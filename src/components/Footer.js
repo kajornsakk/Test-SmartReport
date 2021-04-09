@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="content has-text-centered ">
         <p>
            {/* Hexal 2019. The source code is licensed MIT. The website content is licensed CC BY NC SA 4.0. */}
-           SCI-TU Smart Report . Faaculty of Science and Technology . Thammasat university
+           SCI-TU Smart Report . Faaculty of Science and Technology . Thammasat University
         </p>
       </div>
     </footer>

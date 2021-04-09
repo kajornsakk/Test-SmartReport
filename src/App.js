@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
-import Products from './components/Products';
+import Upload_lecture from './components/Upload_lecture';
 import ProductAdmin from './components/ProductAdmin';
 import LogIn from './components/auth/LogIn';
 import Register from './components/auth/Register';
@@ -15,6 +15,7 @@ import Welcome from './components/auth/Welcome';
 import Footer from './components/Footer';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import Upload_academy from './components/Upload_academy';
 library.add(faEdit);
 
 class App extends Component {
@@ -26,7 +27,8 @@ class App extends Component {
             <Navbar />
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route exact path="/products" component={Products} />
+              <Route exact path="/Upload_lecture" component={Upload_lecture} />
+              <Route exact path="/Upload_academy" component={Upload_academy} />
               <Route exact path="/admin" component={ProductAdmin} />
               <Route exact path="/login" component={LogIn} />
               <Route exact path="/register" component={Register} />
