@@ -16,6 +16,7 @@ import Footer from './components/Footer';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import Upload_academy from './components/Upload_academy';
+import Report from './components/Report';
 library.add(faEdit);
 
 class App extends Component {
@@ -29,6 +30,7 @@ class App extends Component {
               <Route exact path="/" component={Home} />
               <Route exact path="/Upload_lecture" component={Upload_lecture} />
               <Route exact path="/Upload_academy" component={Upload_academy} />
+              <Route exact path="/Report" component={Report} />
               <Route exact path="/admin" component={ProductAdmin} />
               <Route exact path="/login" component={LogIn} />
               <Route exact path="/register" component={Register} />

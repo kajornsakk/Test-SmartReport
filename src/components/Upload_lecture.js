@@ -8,27 +8,6 @@ const config = require('../config.json');
 
 export default class Upload_lecture extends Component {
 
-  // state = {
-  //   newproduct: null,
-  //   products: []
-  // }
-
-  // fetchProducts = async () => {
-  //   // add call to AWS API Gateway to fetch products here
-  //   // then set them in state
-  //   try {
-  //     const res = await axios.get(`${config.api.invokeUrl}/products`);
-  //     const products = res.data;
-  //     this.setState({ products: products });
-  //   } catch (err) {
-  //     console.log(`An error has occurred: ${err}`);
-  //   }
-  // }
-
-  // componentDidMount = () => {
-  //   this.fetchProducts();
-  // }
-
   constructor(props) {
     super(props);
     this.state = {

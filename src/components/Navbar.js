@@ -18,7 +18,7 @@ export default class Navbar extends Component {
             <a href="/Upload_lecture" className="navbar-item">
               อัพโหลดข้อมูล
             </a>
-            <a href="/admin" className="navbar-item">
+            <a href="/Report" className="navbar-item">
               สร้างฟอร์มภาระงาน
             </a>
           </div>
