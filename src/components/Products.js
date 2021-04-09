@@ -10,53 +10,43 @@ export default class Products extends Component {
     products: []
   }
 
-  fetchProducts = async () => {
-    // add call to AWS API Gateway to fetch products here
-    // then set them in state
-    try {
-      const res = await axios.get(`${config.api.invokeUrl}/products`);
-      const products = res.data;
-      this.setState({ products: products });
-    } catch (err) {
-      console.log(`An error has occurred: ${err}`);
-    }
+  // fetchProducts = async () => {
+  //   // add call to AWS API Gateway to fetch products here
+  //   // then set them in state
+  //   try {
+  //     const res = await axios.get(`${config.api.invokeUrl}/products`);
+  //     const products = res.data;
+  //     this.setState({ products: products });
+  //   } catch (err) {
+  //     console.log(`An error has occurred: ${err}`);
+  //   }
+  // }
+
+  // componentDidMount = () => {
+  //   this.fetchProducts();
+  // }
+
+  saveFile = () =>{
+    alert("test")
   }
 
-  componentDidMount = () => {
-    this.fetchProducts();
-  }
+
+
+
+
+
+
+
+
 
   render() {
     return (
 
       <Fragment>
-        {/* <section className="section">
-          <div className="container">
-            <h1>Energy Products</h1>
-            <p className="subtitle is-5">Invest in a clean future with our efficient and cost-effective green energy products:</p>
-            <br />
-            <div className="columns">
-              <div className="column">
-                <div className="tile is-ancestor">
-                  <div className="tile is-4 is-parent  is-vertical">
-                    { 
-                      this.state.products && this.state.products.length > 0
-                      ? this.state.products.map(product => <Product name={product.productname} id={product.id} key={product.id} />)
-                      : <div className="tile notification is-warning">No products available</div>
-                    }
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section> */}
-
-
-
-        {/*  */}
         <div className="box cta">
 
-          <div class="tabs is-boxed">
+          {/* Tabs */}
+          <div class="tabs is-centered">
             <ul>
               <li class="is-active">
                 <a>
@@ -64,7 +54,7 @@ export default class Products extends Component {
                   <span>อัปโหลดข้อมูลภาระงานสอน</span>
                 </a>
               </li>
-              <li>
+              <li >
                 <a>
                   <span class="icon is-small"><i class="fas fa-music" aria-hidden="true"></i></span>
                   <span>อัปโหลดข้อมูลผลงานวิชาการ</span>
@@ -79,30 +69,146 @@ export default class Products extends Component {
             </ul>
           </div>
 
-          <div class="card-content">
-            <div class="content">
-              <h4>Energy conservation</h4>
+          <div class="columns">
+            <div class="column"></div>
+            <div class="column is-four-fifths">
+              
+              <div class="card">
 
-              <div class="select is-rounded">
-                <select>
-                  <option>โปรดเลือก</option>
-                  <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
-                  <option>สาขาวิชาฟิสิกส์</option>
-                  <option>สาขาวิชาเคมี</option>
-                  <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
-                  <option>สาขาวิชาคณิตศาสตร์ประกันภัย</option>
-                  <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
-                  <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
-                  <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
-                  <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
-                  <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
-                </select>
+                <div class="card-content ">
+                  <div class="content">
+                    <section class="section is-small">
+                      <div class="container">
+                        <div class="columns is-multiline is-centered">
+
+                          <div class="column is-one-quarter">
+                            <div class="field">
+                              <label class="label">สาขาวิชา :</label>
+                            </div>
+
+                            <div class="select">
+                              <select>
+                                <option>โปรดเลือก</option>
+                                <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
+                                <option>สาขาวิชาฟิสิกส์</option>
+                                <option>สาขาวิชาเคมี</option>
+                                <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
+                                <option>สาขาวิชาคณิตศาสตร์ประกันภัย</option>
+                                <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
+                                <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
+                                <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
+                                <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
+                                <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
+                              </select>
+                            </div>
+
+                          </div>
+
+                          <div class="column is-one-quarter">
+                            <div class="field">
+                              <label class="label">ระดับการศึกษา :</label>
+                            </div>
+
+                            <div class="select">
+                              <select>
+                                <option>โปรดเลือก</option>
+                                <option>ปริญญาตรี</option>
+                                <option>ปริญญาโทและปริญญาเอก</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="column is-one-quarter">
+                            <div class="field">
+                              <label class="label">ประเภท :</label>
+                            </div>
+
+                            <div class="select">
+                              <select>
+                                <option>โปรดเลือก</option>
+                                <option>วิชาบรรยาย-วิชาปฏิบัติ</option>
+                                <option>ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา</option>
+                                <option>วิทยานิพนธ์-สารนิพนธ์-ปัญหาพิเศษ-สัมมนา</option>
+                              </select>
+                            </div>
+
+                          </div>
+
+                        </div>
+                      </div>
+
+                      <div class="container">
+                        <div class="columns is-multiline is-centered">
+
+                          <div class="column is-one-quarter">
+                            <div class="field">
+                              <label class="label">ปีการศึกษา :</label>
+                            </div>
+
+                            <div class="select">
+                              <select>
+                                <option>โปรดเลือก</option>
+                                <option>ปีการศึกษาที่ .....</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="column is-one-quarter">
+                            <div class="field">
+                              <label class="label">ภาคการศึกษา :</label>
+                            </div>
+
+                            <div class="select">
+                              <select>
+                                <option>โปรดเลือก</option>
+                                <option>ภาคการศึกษาที่ 1</option>
+                                <option>ภาคการศึกษที่ 2</option>
+                              </select>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+
+                      <div class="container">
+                        <div class="columns is-multiline is-centered">
+                          <div class="field">
+                            <div class="column is-one-quarter">
+                              <input type='file' className="selectfile" onChange={this.handleChange} />
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+
+
+                      <div class="container level-right">
+                        <div class="columns is-multiline is-centered">
+                          <div class="colum is-one-quarter">
+                          <button class="button is-primary " onClick={this.saveFile}>
+                            <span class="icon is-small">
+                              <i class="fas fa-check"></i>
+                            </span>
+                            <span>อัพโหลดข้อมูล</span>
+                          </button>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+
+                    </section>
+                  </div>
+                </div>
               </div>
-
             </div>
+            <div class="column"></div>
           </div>
 
+
         </div>
+
 
       </Fragment>
 

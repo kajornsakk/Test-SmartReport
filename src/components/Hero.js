@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Hero() {
   return (
-    <section className="hero is-primary">
+    <section className="hero ">
       <div className="hero-body">
         <div className="container">
           <img src="energy.jpg" alt="conserve energy" />

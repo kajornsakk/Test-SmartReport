@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 export default class Navbar extends Component {
   render() {
     return (
-      <nav className="navbar" role="navigation" aria-label="main navigation">
+      <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
           <a className="navbar-item" href="/">
             <img src="hexal-logo.png" width="112" height="28" alt="hexal logo" />
@@ -19,7 +19,7 @@ export default class Navbar extends Component {
               อัพโหลดข้อมูล
             </a>
             <a href="/admin" className="navbar-item">
-              Admin
+              สร้างฟอร์มภาระงาน
             </a>
           </div>
 
