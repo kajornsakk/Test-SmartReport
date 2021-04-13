@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react'
 import Product from './Product';
 import axios from "axios";
 import * as XLSX from 'xlsx'
+import moment from 'moment';
+import Amplify, { Storage } from 'aws-amplify';
 const config = require('../config.json');
 
 export default class Upload_academy extends Component {
@@ -22,15 +24,7 @@ export default class Upload_academy extends Component {
         this.setState({ version: e.target.value })
     }
 
-    handleChange = e => {
-        const file = e.target.files[0]
-        this.setState({
-            fileUrl: URL.createObjectURL(file),
-            file,
-            filename: file.name
-        })
-        this.readExcel(file);
-    }
+
 
     readExcel = (file) => {
         console.log(file.name);
@@ -114,7 +108,47 @@ export default class Upload_academy extends Component {
 
     }
 
-    
+    handleChange = e => {
+        const file = e.target.files[0]
+        this.setState({
+            fileUrl: URL.createObjectURL(file),
+            file,
+            filename: file.name
+        })
+        this.readExcel(file);
+    }
+
+    saveFile = (e) => {
+        const DASH_DMYHMS = 'DD-MM-YYYY HH:mm:ss';
+        const timeStamp = moment().format(DASH_DMYHMS);
+        if (this.state.version == 'รายงานบทความ/ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ') {
+            var bufferVersion = 'รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ';
+        }
+        if (this.state.version == 'รายงานการเสนอผลงานในที่ประชุมวิชาการ') {
+            var bufferVersion = 'รายงานการเสนอผลงานในที่ประชุมวิชาการ';
+        }
+        var fileName = this.state.department + "/" + "ผลงานทางวิชาการ" + "/" + bufferVersion + "/" +
+            this.state.professor + "_" + this.state.department + "_" + bufferVersion + "_" + timeStamp + ".xlsx";
+        Storage.put(fileName, this.state.file)
+            .then(() => {
+                console.log('Successfully save file!')
+                alert('Successfully save file!');
+                this.setState({ fileUrl: '', file: '', filename: '' })
+                //this.state.filename;
+                e.preventDefault();
+            })
+            .catch(err => {
+                console.log('error upload file!', err)
+            })
+
+        //เพิ่มาจากด้านล่าง
+        this.setState({
+            professor: '',
+            department: '',
+            version: ''
+        })
+    }
+
 
     render() {
         return (

@@ -23,6 +23,12 @@ export default class TestS3 extends Component {
         }  
     }
 
+    clickList =() =>{
+        Storage.list('public/') // for listing ALL files without prefix, pass '' instead
+        .then(result => console.log(result))
+        .catch(err => console.log(err));
+    }
+
     // saveFile = () => {
     //     Storage.put(this.state.filename, this.state.file)
     //         .then(() => {
@@ -39,6 +45,7 @@ export default class TestS3 extends Component {
             <div>
                 <input type='file' onChange={this.onChange} />
                 <button onClick={this.saveFile}>Save</button>
+                <button onClick={this.clickList}>List</button>
             </div>
         )
     }

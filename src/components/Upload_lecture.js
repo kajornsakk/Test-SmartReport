@@ -4,7 +4,7 @@ import Upload_academy from './Upload_academy';
 import axios from "axios";
 import * as XLSX from 'xlsx';
 import moment from 'moment';
-import Amplify,{ Storage } from 'aws-amplify'
+import Amplify, { Storage } from 'aws-amplify';
 
 const config = require('../config.json');
 
@@ -31,7 +31,7 @@ export default class Upload_lecture extends Component {
   state = { fileUrl: '', file: '', filename: '' }
   state = {
     chack: false
-}
+  }
 
   onChangeYear = (e) => {
     this.setState({ year: e.target.value })
@@ -276,47 +276,24 @@ export default class Upload_lecture extends Component {
 
   saveFile = (e) => {
 
-    Storage.put(this.filename,this.file)
-      .then(()=>{
-        console.log('sueccessfully saved file!');
-        this.setState({fileUrl:'',file:'',filename:''})
-      })
-      .catch(err=>{
-        console.log('error uploading file',err);
-      })
+    const DASH_DMYHMS = 'DD-MM-YYYY HH:mm:ss';
+    const timeStamp = moment().format(DASH_DMYHMS);
+    var fileName = this.state.department + "/" + "ภาระงานสอน" + "/" + this.state.educationlevel + "/" + this.state.version + "/" +
+      this.state.year + "_" + this.state.semester + "_" + this.state.department + "_" + this.state.version + "_" + timeStamp + ".xlsx";
 
-
-    // const DASH_DMYHMS = 'DD-MM-YYYY HH:mm:ss';
-    // const timeStamp = moment().format(DASH_DMYHMS);
-    // var fileName = this.state.department + "/" + "ภาระงานสอน" + "/" + this.state.educationlevel + "/" + this.state.version + "/" +
-    //   this.state.year + "_" + this.state.semester + "_" + this.state.department + "_" + this.state.version + "_" + timeStamp + ".xlsx";
-
-    // if (this.state.chack) {
-    //   Storage.put(fileName, this.state.file)
-    //     .then(() => {
-    //       console.log('Successfully save file!')
-    //       alert('Successfully save file!');
-    //       this.setState({ fileUrl: '', file: '', filename: '' })
-    //       //this.state.filename;
-    //       // e.preventDefault();
-    //     })
-    //     .catch(err => {
-    //       console.log('error upload file!', err)
-    //     })
-
-    //   //เพิ่มาจากด้านล่าง
-    //   this.setState({
-    //     year: '',
-    //     semester: '',
-    //     department: '',
-    //     version: '',
-    //     educationlevel: '',
-    //     chack: false,
-    //   })
-
-    // } else {
-    //   alert('บันทึกไม่สำเสร็จ \n !! ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง !!')
-    // }
+    if (this.state.chack) {
+      Storage.put(fileName, this.state.file)
+        .then(() => {
+          console.log('sueccessfully saved file!');
+          alert('Successfully save file!');
+          this.setState({ fileUrl: '', file: '', filename: '' })
+        })
+        .catch(err => {
+          console.log('error uploading file', err);
+        })
+    } else {
+      alert('บันทึกไม่สำเสร็จ \n !! ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง !!')
+    }
 
   }
 

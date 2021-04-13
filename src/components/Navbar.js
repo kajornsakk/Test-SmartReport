@@ -1,8 +1,19 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { AmplifySignOut, withAuthenticator } from '@aws-amplify/ui-react';
+import Auth from '@aws-amplify/auth';
 
 export default class Navbar extends Component {
+
   render() {
+    // const [loggedin, setLoggedIn] = useState(false);
+    const signOut = async ()=>{
+      try{
+        await Auth.signOut();
+      }catch (error){
+        console.log('error signing out:',error);
+      }
+    }
+
     return (
       <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
@@ -34,9 +45,26 @@ export default class Navbar extends Component {
                   <strong>ลงทะเบียน</strong>
                 </a>
                 <a href="/login" className="button is-light" >
-                  ล๊อกเอาท์
-                  <AmplifySignOut />
+                  ล็อกอิน
+                  {/* <AmplifySignOut /> */}
                 </a>
+
+
+                {/* {loggedin ? ( */}
+                  <a href="/">
+                  <button onClick={signOut} className="button is-light">
+                    log out
+                  </button>
+                  </a>
+                {/* ) : (
+                  <a href="/login">
+                    <button onClick={signOut} className="button is-light">
+                    log in
+                  </button>
+                  </a>
+                  
+                )} */}
+
               </div>
             </div>
           </div>
