@@ -34,7 +34,8 @@ export default class Navbar extends Component {
                   <strong>ลงทะเบียน</strong>
                 </a>
                 <a href="/login" className="button is-light" >
-                  ล๊อกเอาท์<AmplifySignOut />
+                  ล๊อกเอาท์
+                  {/* <AmplifySignOut /> */}
                 </a>
               </div>
             </div>
