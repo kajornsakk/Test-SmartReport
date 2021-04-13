@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-smartreport-dev-142809-authRole",
+      "UnauthRoleArn": "arn:aws:iam::534331787919:role/amplify-smartreport-dev-142809-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::534331787919:role/amplify-smartreport-dev-142809-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-smartreport-dev-142809-deployment",
+      "UnauthRoleName": "amplify-smartreport-dev-142809-unauthRole",
+      "StackName": "amplify-smartreport-dev-142809",
+      "StackId": "arn:aws:cloudformation:us-east-1:534331787919:stack/amplify-smartreport-dev-142809/a4f6b750-9b60-11eb-bac2-12b6a099270b",
+      "AmplifyAppId": "d1qfuptbtomore"
+    },
+    "categories": {
+      "auth": {
+        "smartreport3a52dce9": {}
+      }
+    }
+  }
+}

@@ -2,7 +2,10 @@ import React, { Component, Fragment } from 'react';
 import Product from './Product';
 import Upload_academy from './Upload_academy';
 import axios from "axios";
-import * as XLSX from 'xlsx'
+import * as XLSX from 'xlsx';
+import moment from 'moment';
+import Amplify,{ Storage } from 'aws-amplify'
+
 const config = require('../config.json');
 
 
@@ -25,9 +28,10 @@ export default class Upload_lecture extends Component {
     this.onChangeEducationLevel = this.onChangeEducationLevel.bind(this);
   }
 
-
-
   state = { fileUrl: '', file: '', filename: '' }
+  state = {
+    chack: false
+}
 
   onChangeYear = (e) => {
     this.setState({ year: e.target.value })
@@ -259,12 +263,61 @@ export default class Upload_lecture extends Component {
 
   }
 
-  saveFile = () => {
-    console.log(this.state.department);
-    console.log(this.state.educationlevel);
-    console.log(this.state.version);
-    console.log(this.state.year);
-    console.log(this.state.semester);
+  handleChange = e => {
+    const file = e.target.files[0]
+    this.setState({
+      fileUrl: URL.createObjectURL(file),
+      file,
+      filename: file.name
+    })
+    this.readExcel(file);
+
+  }
+
+  saveFile = (e) => {
+
+    Storage.put(this.filename,this.file)
+      .then(()=>{
+        console.log('sueccessfully saved file!');
+        this.setState({fileUrl:'',file:'',filename:''})
+      })
+      .catch(err=>{
+        console.log('error uploading file',err);
+      })
+
+
+    // const DASH_DMYHMS = 'DD-MM-YYYY HH:mm:ss';
+    // const timeStamp = moment().format(DASH_DMYHMS);
+    // var fileName = this.state.department + "/" + "ภาระงานสอน" + "/" + this.state.educationlevel + "/" + this.state.version + "/" +
+    //   this.state.year + "_" + this.state.semester + "_" + this.state.department + "_" + this.state.version + "_" + timeStamp + ".xlsx";
+
+    // if (this.state.chack) {
+    //   Storage.put(fileName, this.state.file)
+    //     .then(() => {
+    //       console.log('Successfully save file!')
+    //       alert('Successfully save file!');
+    //       this.setState({ fileUrl: '', file: '', filename: '' })
+    //       //this.state.filename;
+    //       // e.preventDefault();
+    //     })
+    //     .catch(err => {
+    //       console.log('error upload file!', err)
+    //     })
+
+    //   //เพิ่มาจากด้านล่าง
+    //   this.setState({
+    //     year: '',
+    //     semester: '',
+    //     department: '',
+    //     version: '',
+    //     educationlevel: '',
+    //     chack: false,
+    //   })
+
+    // } else {
+    //   alert('บันทึกไม่สำเสร็จ \n !! ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง !!')
+    // }
+
   }
 
   render() {
@@ -284,9 +337,9 @@ export default class Upload_lecture extends Component {
               </li>
 
               <li >
-                  <a href="/Upload_academy" className="navbar-item" ><span class="icon is-small" ><i class="far fa-file-alt" aria-hidden="true"></i></span>
+                <a href="/Upload_academy" className="navbar-item" ><span class="icon is-small" ><i class="far fa-file-alt" aria-hidden="true"></i></span>
                      อัปโหลดข้อมูลผลงานวิชาการ
-                  </a> 
+                  </a>
               </li>
 
               <li>

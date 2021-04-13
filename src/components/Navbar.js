@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { AmplifySignOut, withAuthenticator } from '@aws-amplify/ui-react';
 
 export default class Navbar extends Component {
   render() {
@@ -21,6 +22,9 @@ export default class Navbar extends Component {
             <a href="/Report" className="navbar-item">
               สร้างฟอร์มภาระงาน
             </a>
+            <a href="/TestS3" className="navbar-item">
+              Test
+            </a>
           </div>
 
           <div className="navbar-end">
@@ -29,8 +33,8 @@ export default class Navbar extends Component {
                 <a href="/register" className="button is-primary">
                   <strong>ลงทะเบียน</strong>
                 </a>
-                <a href="/login" className="button is-light">
-                  ล๊อกเอาท์
+                <a href="/login" className="button is-light" >
+                  ล๊อกเอาท์<AmplifySignOut />
                 </a>
               </div>
             </div>
