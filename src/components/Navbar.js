@@ -35,7 +35,7 @@ export default class Navbar extends Component {
                 </a>
                 <a href="/login" className="button is-light" >
                   ล๊อกเอาท์
-                  {/* <AmplifySignOut /> */}
+                  <AmplifySignOut />
                 </a>
               </div>
             </div>

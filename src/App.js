@@ -56,8 +56,7 @@ class App extends Component {
       </div>
     );
   }
-  
 }
 
-export default App;
-// export default withAuthenticator(App, { includeGreetings: true });
+// export default App;
+export default withAuthenticator(App, { includeGreetings: true });
