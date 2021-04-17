@@ -22,6 +22,7 @@ import TestS3 from './components/TestS3';
 import Amplify from 'aws-amplify';
 import aws_exports from './aws-exports';
 import { AmplifySignOut, withAuthenticator } from '@aws-amplify/ui-react';
+import Send_report from './components/Send_report';
 Amplify.configure(aws_exports);
 
 library.add(faEdit);
@@ -40,6 +41,7 @@ class App extends Component {
               <Route exact path="/Upload_lecture" component={Upload_lecture} />
               <Route exact path="/Upload_academy" component={Upload_academy} />
               <Route exact path="/Report" component={Report} />
+              <Route exact path="/Send_report" component={Send_report} />
               <Route exact path="/TestS3" component={TestS3} />
               <Route exact path="/admin" component={ProductAdmin} />
               <Route exact path="/login" component={LogIn} />

@@ -1,4 +1,6 @@
 import React, { Component, Fragment } from 'react'
+import DataReportIndividual from './DataReportIndividual';
+import DataReportForeveryone from './DataReportForeveryone';
 
 export default class Report extends Component {
 
@@ -43,7 +45,7 @@ export default class Report extends Component {
     state = { showSelectRadioForindividual: false }
     state = { showSelectRadioForeveryone: false }
     state = { showTableForeveryone: false }
-
+    
     handleRadiosForIndividual = () => {
         this.setState({ showSelectRadioForindividual: true });
         this.setState({ showSelectRadioForeveryone: false });
@@ -66,7 +68,7 @@ export default class Report extends Component {
         this.setState({ instructorName: e.target.value });
     }
 
-    chackFileForEveryone = () =>{
+    chackFileForEveryone = () => {
 
         this.setState({ showTableForeveryone: true });
 
@@ -198,160 +200,6 @@ export default class Report extends Component {
 
     render() {
 
-        // showDataEveryone
-        let showDataForEveryone = null;
-        if (this.state.showSelectRadioForeveryone) {
-            showDataForEveryone = (
-                <div class="container">
-                    <div class="columns is-multiline is-centered">
-                        <div class="field">
-                            <button class="button is-primary" onClick={this.chackFileForEveryone}>ตรวจสอบข้อมูล</button>
-                        </div>
-
-                    </div>
-
-                    <div class="columns is-multiline is-centered">
-                        <div class="column is-centered">
-                            <div class="card">
-                                <header class="card-header">
-                                    <p class="card-header-title">
-                                        <h4 class="subtitle is-4 has-text-primary">หมวดงานสอน</h4>
-                                    </p>
-                                </header>
-                                <div class="card-content">
-                                    <div class="content">
-                                    <table class="table is-striped is-fullwidth">
-                                <thead>
-                                    <th>หัวข้อ</th>
-                                    <th>ชื่อไฟล์</th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>วิชาบรรยายเเละปฎิบัติการ</td>
-                                        <td>{this.state.lectureFilenameForeveryone}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>ซีเนียร์โปรเจคหรือปัญหาพิเศษ</td>
-                                        <td>{this.state.seniorProjectFilenameForeveryone}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="columns is-multiline is-centered">
-                        <div class="column is-centered">
-                            <div class="card">
-                                <header class="card-header">
-                                    <p class="card-header-title">
-                                        <h4 class="subtitle is-4 has-text-primary">หมวดงานวิชาการ</h4>
-                                    </p>
-                                </header>
-                                <div class="card-content">
-                                    <div class="content">
-                                    <table class="table is-striped is-fullwidth">
-                                <thead>
-                                    <th>หัวข้อ</th>
-                                    <th>ชื่อไฟล์</th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>วิชาบรรยายเเละปฎิบัติการ</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ซีเนียร์โปรเจคหรือปัญหาพิเศษ</td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-
-            )
-        }
-
-
-        // showDataIndividual
-        let showDataIndividual = null;
-        if (this.state.showSelectRadioForindividual) {
-            showDataIndividual = (
-                <div class="container">
-                    <div class="columns is-multiline is-centered">
-                        <div class="column is-one-quarter">
-                            <div class="field">
-                                <label class="label">รายชื่อ :</label>
-                            </div>
-
-                            <div class="select">
-                                <select>
-                                    <option>โปรดเลือก</option>
-                                    <option>ประภาพร รัตนธำรง</option>
-                                    <option>วนิดา พฤทธิวิทยา</option>
-                                    <option>นุชชากร งามเสาวรส</option>
-                                    <option>เสาวลักษณ์ วรรธนาภา</option>
-                                    <option>ธนาธร ทะนานทอง</option>
-                                    <option>เยาวดี เต็มธนาภัทร์</option>
-                                    <option>เด่นดวง ประดับสุวรรณ</option>
-                                </select>
-                            </div>
-                            <button class="button is-primary">Primary</button>
-                        </div>
-
-
-                    </div>
-
-
-                    <div class="columns is-multiline is-centered">
-                        <div class="column is-centered">
-                            <table class="table is-striped is-fullwidth">
-                                <thead>
-                                    <th>หัวข้อ</th>
-                                    <th>ชื่อไฟล์</th>
-                                    <th>เปลี่ยนไฟล์</th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>วิชาบรรยายเเละปฎิบัติการ</td>
-                                        <td></td>
-                                        <td><button class="button is-small is-primary">เลิอกไฟล์</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ซีเนียร์โปรเจคหรือปัญหาพิเศษ</td>
-                                        <td></td>
-                                        <td><button class="button is-small is-primary">เลิอกไฟล์</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>บทความ/ผลงานตีพิมพ์ในวารสารวิชาการ</td>
-                                        <td></td>
-                                        <td><button class="button is-small is-primary">เลิอกไฟล์</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>การเสนอผลงานในที่ประชุมวิชาการ</td>
-                                        <td></td>
-                                        <td><button class="button is-small is-primary">เลิอกไฟล์</button></td>
-                                    </tr>
-                                </tbody>
-
-
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-
-
-            )
-        }
         return (
             <Fragment>
                 <div className="box cta ">
@@ -365,7 +213,7 @@ export default class Report extends Component {
                             </li>
 
                             <li >
-                                <a href="" className="navbar-item" ><span class="icon is-small" ><i class="far fa-file-alt" aria-hidden="true"></i></span>
+                                <a href="/Send_report" className="navbar-item" ><span class="icon is-small" ><i class="far fa-file-alt" aria-hidden="true"></i></span>
                                      ส่งแบบฟอร์มภาระงานอาจารย์
                                 </a>
                             </li>
@@ -461,13 +309,25 @@ export default class Report extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                    {showDataIndividual}
-                                    {showDataForEveryone}
+                                    
+                                    
+                                    {this.state.showSelectRadioForeveryone && <DataReportForeveryone 
+                                        salaryRound={this.state.salaryRound} year={this.state.year} department={this.state.department} />}
+                                    {this.state.showSelectRadioForindividual && <DataReportIndividual 
+                                        salaryRound={this.state.salaryRound} year={this.state.year} department={this.state.department} />}
                                 </section>
                             </div>
                         </div>
                         <div class="column"></div>
                     </div>
+
+                    <div class="columns is-multiline is-centered">
+                        <div class="field">
+                            <button class="button is-primary">สร้างแบบฟอร์ม</button>
+                        </div>
+                    </div>
+
+
 
 
                 </div>

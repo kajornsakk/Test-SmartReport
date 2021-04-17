@@ -365,6 +365,41 @@ export default class Upload_lecture extends Component {
 
                           <div class="column is-one-quarter">
                             <div class="field">
+                              <label class="label">หลักสูตร :</label>
+                            </div>
+
+                            <div class="select" value={this.state.version} onChange={this.onChangeVersion}>
+                              <select>
+                                <option>โปรดเลือก</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาเคมี</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาฟิสิกส์</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาฟิสิกส์อิเล็กทรอนิกส์</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาคณิตศาสตร์ (คณิตศาสตร์)</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาคณิตศาสตร์ (คณิตศาสตร์การเงิน)</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาคณิตศาสตร์การจัดการ</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาคณิตศาสตร์ประยุกต์</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการประกันภัย</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาสถิติ</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาสถิติประยุกต์</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์ (คอมพิวเตอร์และวิทยาการสารสนเทศ)</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์ (คอมพิวเตอร์ประยุกต์)</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์ (เทคโนโลยีการเรียนรู้)</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาวิทยาศาสตร์สิ่งแวดล้อม</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาเทคโนโลยีชีวภาพ</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาเทคโนโลยีพลังงานชีวภาพและการแปรรูปเคมีชีวภาพ</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาเทคโนโลยีการเกษตร</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาวัสดุศาสตร์</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาวิทยาศาสตร์และเทคโนโลยีสิ่งทอ</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาวิทยาศาสตร์และนวัตกรรมทางอาหาร</option>
+                              </select>
+                            </div>
+
+                          </div>
+
+                          <div class="column is-one-quarter">
+                            <div class="field">
                               <label class="label">ระดับการศึกษา :</label>
                             </div>
 
@@ -377,7 +412,13 @@ export default class Upload_lecture extends Component {
                             </div>
                           </div>
 
-                          <div class="column is-one-quarter">
+                        </div>
+                      </div>
+
+                      <div class="container">
+                        <div class="columns is-multiline is-centered">
+
+                        <div class="column is-one-quarter">
                             <div class="field">
                               <label class="label">ประเภท :</label>
                             </div>
@@ -392,12 +433,6 @@ export default class Upload_lecture extends Component {
                             </div>
 
                           </div>
-
-                        </div>
-                      </div>
-
-                      <div class="container">
-                        <div class="columns is-multiline is-centered">
 
                           <div class="column is-one-quarter">
                             <div class="field">
