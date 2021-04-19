@@ -26,6 +26,7 @@ export default class Send_report extends Component {
     }
     state = { listDataWorkload: [] }
     state = { showObjectList: false}
+    state = {showTable : false}
 
 
 
@@ -44,46 +45,47 @@ export default class Send_report extends Component {
         console.log(this.state.yearSend);
         console.log(this.state.salaryRoundSend);
 
+        this.setState({showTable:true})
         this.setState({showObjectList: true});
 
-        const AWS = require('aws-sdk/global');
-        const S3 = require('aws-sdk/clients/s3');
+        // const AWS = require('aws-sdk/global');
+        // const S3 = require('aws-sdk/clients/s3');
 
-        AWS.config.update({
-            accessKeyId: 'AKIAJJOOQS6RRWQUJKNQ',
-            secretAccessKey: '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',
-            region: 'us-east-1'
-        });
-        const s3 = new AWS.S3();
+        // AWS.config.update({
+        //     accessKeyId: 'AKIAJJOOQS6RRWQUJKNQ',
+        //     secretAccessKey: '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',
+        //     region: 'us-east-1'
+        // });
+        // const s3 = new AWS.S3();
 
-        var prefix1 = 'reports/' + this.state.departmemtSend + '/ปีงบประมาณ' + this.state.yearSend + '/' + this.state.salaryRoundSend + '/';
-        const paramsLecture = {
-            Bucket: 'amplifys3smartreport142809-dev',
-            Delimiter: '',
-            Prefix: prefix1,
-        };
+        // var prefix1 = 'reports/' + this.state.departmemtSend + '/ปีงบประมาณ' + this.state.yearSend + '/' + this.state.salaryRoundSend + '/';
+        // const paramsLecture = {
+        //     Bucket: 'amplifys3smartreport142809-dev',
+        //     Delimiter: '',
+        //     Prefix: prefix1,
+        // };
 
-        // useEffect(()=>{
+        // // useEffect(()=>{
             
+        // // })
+        // s3.listObjectsV2(paramsLecture, (err, data) => {
+        //     var contents = data.Contents;
+        //     var time = 'time';
+        //     let value = 'value';
+        //     let isChecked = 'isChecked';
+        //     let id = 'id';
+        //     let count = 1;
+        //     contents.forEach((content) => {
+        //         this.state.listFileNameSends.push({
+        //             [id]: count,
+        //             [value]: ((content.Key).split('/'))[4],
+        //             [time]: content.LastModified,
+        //             [isChecked]: false
+        //         });
+        //         count++;
+        //     })
+        //     console.log(this.state.listFileNameSends);
         // })
-        s3.listObjectsV2(paramsLecture, (err, data) => {
-            var contents = data.Contents;
-            var time = 'time';
-            let value = 'value';
-            let isChecked = 'isChecked';
-            let id = 'id';
-            let count = 1;
-            contents.forEach((content) => {
-                this.state.listFileNameSends.push({
-                    [id]: count,
-                    [value]: ((content.Key).split('/'))[4],
-                    [time]: content.LastModified,
-                    [isChecked]: false
-                });
-                count++;
-            })
-            console.log(this.state.listFileNameSends);
-        })
     }
 
     handleAllChecked = (event) => {
@@ -199,7 +201,7 @@ export default class Send_report extends Component {
 
                                         </div>
 
-                                        <div class="columns is-multiline is-centered">
+                                        {this.state.showTable && <div class="columns is-multiline is-centered">
                                             <div class="column is-centered">
                                                 <table class="table is-striped is-fullwidth">
                                                     <thead>
@@ -223,7 +225,7 @@ export default class Send_report extends Component {
                                                                 return (<CheckBox handleCheckChieldElement={this.handleCheckChieldElement} {...listFile} />)
                                                             })
                                                         } */}
-                                                        
+
                                                         {this.state.showObjectList&&<ListObjects department={this.state.departmemtSend} year={this.state.yearSend} salaryRound={this.state.salaryRoundSend}/>}
 
                                                     </tbody>
@@ -231,7 +233,7 @@ export default class Send_report extends Component {
 
                                                 </table>
                                             </div>
-                                        </div>
+                                        </div>}
                                     </div>
                                 </section>
                             </div>
@@ -239,7 +241,7 @@ export default class Send_report extends Component {
                         <div class="column"></div>
                     </div>
                     
-                    <SendEmail data={this.state.listFileNameSends} />
+                    {/* <SendEmail data={this.state.listFileNameSends} /> */}
 
                     
                 </div>

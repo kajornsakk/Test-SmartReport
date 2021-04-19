@@ -316,13 +316,12 @@ export default class Upload_lecture extends Component {
               <li >
                 <a href="/Upload_academy" className="navbar-item" ><span class="icon is-small" ><i class="far fa-file-alt" aria-hidden="true"></i></span>
                      อัปโหลดข้อมูลผลงานวิชาการ
-                  </a>
+                </a>
               </li>
 
               <li>
-                <a>
-                  <span class="icon is-small"><i class="far fa-file-alt" aria-hidden="true"></i></span>
-                  <span>ประวัติอัปโหลดข้อมูล</span>
+                <a href="/Upload_History" className="navbar-item" ><span class="icon is-small" ><i class="far fa-file-alt" aria-hidden="true"></i></span>
+                    ประวัติอัปโหลดข้อมูล
                 </a>
               </li>
             </ul>
@@ -418,7 +417,7 @@ export default class Upload_lecture extends Component {
                       <div class="container">
                         <div class="columns is-multiline is-centered">
 
-                        <div class="column is-one-quarter">
+                          <div class="column is-one-quarter">
                             <div class="field">
                               <label class="label">ประเภท :</label>
                             </div>

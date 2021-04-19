@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { useState, useEffect } from 'react';
 import AWS from 'aws-sdk';
 import CheckBox2 from './CheckBox2';
+import SendEmail from './SendEmail';
 
 export const ListObjects = props => {
 
@@ -53,14 +54,14 @@ export const ListObjects = props => {
         });
     }, []);
 
-    function handleAllChecked (event) {  
+    function handleAllChecked(event) {
         let lists = listFiles;
         lists.forEach(list => list.isChecked = event.target.checked)
         setListFiles(lists);
         console.log(listFiles);
     }
 
-    function handleCheckChieldElement (event) {
+    function handleCheckChieldElement(event) {
         let lists = listFiles
         lists.forEach(list => {
             if (list.name === event.target.name)
@@ -69,6 +70,7 @@ export const ListObjects = props => {
         setListFiles(lists);
         console.log(listFiles);
     }
+    
 
     return (
         <Fragment>
@@ -77,12 +79,17 @@ export const ListObjects = props => {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td><input type="checkbox"  value="checkedall" onClick={handleAllChecked}/>เลือกทั้งหมด</td>
+                <td><input type="checkbox" value="checkedall" onClick={handleAllChecked} />เลือกทั้งหมด</td>
             </tr>
             {listFiles &&
                 listFiles.map((name, index) => (
                     <CheckBox2 handleCheckChieldElement={handleCheckChieldElement} {...name} />
                 ))}
+
+            <div>
+                <SendEmail data={listFiles}/>
+            </div>
+
         </Fragment>
 
     )

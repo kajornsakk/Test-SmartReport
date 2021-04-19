@@ -309,12 +309,12 @@ export default class Report extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    
+                                                                      
                                     {this.state.showSelectRadioForeveryone && <DataReportForeveryone 
                                         salaryRound={this.state.salaryRound} year={this.state.year} department={this.state.department} />}
                                     {this.state.showSelectRadioForindividual && <DataReportIndividual 
                                         salaryRound={this.state.salaryRound} year={this.state.year} department={this.state.department} />}
+                                
                                 </section>
                             </div>
                         </div>
