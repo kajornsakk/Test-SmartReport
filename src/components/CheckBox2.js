@@ -6,8 +6,9 @@ export const CheckBox2 = props => {
         <tr>
             <td>{props.name}</td>
             <td>{props.department}</td>
-            <td>{props.salaryRound}</td>
-            <td></td>
+            <td>{props.month}</td>
+            <td>{props.salaryRound}{" "}{props.year}</td>
+            
             <td>
                 <input key={props.id} onClick={props.handleCheckChieldElement} type="checkbox" 
                     name={props.name} checked={props.isChecked}   /> 

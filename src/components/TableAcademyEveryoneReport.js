@@ -15,7 +15,7 @@ export const TableAcademyEveryoneReport = props => {
     var instructor = ["ประภาพร รัตนธำรง", "วนิดา พฤทธิวิทยา", "นุชชากร งามเสาวรส", "เสาวลักษณ์ วรรธนาภา", "ธนาธร ทะนานทอง",
         "เยาวดี เต็มธนาภัทร์", "เด่นดวง ประดับสุวรรณ"];
 
-    var prefix = 'public/'+props.department+'/ผลงานทางวิชาการ/';
+    var prefix = 'public/' + props.department + '/ผลงานทางวิชาการ/';
     const paramsTest = {
         Bucket: 'amplifys3smartreport142809-dev',
         Delimiter: '',
@@ -74,37 +74,47 @@ export const TableAcademyEveryoneReport = props => {
 
     return (
         <Fragment>
-            <div class="columns is-multiline is-centered">
-                <table class="table is-striped is-fullwidth">
-                    <thead>
-                        <tr>
-                            <th>รายชื่อ</th>
-                            <th>ชื่อไฟล์</th>
-                            <th>เลือก</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th><input type="checkbox" value="checkedall" onClick={handleAllChecked} />เลือกทั้งหมด</th>
-                        </tr>
-                        {/* {listFiles &&
+            <br/>
+            <span class="is-size-4 has-text-primary">
+                หมวดผลงานวิชาการ
+            </span>
+            <br/>
+            <div class="card">
+                <section class="section is-small">
+                    <div class="columns is-multiline is-centered">
+                        <table class="table is-striped is-fullwidth">
+                            <thead>
+                                <tr>
+                                    <th>รายชื่อ</th>
+                                    <th>ชื่อไฟล์</th>
+                                    <th>เลือก</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th><input type="checkbox" value="checkedall" onClick={handleAllChecked} />เลือกทั้งหมด</th>
+                                </tr>
+                                {/* {listFiles &&
                             listFiles.map((list) => (
                                 <CheckBox3 handleCheckChieldElement={handleCheckChieldElement} {...list} />
                             ))} */}
 
-                        {listFiles &&
-                            listFiles.map((list) => (
-                                <tr>
-                                    <td>{list.name}</td>
-                                    <td>{list.file}</td>
-                                    <td><input key={list.id} onChange={handleCheckChieldElement} type="checkbox" name={list.name} checked={list.isChecked} ></input></td>
-                                </tr>
-                            ))}
-                    </tbody>
-                </table>
+                                {listFiles &&
+                                    listFiles.map((list) => (
+                                        <tr>
+                                            <td>{list.name}</td>
+                                            <td>{list.file}</td>
+                                            <td><input key={list.id} onChange={handleCheckChieldElement} type="checkbox" name={list.name} checked={list.isChecked} ></input></td>
+                                        </tr>
+                                    ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
             </div>
+
         </Fragment>
 
 

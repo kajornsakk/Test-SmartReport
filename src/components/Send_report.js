@@ -207,8 +207,8 @@ export default class Send_report extends Component {
                                                     <thead>
                                                         <th>ชื่ออาจารย์</th>
                                                         <th>สาขาวิชา</th>
-                                                        <th>รอบเลื่อนเงินเดือน</th>
-                                                        <th>วัน/เวลา</th>
+                                                        <th>สำหรับเลื่อนเงินเดือน</th>
+                                                        <th>ช่วงเวลาผลงาน</th>
                                                         <th>เลือก</th>
                                                     </thead>
                                                     <tbody>

@@ -35,14 +35,27 @@ export const ListObjects = props => {
                 let salaryRound = 'salaryRound';
                 let isChecked = 'isChecked';
                 let id = 'id';
+                let year = 'year';
+                let month = 'month';
                 let count = 1;
+                // สำหรับเลื่อนเงินเดือน
+
                 contents.forEach((content) => {
+                    var rangMonth = ((((content.Key).split('/'))[4]).split('_'))[3];
+                    var monthSalaryRound = '';
+                    if (rangMonth === 'กรกฎาคม-ธันวาคม') {
+                        monthSalaryRound = '1 เมษายน';
+                    }
+                    if (rangMonth === 'มกราคม-มิถุนายน') {
+                        monthSalaryRound = '1 ตุลาคม';
+                    }
                     arrData.push({
                         [id]: count,
                         [name]: ((((content.Key).split('/'))[4]).split('_'))[1],
                         [department]: ((((content.Key).split('/'))[4]).split('_'))[2],
+                        [month]: monthSalaryRound,
                         [salaryRound]: ((((content.Key).split('/'))[4]).split('_'))[3],
-                        [time]: content.LastModified,
+                        [year]: ((((content.Key).split('/'))[4]).split('_'))[4],
                         [isChecked]: false
                     });
                     count++;
@@ -70,7 +83,7 @@ export const ListObjects = props => {
         setListFiles(lists);
         console.log(listFiles);
     }
-    
+
 
     return (
         <Fragment>
@@ -87,7 +100,7 @@ export const ListObjects = props => {
                 ))}
 
             <div>
-                <SendEmail data={listFiles}/>
+                <SendEmail data={listFiles} />
             </div>
 
         </Fragment>
