@@ -2,6 +2,9 @@ import React, { Component, Fragment } from 'react'
 import * as XLSX from 'xlsx';
 import moment from 'moment';
 import Amplify, { Storage } from 'aws-amplify';
+import Popup from './Popup';
+import PopupSaveFile from './PopupSaveFile';
+import PopupDanger from './PopupDanger';
 
 const config = require('../config.json');
 
@@ -30,24 +33,48 @@ export default class UploadLectureBachelor extends Component {
         chack: false
     }
 
+    // เพิ่มมา 23/04/64
+    state = {
+        showPopup: false,
+        showPopupSave: false,
+        showPopupDanger: false,
+        showNotification : false,
+        textAleart: [],
+        textAleartSave: '',
+        textAleartDanger: ''
+    }
+    clickPopup = (e) => {
+        this.setState({ showPopup: !this.state.showPopup })
+    }
+    clickPopupSave = (e) => {
+        this.setState({ showPopupSave: !this.state.showPopupSave })
+    }
+    clickPopupDanger = (e) => {
+        this.setState({ showPopupDanger: !this.state.showPopupDanger })
+    }
+    clickNotification = (e) => {
+        this.setState({ showNotification: !this.state.showNotification })
+    }
+    //
+
     onChangeYear = (e) => {
         this.setState({ year: e.target.value })
-      }
-      onChangeSemester = (e) => {
+    }
+    onChangeSemester = (e) => {
         this.setState({ semester: e.target.value })
-      }
-      onChangeDepartment = (e) => {
+    }
+    onChangeDepartment = (e) => {
         this.setState({ department: e.target.value })
-      }
-      onChangeVersion = (e) => {
+    }
+    onChangeVersion = (e) => {
         this.setState({ version: e.target.value })
-      }
-      onChangeEducationLevel = (e) => {
+    }
+    onChangeEducationLevel = (e) => {
         this.setState({ educationlevel: e.target.value })
-      }
-      onChangeCourse = (e) => {
+    }
+    onChangeCourse = (e) => {
         this.setState({ course: e.target.value })
-      }
+    }
 
     handleChange = e => {
         const file = e.target.files[0]
@@ -86,107 +113,126 @@ export default class UploadLectureBachelor extends Component {
 
             // if (this.state.educationlevel === 'ปริญญาตรี') {
 
-                if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
+            if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
 
-                    var buffer = (d.A3.v).split(" ");
-                    var buffer2 = buffer[1].split("/");
-                    var DepartmentFromFile = ((d.A1.v).split(" "))[1];
-                    var SemesterFromFile = buffer2[0];
-                    var YearFromFile = buffer2[1];
-                    var LectureFromFile = ((d.P5.v).split(" ", 1))[0];
-                    var PracticeFromFile = ((d.Q5.v).split(" ", 1))[0];
-                    var CourseFromFile = d.D2.v;
-                    var EducationFromFile = d.L2.v;
+                var buffer = (d.A3.v).split(" ");
+                var buffer2 = buffer[1].split("/");
+                var DepartmentFromFile = ((d.A1.v).split(" "))[1];
+                var SemesterFromFile = buffer2[0];
+                var YearFromFile = buffer2[1];
+                var LectureFromFile = ((d.P5.v).split(" ", 1))[0];
+                var PracticeFromFile = ((d.Q5.v).split(" ", 1))[0];
+                var CourseFromFile = d.D2.v;
+                var EducationFromFile = d.L2.v;
+
+
+                if (DepartmentFromFile === this.state.department && LectureFromFile === 'บรรยาย' && PracticeFromFile === 'ปฏิบัติ'
+                    && SemesterFromFile === this.state.semester && YearFromFile === this.state.year
+                    && CourseFromFile === this.state.course && EducationFromFile === 'ปริญญาตรี') {
+                    this.setState({ chack: true })
+                    // alert('Good!! (ป.ตรี บรรยาย/ปฏิบัติ) --> Format ถูกต้องสามารถอัปโหลดข้อมูลได้');
+                    // เพิ่ม
+                    this.setState({
+                        showNotification: true
+                    })
+                }
+                else {
                     
-
-                    if (DepartmentFromFile === this.state.department && LectureFromFile === 'บรรยาย' && PracticeFromFile === 'ปฏิบัติ'
-                        && SemesterFromFile === this.state.semester && YearFromFile === this.state.year
-                        && CourseFromFile === this.state.course && EducationFromFile === 'ปริญญาตรี') {
-                        this.setState({ chack: true })
-                        alert('Good!! (ป.ตรี บรรยาย/ปฏิบัติ) --> Format ถูกต้องสามารถอัปโหลดข้อมูลได้');
+                    var arrTextAleart = [];
+                    if (DepartmentFromFile !== this.state.department) {
+                        arrTextAleart.push('"สาขาวิชา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ department: '' })
                     }
-                    else {
-                        var text_alert = "";
-                        if (DepartmentFromFile !== this.state.department) {
-                            text_alert = text_alert + "!! สาขาวิชาไม่ตรงกับข้อมูลนำเข้า โปรดเลือกสาขาวิชาใหม่\n";
-                            this.setState({ department: '' })
-                        }
-                        if (LectureFromFile !== 'บรรยาย' && PracticeFromFile !== 'ปฏิบัติ') {
-                            text_alert = text_alert + "!! ประเภทไม่ตรงกับข้อมูลนำเข้า \n";
-                            this.setState({ version: '' })
-                        }
-                        if (SemesterFromFile !== this.state.semester) {
-                            text_alert = text_alert + "!! ภาคการศึกษาไม่ตรงกับข้อมูลนำเข้า \n"
-                            this.setState({ semester: '' })
-                        }
-                        if (YearFromFile !== this.state.year) {
-                            text_alert = text_alert + "!! ปีการศึกษาไม่ตรงกับข้อมูลนำเข้า \n"
-                            this.setState({ year: '' })
-                        }
-                        if (CourseFromFile !== this.state.course) {
-                            text_alert = text_alert + "!! หลักสูตรไม่ตรงกับข้อมูลนำเข้า \n"
-                            this.setState({ course: '' })
-                        }
-                        if (EducationFromFile !== 'ปริญญาตรี') {
-                            text_alert = text_alert + "!! ระดับการศึกษาไม่ตรงกับข้อมูลนำเข้า \n"
-                            this.setState({ educationlevel: '' })
-                        }
-                        alert(text_alert);
-
+                    if (LectureFromFile !== 'บรรยาย' && PracticeFromFile !== 'ปฏิบัติ') {
+                        arrTextAleart.push('"ประเภท" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ version: '' })
                     }
-                }
-                else if (this.state.version === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
-
-                    var buffer = (d.A3.v).split(" ");
-                    var buffer2 = buffer[1].split("/");
-                    var DepartmentFromFile = ((d.A1.v).split(" "))[1];
-                    var SemesterFromFile = buffer2[0];
-                    var YearFromFile = buffer2[1];
-                    var bufferSeniorproject = (d.N5.v).split("/");
-                    var SeminarFromFile = d.Q5.v;
-                    var Seniorproject_SeminarFromFile = bufferSeniorproject[0] + "-" + bufferSeniorproject[1] + "-" + d.Q5.v + "";
-                    var CourseFromFile = d.D2.v;
-                    var EducationFromFile = d.L2.v;
-
-                    console.log(bufferSeniorproject);
-                    console.log(Seniorproject_SeminarFromFile);
-                    console.log(SeminarFromFile);
-
-                    if (DepartmentFromFile === this.state.department && YearFromFile === this.state.year && SemesterFromFile === this.state.semester && bufferSeniorproject[0] === 'ซีเนียร์โปรเจค'
-                        && CourseFromFile === this.state.course && EducationFromFile === 'ปริญญาตรี') {
-                        this.setState({ chack: true })
-                        alert('Good!! (ป.ตรี ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา) --> Format ถูกต้องสามารถอัปโหลดข้อมูลได้');
+                    if (SemesterFromFile !== this.state.semester) {
+                        arrTextAleart.push('"ภาคการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ semester: '' })
                     }
-                    else {
-                        var text_alert = "";
-                        if (DepartmentFromFile !== this.state.department) {
-                            text_alert = text_alert + "!! สาขาวิชาไม่ตรงกับข้อมูลนำเข้า \n";
-                            this.setState({ department: '' })
-                        }
-                        if (bufferSeniorproject[0] !== 'ซีเนียร์โปรเจค') {
-                            text_alert = text_alert + "!! ประเภทไม่ตรงกับข้อมูลนำเข้า \n";
-                            this.setState({ version: '' })
-                        }
-                        if (SemesterFromFile !== this.state.semester) {
-                            text_alert = text_alert + "!! ภาคการศึกษาไม่ตรงกับข้อมูลนำเข้า \n"
-                            this.setState({ semester: '' })
-                        }
-                        if (YearFromFile !== this.state.year) {
-                            text_alert = text_alert + "!! ปีการศึกษาไม่ตรงกับข้อมูลนำเข้า \n"
-                            this.setState({ year: '' })
-                        }
-                        if (CourseFromFile !== this.state.course) {
-                            text_alert = text_alert + "!! หลักสูตรไม่ตรงกับข้อมูลนำเข้า \n"
-                            this.setState({ course: '' })
-                        }
-                        if (EducationFromFile !== 'ปริญญาตรี') {
-                            text_alert = text_alert + "!! ระดับการศึกษาไม่ตรงกับข้อมูลนำเข้า \n"
-                            this.setState({ educationlevel: '' })
-                        }
-                        alert(text_alert);
+                    if (YearFromFile !== this.state.year) {
+                        arrTextAleart.push('"ปีการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ year: '' })
                     }
+                    if (CourseFromFile !== this.state.course) {
+                        arrTextAleart.push('"หลักสูตร" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ course: '' })
+                    }
+                    if (EducationFromFile !== 'ปริญญาตรี') {
+                        arrTextAleart.push('"ระดับการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ educationlevel: '' })
+                    }
+                    // เพิ่ม
+                    this.setState({
+                        textAleart: arrTextAleart,
+                        showPopup: true
+                    })
 
                 }
+            }
+            else if (this.state.version === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
+
+                var buffer = (d.A3.v).split(" ");
+                var buffer2 = buffer[1].split("/");
+                var DepartmentFromFile = ((d.A1.v).split(" "))[1];
+                var SemesterFromFile = buffer2[0];
+                var YearFromFile = buffer2[1];
+                var bufferSeniorproject = (d.N5.v).split("/");
+                var SeminarFromFile = d.Q5.v;
+                var Seniorproject_SeminarFromFile = bufferSeniorproject[0] + "-" + bufferSeniorproject[1] + "-" + d.Q5.v + "";
+                var CourseFromFile = d.D2.v;
+                var EducationFromFile = d.L2.v;
+
+                console.log(bufferSeniorproject);
+                console.log(Seniorproject_SeminarFromFile);
+                console.log(SeminarFromFile);
+
+                if (DepartmentFromFile === this.state.department && YearFromFile === this.state.year && SemesterFromFile === this.state.semester && bufferSeniorproject[0] === 'ซีเนียร์โปรเจค'
+                    && CourseFromFile === this.state.course && EducationFromFile === 'ปริญญาตรี') {
+                    this.setState({ chack: true })
+                    // alert('Good!! (ป.ตรี ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา) --> Format ถูกต้องสามารถอัปโหลดข้อมูลได้');
+                    this.setState({
+                        showNotification: true
+                    })
+                }
+                else {
+                    // var text_alert = "";
+                    var arrTextAleart = [];
+                    if (DepartmentFromFile !== this.state.department) {
+                        arrTextAleart.push('"สาขาวิชา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ department: '' })
+                    }
+                    if (bufferSeniorproject[0] !== 'ซีเนียร์โปรเจค') {
+                        arrTextAleart.push('"ประเภท" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ version: '' })
+                    }
+                    if (SemesterFromFile !== this.state.semester) {
+                        arrTextAleart.push('"ภาคการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ semester: '' })
+                    }
+                    if (YearFromFile !== this.state.year) {
+                        arrTextAleart.push('"ปีการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ year: '' })
+                    }
+                    if (CourseFromFile !== this.state.course) {
+                        arrTextAleart.push('"หลักสูตร" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ course: '' })
+                    }
+                    if (EducationFromFile !== 'ปริญญาตรี') {
+                        arrTextAleart.push('"ระดับการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ educationlevel: '' })
+                    }
+                    // alert(text_alert);
+
+                    // เพิ่ม
+                    this.setState({
+                        textAleart: arrTextAleart,
+                        showPopup: true
+                    })
+                }
+
+            }
             // }
 
         })
@@ -206,21 +252,44 @@ export default class UploadLectureBachelor extends Component {
             Storage.put(fileName, this.state.file)
                 .then(() => {
                     console.log('sueccessfully saved file!');
-                    alert('Successfully save file!');
+                    // alert('Successfully save file!');
+                    // เพิ่ม
+                    this.setState({
+                        textAleartSave: 'Successfully save file!',
+                        showPopupSave: true
+                    })
+
                     this.setState({ fileUrl: '', file: '', filename: '' })
                 })
                 .catch(err => {
                     console.log('error uploading file', err);
                 })
         } else {
-            alert('บันทึกไม่สำเสร็จ \n !! ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง !!')
+            // alert('บันทึกไม่สำเสร็จ \n !! ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง !!')
+            this.setState({
+                textAleartDanger: 'ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง',
+                showPopupDanger: true
+            })
         }
 
     }
 
+ 
+
     render() {
         return (
             <Fragment>
+
+                {/* เพิ่มเติม */}
+                {this.state.showNotification && <div class="container">
+                    <div class="columns is-multiline is-centered">
+                        <div class="notification is-primary is-light">
+                            <button class="delete" onClick={this.clickNotification}></button>
+                            Format ถูกต้องสามารถอัปโหลดข้อมูลได้
+                        </div>
+                    </div>
+                </div>}
+
                 <div class="columns is-multiline is-centered">
 
                     <div class="column is-one-quarter">
@@ -235,7 +304,7 @@ export default class UploadLectureBachelor extends Component {
                                 <option>สาขาวิชาฟิสิกส์</option>
                                 <option>สาขาวิชาเคมี</option>
                                 <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
-                                <option>สาขาวิชาคณิตศาสตร์ประกันภัย</option>
+                                <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
                                 <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
                                 <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
                                 <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
@@ -346,6 +415,25 @@ export default class UploadLectureBachelor extends Component {
                         </div>
                     </div>
                 </div>
+
+
+                {/* เพิ่มเติม */}
+                {/* <div class="container level-left">
+                    <div class="columns is-multiline is-centered">
+                        <div class="colum is-one-quarter">
+                            <button class="button is-primary " onClick={this.clickPopup}>
+                                <span class="icon is-small">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span>Show popup</span>
+                            </button>
+                        </div>
+                    </div>
+                </div> */}
+
+                {this.state.showPopup && <Popup clickPopup={this.clickPopup} textAleart={this.state.textAleart} />}
+                {this.state.showPopupSave && <PopupSaveFile clickPopupSave={this.clickPopupSave} textAleart={this.textAleartSave} />}
+                {this.state.showPopupDanger && <PopupDanger clickPopupDanger={this.clickPopupDanger} textAleart={this.textAleartDanger}/> }
             </Fragment>
         )
     }

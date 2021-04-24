@@ -4,6 +4,9 @@ import axios from "axios";
 import * as XLSX from 'xlsx'
 import moment from 'moment';
 import Amplify, { Storage } from 'aws-amplify';
+import Popup from './Popup';
+import PopupSaveFile from './PopupSaveFile';
+import PopupDanger from './PopupDanger';
 const config = require('../config.json');
 
 export default class Upload_academy extends Component {
@@ -22,6 +25,29 @@ export default class Upload_academy extends Component {
     }
     onChangeVersion = (e) => {
         this.setState({ version: e.target.value })
+    }
+
+    // เพิ่มเติม popup
+    state = {
+        showPopup: false,
+        showPopupSave: false,
+        showPopupDanger: false,
+        showNotification : false,
+        textAleart: [],
+        textAleartSave: '',
+        textAleartDanger: ''
+    }
+    clickPopup = (e) => {
+        this.setState({ showPopup: !this.state.showPopup })
+    }
+    clickPopupSave = (e) => {
+        this.setState({ showPopupSave: !this.state.showPopupSave })
+    }
+    clickPopupDanger = (e) => {
+        this.setState({ showPopupDanger: !this.state.showPopupDanger })
+    }
+    clickNotification = (e) => {
+        this.setState({ showNotification: !this.state.showNotification })
     }
 
 
@@ -58,21 +84,26 @@ export default class Upload_academy extends Component {
                 var ProfessorFromFile = d.K2.v;
 
                 if (DepartmentFromFile == this.state.department && VersionFromFile == this.state.version && ProfessorFromFile == this.state.professor) {
-                    alert('Correct 1 --> Format ถูกต้องสามารถอัปโหลดข้อมูลได้');
+                    this.setState({
+                        showNotification: true
+                    })
                 }
                 else {
                     //เเจ้งว่าผิดพลาดอะไรบ้าง
-                    var text_alert = "";
+                    var arrTextAleart = [];
                     if (DepartmentFromFile != this.state.department) {
-                        text_alert = text_alert + "!! สาขาวิชาไม่ตรงกับข้อมูลนำเข้า \n";
+                        arrTextAleart.push('"สาขาวิชา"ไม่ตรงกับข้อมูลนำเข้า');
                     }
                     if (VersionFromFile != this.state.version) {
-                        text_alert = text_alert + "!! ประเภทไม่ตรงกับข้อมูลนำเข้า \n";
+                        arrTextAleart.push('"ประเภท" ไม่ตรงกับข้อมูลนำเข้า');
                     }
                     if (ProfessorFromFile != this.state.professor) {
-                        text_alert = text_alert + "!! ชื่อเจ้าของผลงานไม่ตรงกับข้อมูลนำเข้า \n";
+                        arrTextAleart.push('"ชื่อเจ้าของผลงาน" ไม่ตรงกับข้อมูลนำเข้า');
                     }
-                    alert(text_alert);
+                    this.setState({
+                        textAleart: arrTextAleart,
+                        showPopup: true
+                    })
                 }
             }
             if (this.state.version == 'รายงานการเสนอผลงานในที่ประชุมวิชาการ') {
@@ -82,21 +113,26 @@ export default class Upload_academy extends Component {
                 var ProfessorFromFile = d.N2.v;
 
                 if (DepartmentFromFile == this.state.department && VersionFromFile == this.state.version && ProfessorFromFile == this.state.professor) {
-                    alert('Correct 2 --> Format ถูกต้องสามารถอัปโหลดข้อมูลได้')
+                    this.setState({
+                        showNotification: true
+                    })
                 }
                 else {
                     //เเจ้งว่าผิดพลาดอะไรบ้าง
-                    var text_alert = "";
+                    var arrTextAleart = [];
                     if (DepartmentFromFile != this.state.department) {
-                        text_alert = text_alert + "!! สาขาวิชาไม่ตรงกับข้อมูลนำเข้า \n";
+                        arrTextAleart.push('"สาขาวิชา"ไม่ตรงกับข้อมูลนำเข้า');
                     }
                     if (VersionFromFile != this.state.version) {
-                        text_alert = text_alert + "!! ประเภทไม่ตรงกับข้อมูลนำเข้า \n";
+                        arrTextAleart.push('"ประเภท" ไม่ตรงกับข้อมูลนำเข้า');
                     }
                     if (ProfessorFromFile != this.state.professor) {
-                        text_alert = text_alert + "!! ชื่อเจ้าของผลงานไม่ตรงกับข้อมูลนำเข้า \n";
+                        arrTextAleart.push('"ชื่อเจ้าของผลงาน" ไม่ตรงกับข้อมูลนำเข้า');
                     }
-                    alert(text_alert);
+                    this.setState({
+                        textAleart: arrTextAleart,
+                        showPopup: true
+                    })
                 }
 
             }
@@ -132,13 +168,21 @@ export default class Upload_academy extends Component {
         Storage.put(fileName, this.state.file)
             .then(() => {
                 console.log('Successfully save file!')
-                alert('Successfully save file!');
+                this.setState({
+                    textAleartSave: 'Successfully save file!',
+                    showPopupSave: true
+                })
+
                 this.setState({ fileUrl: '', file: '', filename: '' })
                 //this.state.filename;
                 e.preventDefault();
             })
             .catch(err => {
                 console.log('error upload file!', err)
+                this.setState({
+                    textAleartDanger: 'ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง',
+                    showPopupDanger: true
+                })
             })
 
         //เพิ่มาจากด้านล่าง
@@ -153,6 +197,16 @@ export default class Upload_academy extends Component {
     render() {
         return (
             <Fragment>
+                {/* เพิ่มเติม */}
+                {this.state.showNotification && <div class="container">
+                    <div class="columns is-multiline is-centered">
+                        <div class="notification is-primary is-light">
+                            <button class="delete" onClick={this.clickNotification}></button>
+                            Format ถูกต้องสามารถอัปโหลดข้อมูลได้
+                        </div>
+                    </div>
+                </div>}
+
                 <div className="box cta ">
 
                     {/* Tabs */}
@@ -280,6 +334,9 @@ export default class Upload_academy extends Component {
 
                 </div>
 
+                {this.state.showPopup && <Popup clickPopup={this.clickPopup} textAleart={this.state.textAleart} />}
+                {this.state.showPopupSave && <PopupSaveFile clickPopupSave={this.clickPopupSave} textAleart={this.textAleartSave} />}
+                {this.state.showPopupDanger && <PopupDanger clickPopupDanger={this.clickPopupDanger} textAleart={this.textAleartDanger}/> }
 
 
             </Fragment>

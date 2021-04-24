@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import TableAcademyEveryoneReport from './TableAcademyEveryoneReport';
 import TableLectureEveryoneReport from './TableLectureEveryoneReport';
+import TableReportBachelor from './TableReportBachelor';
+import TableReportDoctor from './TableReportDoctor';
+import TableReportMaster from './TableReportMaster';
 
 export default class DataReportForeveryone extends Component {
     state = {
@@ -11,6 +14,10 @@ export default class DataReportForeveryone extends Component {
     }
     state = {
         showTableForeveryone: false
+    }
+
+    state = {
+        yearAndSemesterForSalaryRound: ''
     }
 
     state = {
@@ -48,59 +55,8 @@ export default class DataReportForeveryone extends Component {
             var semeter = 2;
         }
         var numyear_semeter = numyear + '_' + semeter + '_';
+        this.setState({ yearAndSemesterForSalaryRound: numyear_semeter })
 
-        var branch = ["สาขาวิชาวิทยาการคอมพิวเตอร์", "สาขาวิชาเคมี", "สาขาวิชาฟิสิกส์", "สาขาวิชาเทคโนโลยีชีวภาพ", "สาขาวิชาคณิตศาสตร์ประกันภัย",
-            "สาขาวิชาเทคโนโลยีการเกษตร", "สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม", "สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน", "สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร",
-            "สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ"];
-        var i;
-        for (i = 0; i < branch.length; i++) {
-            if (this.props.department === branch[i]) {
-                var prefixLectrue1 = 'public/' + branch[i] + '/ภาระงานสอน/ปริญญาตรี/วิชาบรรยาย-วิชาปฏิบัติ/' + numyear_semeter + '';
-                var prefixLectrue2 = 'public/' + branch[i] + '/ภาระงานสอน/ปริญญาตรี/วิชาบรรยาย-วิชาปฏิบัติ/';
-                var prefixPathSenior1 = 'public/' + branch[i] + '/ภาระงานสอน/ปริญญาตรี/ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา/' + numyear_semeter + '';
-                var prefixPathSenior2 = 'public/' + branch[i] + '/ภาระงานสอน/ปริญญาตรี/ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา/';
-            }
-        }
-
-        // Lecture for everyone
-        const paramsLecture = {
-            Bucket: 'amplifys3smartreport142809-dev',
-            Delimiter: '',
-            Prefix: prefixLectrue1,
-        };
-
-        s3.listObjectsV2(paramsLecture, (err, data) => {
-            var file_name1 = (data.Contents[0].Key).split(prefixLectrue2);
-            var filename = file_name1[1] + "";
-            // this.setState({ lectureFilenameForeveryone: filename })
-            this.setState({
-                departmentLectureForeveryone: (filename).split('_')[2],
-                yearLectureForeveryone: (filename).split('_')[0],
-                semesterLectureForeveryone: (filename).split('_')[1],
-                timeLectureForeveryone: (filename).split('_')[4]
-            })
-
-        })
-
-        //Senior  for everyone
-        const paramsSenior = {
-            Bucket: 'amplifys3smartreport142809-dev',
-            Delimiter: '',
-            Prefix: prefixPathSenior1,
-        };
-
-        s3.listObjectsV2(paramsSenior, (err, data) => {
-            var file_name1 = (data.Contents[0].Key).split(prefixPathSenior2);
-            var filename = file_name1[1] + "";
-            // this.setState({ seniorProjectFilenameForeveryone: filename })
-            this.setState({
-                departmentSeniorProjectForeveryone: (filename).split('_')[2],
-                yearSeniorProjectForeveryone: (filename).split('_')[0],
-                semesterSeniorProjectForeveryone: (filename).split('_')[1],
-                timeSeniorProjectForeveryone: (filename).split('_')[4]
-            })
-
-        })
     }
 
     render() {
@@ -126,29 +82,28 @@ export default class DataReportForeveryone extends Component {
                                 <table class="table is-striped is-fullwidth">
                                     <thead>
                                         <tr>
-                                            <th>หัวข้อ</th>
-                                            <th>สาขาวิชา</th>
-                                            <th>ปีการศึกษา</th>
+                                            <th>ระดับการศึกษา</th>
+                                            <th>หลักสูตร</th>
+                                            <th>หมวดวิชา</th>
                                             <th>ภาคการศึกษา</th>
-                                            <th>อัปโหลดเมื่อ</th>
+                                            <th>สถานะ</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>วิชาบรรยายเเละปฎิบัติการ</td>
-                                            <td>{this.state.departmentLectureForeveryone}</td>
-                                            <td>{this.state.yearLectureForeveryone}</td>
-                                            <td>{this.state.semesterLectureForeveryone}</td>
-                                            <td>{this.state.timeLectureForeveryone}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>ซีเนียร์โปรเจคหรือปัญหาพิเศษ</td>
-                                            <td>{this.state.departmentSeniorProjectForeveryone}</td>
-                                            <td>{this.state.yearSeniorProjectForeveryone}</td>
-                                            <td>{this.state.semesterSeniorProjectForeveryone}</td>
-                                            <td>{this.state.timeSeniorProjectForeveryone}</td>
-                                        </tr>
-                                    </tbody>
+
+                                    {this.state.showTableForeveryone && <TableReportBachelor
+                                        yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
+                                        department={this.props.department}
+                                    />}
+                                    {this.state.showTableForeveryone && <TableReportMaster
+                                        yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
+                                        department={this.props.department}
+                                    />}
+                                    {this.state.showTableForeveryone && <TableReportDoctor 
+                                        yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
+                                        department={this.props.department}
+                                    />}
+
+
                                 </table>
                             </div>
                         </section>

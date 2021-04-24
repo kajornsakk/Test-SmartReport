@@ -2,6 +2,9 @@ import React, { Component, Fragment } from 'react'
 import * as XLSX from 'xlsx';
 import moment from 'moment';
 import Amplify, { Storage } from 'aws-amplify';
+import Popup from './Popup';
+import PopupSaveFile from './PopupSaveFile';
+import PopupDanger from './PopupDanger';
 
 const config = require('../config.json');
 
@@ -29,6 +32,30 @@ export default class UploadLectureDoctor extends Component {
     state = {
         chack: false
     }
+
+    // เพิ่มมา 23/04/64
+    state = {
+        showPopup: false,
+        showPopupSave: false,
+        showPopupDanger: false,
+        showNotification: false,
+        textAleart: [],
+        textAleartSave: '',
+        textAleartDanger: ''
+    }
+    clickPopup = (e) => {
+        this.setState({ showPopup: !this.state.showPopup })
+    }
+    clickPopupSave = (e) => {
+        this.setState({ showPopupSave: !this.state.showPopupSave })
+    }
+    clickPopupDanger = (e) => {
+        this.setState({ showPopupDanger: !this.state.showPopupDanger })
+    }
+    clickNotification = (e) => {
+        this.setState({ showNotification: !this.state.showNotification })
+    }
+    //
 
     onChangeYear = (e) => {
         this.setState({ year: e.target.value })
@@ -85,7 +112,7 @@ export default class UploadLectureDoctor extends Component {
 
             // alert(this.state.educationlevel)
 
-            if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
+            if (this.state.version === 'วิชาบรรยาย') {
 
                 var buffer = (d.A3.v).split(" ");
                 var buffer2 = buffer[1].split("/");
@@ -107,40 +134,47 @@ export default class UploadLectureDoctor extends Component {
                     && SemesterFromFile === this.state.semester && YearFromFile === this.state.year
                     && CourseFromFile === this.state.course && EducationFromFile === 'ปริญญาเอก') {
                     this.setState({ chack: true })
-                    alert('Good!! (ป.โท เอก บรรยาย/ปฏิบัติ) --> Format ถูกต้องสามารถอัปโหลดข้อมูลได้');
+                    this.setState({
+                        showNotification: true
+                    })
                 }
                 else {
-                    var text_alert = "";
+
+                    var arrTextAleart = [];
                     if (DepartmentFromFile !== this.state.department) {
-                        text_alert = text_alert + "!! สาขาวิชาไม่ตรงกับข้อมูลนำเข้า โปรดเลือกสาขาวิชาใหม่\n";
+                        arrTextAleart.push('"สาขาวิชา" ไม่ตรงกับข้อมูลนำเข้า');
                         this.setState({ department: '' })
                     }
                     if (LectureFromFile !== 'บรรยาย' && PracticeFromFile !== 'ปฏิบัติ') {
-                        text_alert = text_alert + "!! ประเภทไม่ตรงกับข้อมูลนำเข้า \n";
+                        arrTextAleart.push('"ประเภท" ไม่ตรงกับข้อมูลนำเข้า');
                         this.setState({ version: '' })
                     }
                     if (SemesterFromFile !== this.state.semester) {
-                        text_alert = text_alert + "!! ภาคการศึกษาไม่ตรงกับข้อมูลนำเข้า \n"
+                        arrTextAleart.push('"ภาคการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
                         this.setState({ semester: '' })
                     }
                     if (YearFromFile !== this.state.year) {
-                        text_alert = text_alert + "!! ปีการศึกษาไม่ตรงกับข้อมูลนำเข้า \n"
+                        arrTextAleart.push('"ปีการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
                         this.setState({ year: '' })
                     }
                     if (CourseFromFile !== this.state.course) {
-                        text_alert = text_alert + "!! หลักสูตรไม่ตรงกับข้อมูลนำเข้า \n"
+                        arrTextAleart.push('"หลักสูตร" ไม่ตรงกับข้อมูลนำเข้า');
                         this.setState({ course: '' })
                     }
                     if (EducationFromFile !== 'ปริญญาเอก') {
-                        text_alert = text_alert + "!! ระดับการศึกษาไม่ตรงกับข้อมูลนำเข้า \n"
+                        arrTextAleart.push('"ระดับการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
                         this.setState({ educationlevel: '' })
                     }
-                    alert(text_alert);
+                    // เพิ่ม
+                    this.setState({
+                        textAleart: arrTextAleart,
+                        showPopup: true
+                    })
 
                 }
             }
 
-            if (this.state.version === 'วิทยานิพนธ์-สารนิพนธ์-ปัญหาพิเศษ-สัมมนา') {
+            if (this.state.version === 'วิทยานิพนธ์') {
                 // alert(this.state.version)
 
                 var buffer = (d.A3.v).split(" ");
@@ -162,35 +196,41 @@ export default class UploadLectureDoctor extends Component {
                     && CourseFromFile === this.state.course && EducationFromFile === 'ปริญญาเอก') {
 
                     this.setState({ chack: true })
-                    alert('Good!! (ป.โท เอก วิทยานิพนธ์) --> Format ถูกต้องสามารถอัปโหลดข้อมูลได้');
+                    this.setState({
+                        showNotification: true
+                    })
                 }
                 else {
-                    var text_alert = "";
+                    var arrTextAleart = [];
                     if (DepartmentFromFile !== this.state.department) {
-                        text_alert = text_alert + "!! สาขาวิชาไม่ตรงกับข้อมูลนำเข้า \n";
+                        arrTextAleart.push('"สาขาวิชา" ไม่ตรงกับข้อมูลนำเข้า');
                         this.setState({ department: '' })
                     }
                     if (ThesisFromFile !== 'วิทยานิ-พนธ์') {
-                        text_alert = text_alert + "!! ประเภทไม่ตรงกับข้อมูลนำเข้า \n";
+                        arrTextAleart.push('"ประเภท" ไม่ตรงกับข้อมูลนำเข้า');
                         this.setState({ version: '' })
                     }
                     if (SemesterFromFile !== this.state.semester) {
-                        text_alert = text_alert + "!! ภาคการศึกษาไม่ตรงกับข้อมูลนำเข้า \n"
+                        arrTextAleart.push('"ภาคการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
                         this.setState({ semester: '' })
                     }
                     if (YearFromFile !== this.state.year) {
-                        text_alert = text_alert + "!! ปีการศึกษาไม่ตรงกับข้อมูลนำเข้า \n"
+                        arrTextAleart.push('"ปีการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
                         this.setState({ year: '' })
                     }
                     if (CourseFromFile !== this.state.course) {
-                        text_alert = text_alert + "!! หลักสูตรไม่ตรงกับข้อมูลนำเข้า \n"
+                        arrTextAleart.push('"หลักสูตร" ไม่ตรงกับข้อมูลนำเข้า');
                         this.setState({ course: '' })
                     }
                     if (EducationFromFile !== 'ปริญญาเอก') {
-                        text_alert = text_alert + "!! ระดับการศึกษาไม่ตรงกับข้อมูลนำเข้า \n"
+                        arrTextAleart.push('"ระดับการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
                         this.setState({ educationlevel: '' })
                     }
-                    alert(text_alert);
+                    // เพิ่ม
+                    this.setState({
+                        textAleart: arrTextAleart,
+                        showPopup: true
+                    })
                 }
 
             }
@@ -213,14 +253,21 @@ export default class UploadLectureDoctor extends Component {
             Storage.put(fileName, this.state.file)
                 .then(() => {
                     console.log('sueccessfully saved file!');
-                    alert('Successfully save file!');
+                    // เพิ่ม
+                    this.setState({
+                        textAleartSave: 'Successfully save file!',
+                        showPopupSave: true
+                    })
                     this.setState({ fileUrl: '', file: '', filename: '' })
                 })
                 .catch(err => {
                     console.log('error uploading file', err);
                 })
         } else {
-            alert('บันทึกไม่สำเสร็จ \n !! ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง !!')
+            this.setState({
+                textAleartDanger: 'ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง',
+                showPopupDanger: true
+            })
         }
 
     }
@@ -228,6 +275,17 @@ export default class UploadLectureDoctor extends Component {
     render() {
         return (
             <Fragment>
+
+                {/* เพิ่มเติม */}
+                {this.state.showNotification && <div class="container">
+                    <div class="columns is-multiline is-centered">
+                        <div class="notification is-primary is-light">
+                            <button class="delete" onClick={this.clickNotification}></button>
+                            Format ถูกต้องสามารถอัปโหลดข้อมูลได้
+                        </div>
+                    </div>
+                </div>}
+
                 <div class="columns is-multiline is-centered">
 
                     <div class="column is-one-quarter">
@@ -286,8 +344,8 @@ export default class UploadLectureDoctor extends Component {
                             <div class="select" value={this.state.version} onChange={this.onChangeVersion}>
                                 <select>
                                     <option>โปรดเลือก</option>
-                                    <option>วิชาบรรยาย-วิชาปฏิบัติ</option>
-                                    <option>วิทยานิพนธ์-สารนิพนธ์-ปัญหาพิเศษ-สัมมนา</option>
+                                    <option>วิชาบรรยาย</option>
+                                    <option>วิทยานิพนธ์</option>
                                 </select>
                             </div>
 
@@ -342,6 +400,9 @@ export default class UploadLectureDoctor extends Component {
                         </div>
                     </div>
                 </div>
+                {this.state.showPopup && <Popup clickPopup={this.clickPopup} textAleart={this.state.textAleart} />}
+                {this.state.showPopupSave && <PopupSaveFile clickPopupSave={this.clickPopupSave} textAleart={this.textAleartSave} />}
+                {this.state.showPopupDanger && <PopupDanger clickPopupDanger={this.clickPopupDanger} textAleart={this.textAleartDanger} />}
             </Fragment>
         )
     }

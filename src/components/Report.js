@@ -278,7 +278,7 @@ export default class Report extends Component {
                                                         <option>สาขาวิชาฟิสิกส์</option>
                                                         <option>สาขาวิชาเคมี</option>
                                                         <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
-                                                        <option>สาขาวิชาคณิตศาสตร์ประกันภัย</option>
+                                                        <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
                                                         <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
                                                         <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
                                                         <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
@@ -305,7 +305,7 @@ export default class Report extends Component {
 
                                                 </div>
 
-
+ 
                                             </div>
                                         </div>
                                     </div>

@@ -229,7 +229,7 @@ export default class Send_report extends Component {
                                                         {this.state.showObjectList&&<ListObjects department={this.state.departmemtSend} year={this.state.yearSend} salaryRound={this.state.salaryRoundSend}/>}
 
                                                     </tbody>
-
+ 
 
                                                 </table>
                                             </div>

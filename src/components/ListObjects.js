@@ -22,8 +22,9 @@ export const ListObjects = props => {
 
     const [listFiles, setListFiles] = useState([]);
 
-    useEffect(() => {
-        s3.listObjectsV2(paramsLecture, (err, data) => {
+    // useEffect(() => {
+    async function listObjectFroms3 () {
+        await s3.listObjectsV2(paramsLecture, (err, data) => {
             if (err) {
                 console.log(err, err.stack);
             } else {
@@ -65,7 +66,8 @@ export const ListObjects = props => {
                 // console.log(listFiles);
             }
         });
-    }, []);
+    }
+    // }, []);
 
     function handleAllChecked(event) {
         let lists = listFiles;
@@ -87,6 +89,7 @@ export const ListObjects = props => {
 
     return (
         <Fragment>
+            <button onClick={listObjectFroms3}>Click</button>
             <tr>
                 <td></td>
                 <td></td>
@@ -98,7 +101,7 @@ export const ListObjects = props => {
                 listFiles.map((name, index) => (
                     <CheckBox2 handleCheckChieldElement={handleCheckChieldElement} {...name} />
                 ))}
-
+ 
             <div>
                 <SendEmail data={listFiles} />
             </div>

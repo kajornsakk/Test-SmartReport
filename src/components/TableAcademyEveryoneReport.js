@@ -94,7 +94,7 @@ export const TableAcademyEveryoneReport = props => {
                                 <tr>
                                     <th></th>
                                     <th></th>
-                                    <th><input type="checkbox" value="checkedall" onClick={handleAllChecked} />เลือกทั้งหมด</th>
+                                    <th><input type="checkbox" value="checkedall" onClick={handleAllChecked} /> เลือกทั้งหมด</th>
                                 </tr>
                                 {/* {listFiles &&
                             listFiles.map((list) => (
@@ -106,7 +106,7 @@ export const TableAcademyEveryoneReport = props => {
                                         <tr>
                                             <td>{list.name}</td>
                                             <td>{list.file}</td>
-                                            <td><input key={list.id} onChange={handleCheckChieldElement} type="checkbox" name={list.name} checked={list.isChecked} ></input></td>
+                                            <td><input key={list.id} onChange={handleCheckChieldElement} type="checkbox" name={list.name} checked={list.isChecked} /> เลือก</td>
                                         </tr>
                                     ))}
                             </tbody>

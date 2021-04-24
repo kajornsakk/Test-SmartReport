@@ -1,6 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import AWS from 'aws-sdk';
 import PopupReportIndividual from './PopupReportIndividual';
+import TableReportBachelor from './TableReportBachelor';
+import TableReportDoctor from './TableReportDoctor';
+import TableReportMaster from './TableReportMaster';
 
 export default class DataReportIndividual extends Component {
 
@@ -14,7 +17,14 @@ export default class DataReportIndividual extends Component {
         filePresentationForIndividual: ''
     }
     state = {
+        yearAndSemesterForSalaryRound: ''
+    }
+    state = {
         showPopup: false
+    }
+
+    state = {
+        showTableForindividual: false
     }
 
     onChangeInstructor = (e) => {
@@ -30,6 +40,8 @@ export default class DataReportIndividual extends Component {
         console.log(this.props.year);
         console.log(this.props.department);
         console.log(this.state.instructor);
+
+        this.setState({ showTableForindividual: true })
 
         AWS.config.update({
             accessKeyId: 'AKIAJJOOQS6RRWQUJKNQ',
@@ -49,39 +61,6 @@ export default class DataReportIndividual extends Component {
         }
         var numyear_semeter = numyear + '_' + semeter + '_';
 
-        // Lecture for individual
-        var prefixLectrue1 = 'public/' + this.props.department + '/ภาระงานสอน/ปริญญาตรี/วิชาบรรยาย-วิชาปฏิบัติ/' + numyear_semeter + '';
-        const paramsLecture = {
-            Bucket: 'amplifys3smartreport142809-dev',
-            Delimiter: '',
-            Prefix: prefixLectrue1,
-        };
-
-        s3.listObjectsV2(paramsLecture, (err, data) => {
-            var file_name1 = (data.Contents[0].Key).split(prefixLectrue1);
-            var filename = file_name1[1] + "";
-            this.setState({
-                fileLectureForIndividual: filename
-            })
-
-        })
-
-        //Senior  for individual
-        var prefixPathSenior1 = 'public/' + this.props.department + '/ภาระงานสอน/ปริญญาตรี/ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา/' + numyear_semeter + '';
-        const paramsSenior = {
-            Bucket: 'amplifys3smartreport142809-dev',
-            Delimiter: '',
-            Prefix: prefixPathSenior1,
-        };
-
-        s3.listObjectsV2(paramsSenior, (err, data) => {
-            var file_name1 = (data.Contents[0].Key).split(prefixPathSenior1);
-            var filename = file_name1[1] + "";
-            this.setState({
-                fileSeniorForIndividual: filename
-            })
-
-        })
 
         // article for individual
         var prefixArticle = 'public/' + this.props.department + '/ผลงานทางวิชาการ/รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ/' + this.state.instructor + '';
@@ -120,73 +99,116 @@ export default class DataReportIndividual extends Component {
     render() {
         const active = this.state.showPopup ? "is-active" : "";
         return (
-            <div class="container">
-                <div class="columns is-multiline is-centered">
-                    <div class="column is-one-quarter">
+            <Fragment>
+                <div class="container">
+                    <div class="columns is-multiline is-centered">
+                        <div class="column is-one-quarter">
+                            <div class="field">
+                                <label class="label">รายชื่อ :</label>
+                            </div>
+
+                            <div class="select" value={this.state.instructor} onChange={this.onChangeInstructor}>
+                                <select>
+                                    <option>โปรดเลือก</option>
+                                    <option>ประภาพร รัตนธำรง</option>
+                                    <option>วนิดา พฤทธิวิทยา</option>
+                                    <option>นุชชากร งามเสาวรส</option>
+                                    <option>เสาวลักษณ์ วรรธนาภา</option>
+                                    <option>ธนาธร ทะนานทอง</option>
+                                    <option>เยาวดี เต็มธนาภัทร์</option>
+                                    <option>เด่นดวง ประดับสุวรรณ</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="columns is-multiline is-centered">
                         <div class="field">
-                            <label class="label">รายชื่อ :</label>
-                        </div>
-
-                        <div class="select" value={this.state.instructor} onChange={this.onChangeInstructor}>
-                            <select>
-                                <option>โปรดเลือก</option>
-                                <option>ประภาพร รัตนธำรง</option>
-                                <option>วนิดา พฤทธิวิทยา</option>
-                                <option>นุชชากร งามเสาวรส</option>
-                                <option>เสาวลักษณ์ วรรธนาภา</option>
-                                <option>ธนาธร ทะนานทอง</option>
-                                <option>เยาวดี เต็มธนาภัทร์</option>
-                                <option>เด่นดวง ประดับสุวรรณ</option>
-                            </select>
+                            <button class="button is-primary" onClick={this.chackFileForIndividual}>ตรวจสอบข้อมูล</button>
                         </div>
                     </div>
 
-                </div>
-                <div class="columns is-multiline is-centered">
-                    <div class="field">
-                        <button class="button is-primary" onClick={this.chackFileForIndividual}>ตรวจสอบข้อมูล</button>
+                    <br />
+                    <span class="is-size-4 has-text-primary">
+                        หมวดภาระงานสอน
+                        </span>
+                    <br />
+
+                    <div class="card">
+                        <section class="section is-small">
+                            <div class="columns is-multiline is-centered">
+                                <table class="table is-striped is-fullwidth">
+                                    <thead>
+                                        <tr>
+                                            <th>ระดับการศึกษา</th>
+                                            <th>หลักสูตร</th>
+                                            <th>หมวดวิชา</th>
+                                            <th>ภาคการศึกษา</th>
+                                            <th>สถานะ</th>
+                                        </tr>
+                                    </thead>
+
+                                    {this.state.showTableForindividual && <TableReportBachelor
+                                        yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
+                                        department={this.props.department}
+                                    />}
+
+                                    {this.state.showTableForindividual && <TableReportMaster
+                                        yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
+                                        department={this.props.department}
+                                    />}
+                                    {this.state.showTableForindividual && <TableReportDoctor
+                                        yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
+                                        department={this.props.department}
+                                    />}
+
+
+                                </table>
+                            </div>
+                        </section>
+
                     </div>
+
+                    <br />
+                    <span class="is-size-4 has-text-primary">
+                        หมวดผลงานทางวิชาการ
+                        </span>
+                    <br />
+
+                    <div class="card">
+                        <section class="section is-small">
+                            <div class="columns is-multiline is-centered">
+                                <table class="table is-striped is-fullwidth">
+                                    <thead>
+                                        <tr>
+                                            <th>หัวข้อ</th>
+                                            <th>ขื่อไฟล์</th>
+                                            <th>สถานะ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>บทความ/ผลงานตีพิมพ์ในวารสารวิชาการ</td>
+                                            <td>{this.state.fileArticleForIndividual}</td>
+                                            <td>สถานะ</td>
+                                        </tr>
+                                        <tr>
+                                            <td>การเสนอผลงานในที่ประชุมวิชาการ</td>
+                                            <td>{this.state.filePresentationForIndividual}</td>
+                                            <td>สถานะ</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+
+                    </div>
+
                 </div>
+            </Fragment>
 
 
-                <div class="columns is-multiline is-centered">
-                    {/* <div class="column is-centered"> */}
-                    <table class="table is-striped is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>หัวข้อ</th>
-                                <th>ชื่อไฟล์</th>
-                                <th>เปลี่ยนไฟล์</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>วิชาบรรยายเเละปฎิบัติการ</td>
-                                <td>{this.state.fileLectureForIndividual}</td>
-                                <td><button class="button is-small is-primary" onClick={this.onClickPopup}>เลือกไฟล์</button></td>
-                            </tr>
-                            <tr>
-                                <td>ซีเนียร์โปรเจคหรือปัญหาพิเศษ</td>
-                                <td>{this.state.fileSeniorForIndividual}</td>
-                                <td><button class="button is-small is-primary">เลือกไฟล์</button></td>
-                            </tr>
-                            <tr>
-                                <td>บทความ/ผลงานตีพิมพ์ในวารสารวิชาการ</td>
-                                <td>{this.state.fileArticleForIndividual}</td>
-                                <td><button class="button is-small is-primary">เลือกไฟล์</button></td>
-                            </tr>
-                            <tr>
-                                <td>การเสนอผลงานในที่ประชุมวิชาการ</td>
-                                <td>{this.state.filePresentationForIndividual}</td>
-                                <td><button class="button is-small is-primary">เลือกไฟล์</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    {/* </div> */}
-
-                </div>
-                {this.state.showPopup && <PopupReportIndividual classActive={active}/>}
-            </div>
         )
     }
 }

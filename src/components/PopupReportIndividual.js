@@ -2,9 +2,9 @@ import React, { Fragment } from 'react'
 
 export const PopupReportIndividual = props => {
 
-    
+
     const show = props.classActive;
-    function handlerClick () {
+    function handlerClick() {
         // show = "";
     }
     return (

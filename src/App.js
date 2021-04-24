@@ -44,7 +44,6 @@ class App extends Component {
               <Route exact path="/Report" component={Report} />
               <Route exact path="/Send_report" component={Send_report} />
               <Route exact path="/Upload_History" component={Upload_History} />
-              <Route exact path="/TestS3" component={TestS3} />
               <Route exact path="/admin" component={ProductAdmin} />
               <Route exact path="/login" component={LogIn} />
               <Route exact path="/register" component={Register} />
