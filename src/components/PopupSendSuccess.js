@@ -1,10 +1,9 @@
 import React, { Component,Fragment } from 'react'
 
-export default class PopupSaveFile extends Component {
+export default class PopupSendSuccess extends Component {
 
     handleClick = () => {
-        this.props.clickPopupSave();
-        this.props.sendApi();
+        this.props.clickPopup();
     }
 
     render() {
@@ -20,13 +19,15 @@ export default class PopupSaveFile extends Component {
                                     <span class="icon has-text-success">
                                         <i class="fas fa-check-square"></i>
                                     </span>
-                                    <span>อัปโหลดข้อมูลสำเร็จ</span>
+                                    <span>ส่งอีเมลสำเร็จ</span>
                                 </div>
                             </p>
-                            <button class="delete" aria-label="close" onClick={this.handleClick} ></button>
+                            <button class="delete" aria-label="close"  onClick={this.handleClick}></button>
                         </header>
                         <section class="modal-card-body">
-                            <p>{this.props.textAleart}</p>
+                            {/* {this.props.listSuccess.map((list) => (
+                                <li>ชื่อ : {list.name}  อีเมล : {list.email}</li>
+                            ))} */}
                         </section>
                         <footer class="modal-card-foot">
                             {/* <button class="button is-success">Save changes</button> */}

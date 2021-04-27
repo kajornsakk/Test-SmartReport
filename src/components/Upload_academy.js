@@ -32,10 +32,15 @@ export default class Upload_academy extends Component {
         showPopup: false,
         showPopupSave: false,
         showPopupDanger: false,
-        showNotification : false,
+        showNotification: false,
         textAleart: [],
         textAleartSave: '',
         textAleartDanger: ''
+    }
+    state = {
+        isPending: false,
+        filePathToSendApi :'',
+        typeToSendApi :'',
     }
     clickPopup = (e) => {
         this.setState({ showPopup: !this.state.showPopup })
@@ -48,6 +53,17 @@ export default class Upload_academy extends Component {
     }
     clickNotification = (e) => {
         this.setState({ showNotification: !this.state.showNotification })
+    }
+
+    sendMessageApi = (e)=>{
+        console.log("send message to API Academy");
+        //ต้องการไฟล์ path
+        var filePath =[];
+        filePath.push({
+            ['filePath']:this.state.filePathToSendApi,
+            ['type'] : this.state.typeToSendApi
+        })
+        console.log(filePath);
     }
 
 
@@ -155,6 +171,7 @@ export default class Upload_academy extends Component {
     }
 
     saveFile = (e) => {
+        this.setState({ isPending: true });
         const DASH_DMYHMS = 'DD-MM-YYYY HH:mm:ss';
         const timeStamp = moment().format(DASH_DMYHMS);
         if (this.state.version == 'รายงานบทความ/ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ') {
@@ -167,6 +184,15 @@ export default class Upload_academy extends Component {
             this.state.professor + "_" + this.state.department + "_" + bufferVersion + "_" + timeStamp + ".xlsx";
         Storage.put(fileName, this.state.file)
             .then(() => {
+                this.setState({
+                    filePathToSendApi: fileName,
+                    typeToSendApi : bufferVersion
+                });
+                e.preventDefault();
+                this.setState({
+                    isPending: false,
+                    showNotification: false
+                })
                 console.log('Successfully save file!')
                 this.setState({
                     textAleartSave: 'Successfully save file!',
@@ -186,11 +212,11 @@ export default class Upload_academy extends Component {
             })
 
         //เพิ่มาจากด้านล่าง
-        this.setState({
-            professor: '',
-            department: '',
-            version: ''
-        })
+        // this.setState({
+        //     professor: '',
+        //     department: '',
+        //     version: ''
+        // })
     }
 
 
@@ -252,7 +278,7 @@ export default class Upload_academy extends Component {
                                                         <option>สาขาวิชาฟิสิกส์</option>
                                                         <option>สาขาวิชาเคมี</option>
                                                         <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
-                                                        <option>สาขาวิชาคณิตศาสตร์ประกันภัย</option>
+                                                        <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
                                                         <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
                                                         <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
                                                         <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
@@ -292,7 +318,7 @@ export default class Upload_academy extends Component {
                                                         <option>เสาวลักษณ์ วรรธนาภา</option>
                                                         <option>ธนาธร ทะนานทอง</option>
                                                         <option>เยาวดี เต็มธนาภัทร์</option>
-                                                        <option>เด่นดวง ประดับสุวรรณ</option>
+                                                        <option>เด่นดวง ประดับสุวรรณ</option> 
                                                     </select>
                                                 </div>
                                             </div>
@@ -317,7 +343,8 @@ export default class Upload_academy extends Component {
                                                     <span class="icon is-small">
                                                         <i class="fas fa-check"></i>
                                                     </span>
-                                                    <span>อัพโหลดข้อมูล</span>
+                                                    {!this.state.isPending && <span>บันทึกข้อมูล</span>}
+                                                    {this.state.isPending && <span>กำลังบันทึกข้อมูล...</span>}
                                                 </button>
                                             </div>
                                         </div>
@@ -335,8 +362,8 @@ export default class Upload_academy extends Component {
                 </div>
 
                 {this.state.showPopup && <Popup clickPopup={this.clickPopup} textAleart={this.state.textAleart} />}
-                {this.state.showPopupSave && <PopupSaveFile clickPopupSave={this.clickPopupSave} textAleart={this.textAleartSave} />}
-                {this.state.showPopupDanger && <PopupDanger clickPopupDanger={this.clickPopupDanger} textAleart={this.textAleartDanger}/> }
+                {this.state.showPopupSave && <PopupSaveFile clickPopupSave={this.clickPopupSave} textAleart={this.textAleartSave} sendApi = {this.sendMessageApi}/>}
+                {this.state.showPopupDanger && <PopupDanger clickPopupDanger={this.clickPopupDanger} textAleart={this.textAleartDanger} />}
 
 
             </Fragment>

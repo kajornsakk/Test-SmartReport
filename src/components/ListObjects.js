@@ -21,13 +21,17 @@ export const ListObjects = props => {
     };
 
     const [listFiles, setListFiles] = useState([]);
+    const [showTable, setshowTable] = useState(false);
+    const [isPending, setisPending] = useState(false)
 
     // useEffect(() => {
-    async function listObjectFroms3 () {
+    async function listObjectFroms3() {
         await s3.listObjectsV2(paramsLecture, (err, data) => {
             if (err) {
                 console.log(err, err.stack);
             } else {
+                setisPending(true);
+                console.log(data.Contents);
                 var contents = data.Contents;
                 var arrData = [];
                 var name = 'name';
@@ -64,14 +68,19 @@ export const ListObjects = props => {
                 console.log(arrData);
                 setListFiles(arrData);
                 // console.log(listFiles);
+                setshowTable(true);
+                setisPending(false)
             }
         });
     }
     // }, []);
 
     function handleAllChecked(event) {
-        let lists = listFiles;
-        lists.forEach(list => list.isChecked = event.target.checked)
+        let lists = listFiles
+        lists.forEach(list => {
+            list.isChecked = event.target.checked
+            console.log(event.target.checked);
+        })
         setListFiles(lists);
         console.log(listFiles);
     }
@@ -89,23 +98,54 @@ export const ListObjects = props => {
 
     return (
         <Fragment>
-            <button onClick={listObjectFroms3}>Click</button>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><input type="checkbox" value="checkedall" onClick={handleAllChecked} />เลือกทั้งหมด</td>
-            </tr>
-            {listFiles &&
-                listFiles.map((name, index) => (
-                    <CheckBox2 handleCheckChieldElement={handleCheckChieldElement} {...name} />
-                ))}
- 
-            <div>
-                <SendEmail data={listFiles} />
+
+            <div class="container">
+                <div class="columns is-multiline is-centered">
+                    <div class="field">
+                        <button class="button is-primary" onClick={listObjectFroms3}>
+                            {!isPending && <span>ค้นหา</span>}
+                            {isPending && <span>กำลังค้นหา...</span>}</button>
+                    </div>
+                </div>
             </div>
 
+            <div class="columns is-multiline is-centered">
+
+                {/* <div class="columns is-multiline is-centered">
+                    <div class="field1">
+                        <button class="button is-primary" onClick={listObjectFroms3}>
+                            {!isPending && <span>ค้นหา</span>}
+                            {isPending && <span>กำลังค้นหา...</span>}</button>
+                    </div>
+                </div> */}
+
+                {showTable && <div class="column is-centered">
+                    <table class="table is-striped is-fullwidth">
+                        <thead>
+                            <th>ชื่ออาจารย์</th>
+                            <th>สาขาวิชา</th>
+                            <th>สำหรับเลื่อนเงินเดือน</th>
+                            <th>ช่วงเวลาผลงาน</th>
+                            <th>เลือก</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><input type="checkbox" value="checkedall" onClick={handleAllChecked} />เลือกทั้งหมด</td>
+                            </tr>
+                            {listFiles &&
+                                listFiles.map((namee, index) => (
+                                    <CheckBox2 handleCheckChieldElement={handleCheckChieldElement} {...namee} />
+                                ))}
+ 
+                        </tbody>
+                    </table>
+                </div>}
+            </div>
+            {showTable && <SendEmail data={listFiles} />}
         </Fragment>
 
     )

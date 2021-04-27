@@ -38,10 +38,14 @@ export default class UploadLectureBachelor extends Component {
         showPopup: false,
         showPopupSave: false,
         showPopupDanger: false,
-        showNotification : false,
+        showNotification: false,
         textAleart: [],
         textAleartSave: '',
         textAleartDanger: ''
+    }
+    state = {
+        isPending: false,
+        filePathToSendApi :''
     }
     clickPopup = (e) => {
         this.setState({ showPopup: !this.state.showPopup })
@@ -76,6 +80,14 @@ export default class UploadLectureBachelor extends Component {
         this.setState({ course: e.target.value })
     }
 
+    sendMessageApi = (e)=>{
+        console.log("send message to API Bachelor");
+        //ต้องการไฟล์ path
+        var filePath =[];
+        filePath.push({['filePath']:this.state.filePathToSendApi})
+        console.log(filePath);
+    }
+
     handleChange = e => {
         const file = e.target.files[0]
         this.setState({
@@ -84,7 +96,6 @@ export default class UploadLectureBachelor extends Component {
             filename: file.name
         })
         this.readExcel(file);
-
     }
 
     readExcel = (file) => {
@@ -137,7 +148,7 @@ export default class UploadLectureBachelor extends Component {
                     })
                 }
                 else {
-                    
+
                     var arrTextAleart = [];
                     if (DepartmentFromFile !== this.state.department) {
                         arrTextAleart.push('"สาขาวิชา" ไม่ตรงกับข้อมูลนำเข้า');
@@ -243,22 +254,28 @@ export default class UploadLectureBachelor extends Component {
 
     saveFile = (e) => {
 
+        this.setState({ isPending: true });
         const DASH_DMYHMS = 'DD-MM-YYYY HH:mm:ss';
         const timeStamp = moment().format(DASH_DMYHMS);
-        var fileName = this.state.department + "/" + "ภาระงานสอน" + "/ปริญญาตรี/" + this.state.course + "/" + this.state.version + "/" +
+        var fileName = this.state.department + "/" + "ภาระงานสอน" + "/ปริญญาตรี/" + this.state.course + "/" + this.state.year + "_" + this.state.semester + "_" + "/" + this.state.version + "/" +
             this.state.year + "_" + this.state.semester + "_" + this.state.department + "_" + this.state.version + "_" + timeStamp + ".xlsx";
-
+           
         if (this.state.chack) {
             Storage.put(fileName, this.state.file)
                 .then(() => {
+                    // 
+                    this.setState({filePathToSendApi: fileName});
+                    e.preventDefault();
+                    this.setState({
+                        isPending: false,
+                        showNotification: false
+                    })
                     console.log('sueccessfully saved file!');
-                    // alert('Successfully save file!');
-                    // เพิ่ม
                     this.setState({
                         textAleartSave: 'Successfully save file!',
                         showPopupSave: true
                     })
-
+                    
                     this.setState({ fileUrl: '', file: '', filename: '' })
                 })
                 .catch(err => {
@@ -272,23 +289,14 @@ export default class UploadLectureBachelor extends Component {
             })
         }
 
+
     }
 
- 
+
 
     render() {
         return (
             <Fragment>
-
-                {/* เพิ่มเติม */}
-                {this.state.showNotification && <div class="container">
-                    <div class="columns is-multiline is-centered">
-                        <div class="notification is-primary is-light">
-                            <button class="delete" onClick={this.clickNotification}></button>
-                            Format ถูกต้องสามารถอัปโหลดข้อมูลได้
-                        </div>
-                    </div>
-                </div>}
 
                 <div class="columns is-multiline is-centered">
 
@@ -402,6 +410,23 @@ export default class UploadLectureBachelor extends Component {
                     </div>
                 </div>
 
+                {/*  */}
+
+                {/* ปุ่มอัปโหลดไฟล์ */}
+                {/* <span class="file-cta">
+                    <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label">
+                       <input type='file' className="selectfile" onChange={this.handleChange} /> Small file…  
+                    </span>
+                </span> */}
+
+                {this.state.showNotification && <article class="message is-primary">
+                    <div class="message-body ">
+                        Format ไฟล์ข้อมูลถูกต้องสามารถอัปโหลดไฟล์ข้อมูลได้
+                    </div>
+                </article>}
 
                 <div class="container level-right">
                     <div class="columns is-multiline is-centered">
@@ -410,30 +435,30 @@ export default class UploadLectureBachelor extends Component {
                                 <span class="icon is-small">
                                     <i class="fas fa-check"></i>
                                 </span>
-                                <span>อัพโหลดข้อมูล</span>
+                                {!this.state.isPending && <span>บันทึกข้อมูล</span>}
+                                {this.state.isPending && <span>กำลังบันทึกข้อมูล...</span>}
                             </button>
                         </div>
                     </div>
                 </div>
 
 
-                {/* เพิ่มเติม */}
-                {/* <div class="container level-left">
-                    <div class="columns is-multiline is-centered">
-                        <div class="colum is-one-quarter">
-                            <button class="button is-primary " onClick={this.clickPopup}>
-                                <span class="icon is-small">
-                                    <i class="fas fa-check"></i>
-                                </span>
-                                <span>Show popup</span>
-                            </button>
-                        </div>
-                    </div>
-                </div> */}
+                {this.state.showPopup && <Popup 
+                    clickPopup={this.clickPopup} 
+                    textAleart={this.state.textAleart} 
+                />}
 
-                {this.state.showPopup && <Popup clickPopup={this.clickPopup} textAleart={this.state.textAleart} />}
-                {this.state.showPopupSave && <PopupSaveFile clickPopupSave={this.clickPopupSave} textAleart={this.textAleartSave} />}
-                {this.state.showPopupDanger && <PopupDanger clickPopupDanger={this.clickPopupDanger} textAleart={this.textAleartDanger}/> }
+                {this.state.showPopupSave && <PopupSaveFile 
+                    clickPopupSave={this.clickPopupSave} 
+                    textAleart={this.textAleartSave} 
+                    sendApi = {this.sendMessageApi}
+                />}
+                
+                {this.state.showPopupDanger && <PopupDanger 
+                    clickPopupDanger={this.clickPopupDanger} 
+                    textAleart={this.textAleartDanger} 
+                />}
+
             </Fragment>
         )
     }

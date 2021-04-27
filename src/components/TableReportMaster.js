@@ -14,7 +14,8 @@ export const TableReportMaster = props => {
 
     const [listFiles, setListFiles] = useState([]);
 
-    async function ReadFileFromS3() {
+    useEffect(() => {
+        // async function ReadFileFromS3() {
 
         var prefixLectrue = 'public/' + props.department + '/ภาระงานสอน/ปริญญาโท/';
         const paramsLecture = {
@@ -25,11 +26,12 @@ export const TableReportMaster = props => {
         var arrData = [];
         var arrBufferCourse = [];
         var count = 1;
-        await s3.listObjectsV2(paramsLecture, (err, data) => {
+        // await
+         s3.listObjectsV2(paramsLecture, (err, data) => {
 
             var contents = data.Contents;
 
-            console.log(data.Contents);
+            // console.log(data.Contents);
             contents.forEach(content => {
                 arrBufferCourse.push({
                     ['course']: (content.Key).split('/')[4]
@@ -45,13 +47,14 @@ export const TableReportMaster = props => {
                 contents.forEach(content => {
                     // console.log(content);
                     // console.log(((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาตรี/')[1]).split('/')[0]);
+                    var checkYearSemester = ((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาโท/')[1]).split('/')[1]; 
                     var checkCourse = ((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาโท/')[1]).split('/')[0];
-                    var checkLecture = ((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาโท/')[1]).split('/')[1];
-
-                    if (course == checkCourse && checkLecture == 'วิชาบรรยาย-วิชาปฏิบัติ') {
+                    var checkLecture = ((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาโท/')[1]).split('/')[2];
+                    
+                    if (course == checkCourse && checkLecture == 'วิชาบรรยาย-วิชาปฏิบัติ' && checkYearSemester == props.yearSemesterSalaryRound) { //เพิ่มเงือนไข 2563_1
                         arrBufferLecture.push(content.Key);
                     }
-                    if (course == checkCourse && checkLecture == 'วิทยานิพนธ์-สารนิพนธ์') {
+                    if (course == checkCourse && checkLecture == 'วิทยานิพนธ์-สารนิพนธ์' && checkYearSemester == props.yearSemesterSalaryRound) {
                         arrBufferAcademy.push(content.Key);
                     }
 
@@ -71,24 +74,31 @@ export const TableReportMaster = props => {
                 //ตรวจสอบเเต่ละไฟล์ว่สตรงกับรอบเงินเดือนไหม ถ้าตรงให้ใส่ true หรือ tag is-primary (เพื่อบอกสี)
 
                 var value = '';
-                var buffer1 = ((list).split('/')[6]).split('_');
+                var buffer1 = ((list).split('/')[7]).split('_');
                 var bufferYear = buffer1[0];
                 var bufferSemester = buffer1[1];
                 var semesterYear = bufferYear + "_" + bufferSemester + "_";
+                var statuss ='';
+
+                console.log(semesterYear);
+                console.log(props.yearSemesterSalaryRound);
 
                 if (semesterYear === props.yearSemesterSalaryRound) {
                     value = 'tag is-primary';
+                    statuss = 'อัปโหลดเเล้ว';
                 } else {
-                    value = false;
+                    value = 'tag is-warning';
+                    statuss = 'ยังไม่อัปโหลด';
                 }
 
                 // 
                 arrShow.push({
                     ['id']: count,
-                    ['course']: ((list).split('/')[4]).split(' ')[1],
-                    ['lecture']: (list).split('/')[5],
-                    ['file']: (list).split('/')[5],
-                    ['isChecked']: value
+                    ['course']: (((list).split('/')[4]).split(' ')[1]).split('สาขาวิชา')[1],
+                    ['lecture']: (list).split('/')[6],
+                    ['file']: list,
+                    ['isChecked']: value,
+                    ['status'] : statuss
                 })
                 count++;
             })
@@ -97,15 +107,17 @@ export const TableReportMaster = props => {
 
         });
 
-    }
+    // }
+    }, [])
+
+    
 
     return (
         <Fragment>
-            <button onClick={ReadFileFromS3}>test</button>
+            {/* <button onClick={ReadFileFromS3}>test</button> */}
             <tbody>
                 <tr>
                     <th>ปริญญาโท</th>
-                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -115,8 +127,7 @@ export const TableReportMaster = props => {
                         <td></td>
                         <td>{list.course}</td>
                         <td>{list.lecture}</td>
-                        <td></td>
-                        <td><span class={`${list.isChecked}`}>อัปโหลดเเล้ว</span></td>
+                        <td><span class={`${list.isChecked}`}>{list.status}</span></td>
 
                     </tr>
                 ))}

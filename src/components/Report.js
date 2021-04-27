@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import DataReportIndividual from './DataReportIndividual';
 import DataReportForeveryone from './DataReportForeveryone';
+import CreateForm from './CreateForm';
 
 export default class Report extends Component {
 
@@ -45,7 +46,7 @@ export default class Report extends Component {
     state = { showSelectRadioForindividual: false }
     state = { showSelectRadioForeveryone: false }
     state = { showTableForeveryone: false }
-    
+
     handleRadiosForIndividual = () => {
         this.setState({ showSelectRadioForindividual: true });
         this.setState({ showSelectRadioForeveryone: false });
@@ -227,7 +228,47 @@ export default class Report extends Component {
                             <div class="card">
                                 <section class="section is-small">
                                     <div class="container">
+
+                                        {/* Radio Button */}
                                         <div class="columns is-multiline is-centered">
+                                            <div class="column is-one-quarter">
+                                                <label for="flexRadioDefault1">
+                                                    <input type="radio" value="option1" name="flexRadioDefault" id="flexRadioDefault1"
+                                                        onChange={this.handleRadiosForEveryone} />สำหรับทุกคน</label>
+                                            </div>
+
+                                            <div class="column is-one-quarter">
+                                                <label for="flexRadioDefault1">
+                                                    <input type="radio" value="option2" name="flexRadioDefault" id="flexRadioDefault2"
+                                                        onChange={this.handleRadiosForIndividual} />สำหรับรายบุคคล</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="columns is-multiline is-centered">
+
+
+                                            <div class="column is-one-quarter">
+                                                <div class="field">
+                                                    <label class="label">สาขาวิชา :</label>
+                                                </div>
+
+                                                <div class="select" value={this.state.department} onChange={this.onChangeDepartment}>
+                                                    <select>
+                                                        <option>โปรดเลือก</option>
+                                                        <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
+                                                        <option>สาขาวิชาฟิสิกส์</option>
+                                                        <option>สาขาวิชาเคมี</option>
+                                                        <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
+                                                        <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
+                                                        <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
+                                                        <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
+                                                        <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
+                                                        <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
+                                                        <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
 
                                             <div class="column is-one-quarter">
                                                 <div class="field">
@@ -266,67 +307,30 @@ export default class Report extends Component {
 
                                     <div class="container">
                                         <div class="columns is-multiline is-centered">
-                                            <div class="column is-one-quarter">
-                                                <div class="field">
-                                                    <label class="label">สาขาวิชา :</label>
-                                                </div>
 
-                                                <div class="select" value={this.state.department} onChange={this.onChangeDepartment}>
-                                                    <select>
-                                                        <option>โปรดเลือก</option>
-                                                        <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
-                                                        <option>สาขาวิชาฟิสิกส์</option>
-                                                        <option>สาขาวิชาเคมี</option>
-                                                        <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
-                                                        <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
-                                                        <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
-                                                        <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
-                                                        <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
-                                                        <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
-                                                        <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
-                                                    </select>
-                                                </div>
 
-                                            </div>
 
-                                            <div class="column is-one-quarter">
-                                                <div class="field">
-                                                    <label class="label">เลือก :</label>
-                                                </div>
-                                                <div className="radios-group">
-
-                                                    <label for="flexRadioDefault1">
-                                                        <input type="radio" value="option1" name="flexRadioDefault" id="flexRadioDefault1" onChange={this.handleRadiosForEveryone} />สำหรับทุกคน
-                                                    </label>
-
-                                                    <label for="flexRadioDefault2">
-                                                        <input type="radio" value="option1" name="flexRadioDefault" id="flexRadioDefault2" onChange={this.handleRadiosForIndividual} />สำหรับรายบุคคล
-                                                    </label>
-
-                                                </div>
-
- 
-                                            </div>
                                         </div>
                                     </div>
-                                                                      
-                                    {this.state.showSelectRadioForeveryone && <DataReportForeveryone 
+
+                                    {this.state.showSelectRadioForeveryone && <DataReportForeveryone
                                         salaryRound={this.state.salaryRound} year={this.state.year} department={this.state.department} />}
-                                    {this.state.showSelectRadioForindividual && <DataReportIndividual 
+                                    {this.state.showSelectRadioForindividual && <DataReportIndividual
                                         salaryRound={this.state.salaryRound} year={this.state.year} department={this.state.department} />}
-                                
+
                                 </section>
                             </div>
                         </div>
                         <div class="column"></div>
                     </div>
 
-                    <div class="columns is-multiline is-centered">
+                    {/* <div class="columns is-multiline is-centered">
                         <div class="field">
-                            <button class="button is-primary">สร้างแบบฟอร์ม</button>
+                            <button class="button is-primary" onClick = {this.creactReport}>สร้างแบบฟอร์ม</button>
                         </div>
-                    </div>
+                    </div> */}
 
+                    <CreateForm />
 
 
 

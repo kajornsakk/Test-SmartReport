@@ -50,7 +50,7 @@ export default class DataReportForeveryone extends Component {
             console.log(numyear);
             var semeter = 1;
         }
-        else if (this.props.salaryRound === 'รอบ2 เดือน ตุลาคม') {
+        else if (this.props.salaryRound === 'รอบ2 เดือน ตุลาคม') { 
             var numyear = parseInt(this.props.year) - 1;
             var semeter = 2;
         }
@@ -63,17 +63,22 @@ export default class DataReportForeveryone extends Component {
 
         return (
             <div class="container">
+                <br />
                 <div class="columns is-multiline is-centered">
                     <div class="field">
                         <button class="button is-primary" onClick={this.chackFileForEveryone}>ตรวจสอบข้อมูล</button>
                     </div>
                 </div>
                 <br />
-                <span class="is-size-4 has-text-primary">
-                    หมวดภาระงานสอน
-                </span>
-                <br />
 
+                {this.state.showTableForeveryone &&
+                <div>
+                    <span class="is-size-4 has-text-primary">
+                        หมวดภาระงานสอน
+                    </span>
+                    <br />
+                </div>}
+                
                 {this.state.showTableForeveryone &&
 
                     <div class="card">
@@ -85,7 +90,6 @@ export default class DataReportForeveryone extends Component {
                                             <th>ระดับการศึกษา</th>
                                             <th>หลักสูตร</th>
                                             <th>หมวดวิชา</th>
-                                            <th>ภาคการศึกษา</th>
                                             <th>สถานะ</th>
                                         </tr>
                                     </thead>
@@ -98,7 +102,7 @@ export default class DataReportForeveryone extends Component {
                                         yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
                                         department={this.props.department}
                                     />}
-                                    {this.state.showTableForeveryone && <TableReportDoctor 
+                                    {this.state.showTableForeveryone && <TableReportDoctor
                                         yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
                                         department={this.props.department}
                                     />}

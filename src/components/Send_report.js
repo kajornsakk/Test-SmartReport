@@ -38,6 +38,7 @@ export default class Send_report extends Component {
     }
     onChangeSalaryRoundSend = (e) => {
         this.setState({ salaryRoundSend: e.target.value })
+        this.setState({showTable:true})
     }
 
     onClickSearch = () => {
@@ -45,7 +46,7 @@ export default class Send_report extends Component {
         console.log(this.state.yearSend);
         console.log(this.state.salaryRoundSend);
 
-        this.setState({showTable:true})
+        
         this.setState({showObjectList: true});
 
         // const AWS = require('aws-sdk/global');
@@ -193,56 +194,22 @@ export default class Send_report extends Component {
 
                                             </div>
 
-                                            <div class="columns is-multiline is-centered">
-                                                <div class="field1">
-                                                    <button class="button is-primary" onClick={this.onClickSearch}>ค้นหา</button>
-                                                </div>
-                                            </div>
+ 
 
                                         </div>
 
-                                        {this.state.showTable && <div class="columns is-multiline is-centered">
-                                            <div class="column is-centered">
-                                                <table class="table is-striped is-fullwidth">
-                                                    <thead>
-                                                        <th>ชื่ออาจารย์</th>
-                                                        <th>สาขาวิชา</th>
-                                                        <th>สำหรับเลื่อนเงินเดือน</th>
-                                                        <th>ช่วงเวลาผลงาน</th>
-                                                        <th>เลือก</th>
-                                                    </thead>
-                                                    <tbody>
-
-                                                        {/* <tr>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td><input type="checkbox" onClick={this.handleAllChecked} value="checkedall" />เลือกทั้งหมด</td>
-                                                        </tr> */}
-                                                        {/* {
-                                                            this.state.listFileNameSends.map((listFile) => {
-                                                                return (<CheckBox handleCheckChieldElement={this.handleCheckChieldElement} {...listFile} />)
-                                                            })
-                                                        } */}
-
-                                                        {this.state.showObjectList&&<ListObjects department={this.state.departmemtSend} year={this.state.yearSend} salaryRound={this.state.salaryRoundSend}/>}
-
-                                                    </tbody>
- 
-
-                                                </table>
-                                            </div>
-                                        </div>}
+                                        <ListObjects department={this.state.departmemtSend} year={this.state.yearSend} salaryRound={this.state.salaryRoundSend}/>
+                                      
                                     </div>
+                                    
                                 </section>
                             </div>
                         </div>
                         <div class="column"></div>
                     </div>
-                    
-                    {/* <SendEmail data={this.state.listFileNameSends} /> */}
 
+                    {/* <SendEmail data={this.state.listFileNameSends} /> */}
+                                
                     
                 </div>
             </Fragment>

@@ -10,9 +10,9 @@ export default class Upload_History extends Component {
         showRadiosDataAcademy: false
     }
 
-    state = {
-        value : 'option1'
-    }
+    // state = {
+    //     value : 'option1'
+    // }
 
     handleRadiosDataLecture = (e) => {
         this.setState({ 
@@ -70,13 +70,13 @@ export default class Upload_History extends Component {
                                         <div class="columns is-multiline is-centered">
                                             <div class="column is-one-quarter">
                                                 <label for="flexRadioDefault1">
-                                                    <input type="radio" value="option1" checked={this.state.value === 'option1'} name="flexRadioDefault" id="flexRadioDefault1"
+                                                    <input type="radio" value="option1"  name="flexRadioDefault" id="flexRadioDefault1"
                                                         onChange={this.handleRadiosDataLecture} />ข้อมูลภาระงานสอน</label>
                                             </div>
 
                                             <div class="column is-one-quarter">
                                                 <label for="flexRadioDefault1">
-                                                    <input type="radio" value="option2" checked={this.state.value === 'option2'} name="flexRadioDefault" id="flexRadioDefault2"
+                                                    <input type="radio" value="option2"  name="flexRadioDefault" id="flexRadioDefault2"
                                                         onChange={this.handleRadiosDataAcademy} />ข้อมูลผลงานวิชาการ</label>
                                             </div>
 

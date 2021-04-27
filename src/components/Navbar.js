@@ -33,6 +33,9 @@ export default class Navbar extends Component {
             <a href="/Report" className="navbar-item">
               สร้างฟอร์มภาระงาน
             </a>
+            <a href="/TestS3" className="navbar-item">
+              Test
+            </a>
           </div>
 
           <div className="navbar-end">

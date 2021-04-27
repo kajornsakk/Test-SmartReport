@@ -14,8 +14,15 @@ export default class DataReportIndividual extends Component {
         fileLectureForIndividual: '',
         fileSeniorForIndividual: '',
         fileArticleForIndividual: '',
-        filePresentationForIndividual: ''
+        filePresentationForIndividual: '',
+        nameArticleForIndividual: '',
+        namePresentationForIndividual: '',
+        statusArticleForIndividual: '',
+        statusPresentationForIndividual: '',
+        statusShowArticle:'',
+        statusShowPresentation:'',
     }
+
     state = {
         yearAndSemesterForSalaryRound: ''
     }
@@ -60,6 +67,7 @@ export default class DataReportIndividual extends Component {
             var semeter = 2;
         }
         var numyear_semeter = numyear + '_' + semeter + '_';
+        this.setState({ yearAndSemesterForSalaryRound: numyear_semeter })
 
 
         // article for individual
@@ -76,7 +84,37 @@ export default class DataReportIndividual extends Component {
             var file_name1 = (data.Contents[lastFile].Key).split('public/สาขาวิชาวิทยาการคอมพิวเตอร์/ผลงานทางวิชาการ/รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ/');
             var filename = file_name1[1] + "";
             // console.log(filename);
-            this.setState({ fileArticleForIndividual: filename })
+            var nameArticle = filename.split('_')[0];
+
+            var time = (data.Contents[lastFile]).LastModified;
+
+            //รอบ 1
+            var startdate1 = new Date('07/01/2021'); //  01 / 07 / 20
+            var enddate1 = new Date('12/31/2021'); //   31 / 12 / 20
+            // รอบ2
+            var startdate2 = new Date('01/01/2021'); //   01 / 01 /20
+            var enddate2 = new Date('06/31/2021'); //   31 / 06 / 20
+
+            var check = 'ไม่มีผลงาน';
+            var statusShow = false;
+            if (this.props.salaryRound === 'รอบ1 เดือน เมษายน') {
+                if (time >= startdate1 && time <= enddate1) {
+                    check = 'มีผลงาน';
+                    statusShow = true;
+                }
+            }
+            else if (this.props.salaryRound === 'รอบ2 เดือน ตุลาคม') {
+                if (time >= startdate2 && time <= enddate2) {
+                    check = 'มีผลงาน';
+                    statusShow = true;
+                }
+            }
+
+            this.setState({
+                fileArticleForIndividual: filename,
+                nameArticleForIndividual: nameArticle,
+                statusArticleForIndividual: check
+            })
         })
 
         // Presentation for individual
@@ -91,7 +129,38 @@ export default class DataReportIndividual extends Component {
             var lastFile = ((data.Contents.length) - 1);
             var file_name1 = (data.Contents[lastFile].Key).split('public/สาขาวิชาวิทยาการคอมพิวเตอร์/ผลงานทางวิชาการ/รายงานการเสนอผลงานในที่ประชุมวิชาการ/');
             var filename = file_name1[1] + "";
-            this.setState({ filePresentationForIndividual: filename })
+            var namePresentation = filename.split('_')[0];
+
+            var time = (data.Contents[lastFile]).LastModified;
+
+            //รอบ 1
+            var startdate1 = new Date('07/01/2021'); //  01 / 07 / 20
+            var enddate1 = new Date('12/31/2021'); //   31 / 12 / 20
+            // รอบ2
+            var startdate2 = new Date('01/01/2021'); //   01 / 01 /20
+            var enddate2 = new Date('06/31/2021'); //   31 / 06 / 20
+
+            var check = 'ไม่มีผลงาน';
+            var statusShow = 'has-text-danger';
+            if (this.props.salaryRound === 'รอบ1 เดือน เมษายน') {
+                if (time >= startdate1 && time <= enddate1) {
+                    check = 'มีผลงาน';
+                    statusShow = 'has-text-success';
+                }
+            }
+            else if (this.props.salaryRound === 'รอบ2 เดือน ตุลาคม') {
+                if (time >= startdate2 && time <= enddate2) {
+                    check = 'มีผลงาน';
+                    statusShow = 'has-text-success';
+                }
+            }
+
+            this.setState({
+                filePresentationForIndividual: filename,
+                namePresentationForIndividual: namePresentation,
+                statusPresentationForIndividual : check,
+                statusShowArticle: statusShow
+            })
         })
 
     }
@@ -128,82 +197,85 @@ export default class DataReportIndividual extends Component {
                         </div>
                     </div>
 
-                    <br />
-                    <span class="is-size-4 has-text-primary">
-                        หมวดภาระงานสอน
+                    {this.state.showTableForindividual &&
+                        <div><br />
+                            <span class="is-size-4 has-text-primary">
+                                หมวดภาระงานสอน
                         </span>
-                    <br />
+                            <br /></div>}
 
-                    <div class="card">
+                    {this.state.showTableForindividual &&
+                        <div class="card">
+                            <section class="section is-small">
+                                <div class="columns is-multiline is-centered">
+                                    <table class="table is-striped is-fullwidth">
+                                        <thead>
+                                            <tr>
+                                                <th>ระดับการศึกษา</th>
+                                                <th>หลักสูตร</th>
+                                                <th>หมวดวิชา</th>
+                                                <th>สถานะ</th>
+                                            </tr>
+                                        </thead>
+
+                                        {this.state.showTableForindividual && <TableReportBachelor
+                                            yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
+                                            department={this.props.department}
+                                        />}
+
+                                        {this.state.showTableForindividual && <TableReportMaster
+                                            yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
+                                            department={this.props.department}
+                                        />}
+                                        {this.state.showTableForindividual && <TableReportDoctor
+                                            yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
+                                            department={this.props.department}
+                                        />}
+
+
+                                    </table>
+                                </div>
+                            </section>
+
+                        </div>}
+
+                    {this.state.showTableForindividual && <div><br />
+                        <span class="is-size-4 has-text-primary">
+                            หมวดผลงานทางวิชาการ
+                        </span>
+                        <br /></div>}
+
+                    {this.state.showTableForindividual && <div class="card">
                         <section class="section is-small">
                             <div class="columns is-multiline is-centered">
                                 <table class="table is-striped is-fullwidth">
                                     <thead>
                                         <tr>
-                                            <th>ระดับการศึกษา</th>
-                                            <th>หลักสูตร</th>
-                                            <th>หมวดวิชา</th>
-                                            <th>ภาคการศึกษา</th>
-                                            <th>สถานะ</th>
-                                        </tr>
-                                    </thead>
-
-                                    {this.state.showTableForindividual && <TableReportBachelor
-                                        yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
-                                        department={this.props.department}
-                                    />}
-
-                                    {this.state.showTableForindividual && <TableReportMaster
-                                        yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
-                                        department={this.props.department}
-                                    />}
-                                    {this.state.showTableForindividual && <TableReportDoctor
-                                        yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
-                                        department={this.props.department}
-                                    />}
-
-
-                                </table>
-                            </div>
-                        </section>
-
-                    </div>
-
-                    <br />
-                    <span class="is-size-4 has-text-primary">
-                        หมวดผลงานทางวิชาการ
-                        </span>
-                    <br />
-
-                    <div class="card">
-                        <section class="section is-small">
-                            <div class="columns is-multiline is-centered">
-                                <table class="table is-striped is-fullwidth">
-                                    <thead>
-                                        <tr>
+                                            <th>ชื่อ</th>
                                             <th>หัวข้อ</th>
-                                            <th>ขื่อไฟล์</th>
                                             <th>สถานะ</th>
+                                            {/* <th>สถานะ</th> */}
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td>{this.state.nameArticleForIndividual}</td>
                                             <td>บทความ/ผลงานตีพิมพ์ในวารสารวิชาการ</td>
-                                            <td>{this.state.fileArticleForIndividual}</td>
-                                            <td>สถานะ</td>
+                                            <td>{this.state.statusArticleForIndividual}</td>
+                                            {/* <td>สถานะ</td> */}
                                         </tr>
                                         <tr>
+                                            <td>{this.state.namePresentationForIndividual}</td>
                                             <td>การเสนอผลงานในที่ประชุมวิชาการ</td>
-                                            <td>{this.state.filePresentationForIndividual}</td>
-                                            <td>สถานะ</td>
+                                            <td><span class={`${this.state.statusShowPresentation}`}>{this.state.statusPresentationForIndividual}</span></td>
+                                            {/* <td>สถานะ</td> */}
                                         </tr>
 
                                     </tbody>
                                 </table>
                             </div>
                         </section>
-
-                    </div>
+                    </div>}
 
                 </div>
             </Fragment>

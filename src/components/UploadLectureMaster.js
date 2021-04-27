@@ -44,6 +44,10 @@ export default class UploadLectureMaster extends Component {
         textAleartSave: '',
         textAleartDanger: ''
     }
+    state = {
+        isPending :false,
+        filePathToSendApi :''
+    }
     clickPopup = (e) => {
         this.setState({ showPopup: !this.state.showPopup })
     }
@@ -76,6 +80,15 @@ export default class UploadLectureMaster extends Component {
     onChangeCourse = (e) => {
         this.setState({ course: e.target.value })
     }
+
+    sendMessageApi = (e)=>{
+        console.log("send message to API Master");
+        //ต้องการไฟล์ path
+        var filePath =[];
+        filePath.push({['filePath']:this.state.filePathToSendApi})
+        console.log(filePath);
+    }
+
 
     handleChange = e => {
         const file = e.target.files[0]
@@ -247,14 +260,22 @@ export default class UploadLectureMaster extends Component {
 
     saveFile = (e) => {
 
+        this.setState({isPending:true});
         const DASH_DMYHMS = 'DD-MM-YYYY HH:mm:ss';
         const timeStamp = moment().format(DASH_DMYHMS);
-        var fileName = this.state.department + "/" + "ภาระงานสอน" + "/ปริญญาโท/" + this.state.course + "/" + this.state.version + "/" +
+        var fileName = this.state.department + "/" + "ภาระงานสอน" + "/ปริญญาโท/" + this.state.course + "/"+ this.state.year+"_"+this.state.semester+"_"+"/" + this.state.version + "/" +
             this.state.year + "_" + this.state.semester + "_" + this.state.department + "_" + this.state.version + "_" + timeStamp + ".xlsx";
 
         if (this.state.chack) {
             Storage.put(fileName, this.state.file)
                 .then(() => {
+                    // 
+                    this.setState({filePathToSendApi: fileName});
+                    e.preventDefault();
+                    this.setState({
+                        isPending:false,
+                        showNotification:false
+                    })
                     console.log('sueccessfully saved file!');
                     this.setState({
                         textAleartSave: 'Successfully save file!',
@@ -277,16 +298,7 @@ export default class UploadLectureMaster extends Component {
     render() {
         return (
             <Fragment>
-                {/* เพิ่มเติม */}
-                {this.state.showNotification && <div class="container">
-                    <div class="columns is-multiline is-centered">
-                        <div class="notification is-primary is-light">
-                            <button class="delete" onClick={this.clickNotification}></button>
-                            Format ถูกต้องสามารถอัปโหลดข้อมูลได้
-                        </div>
-                    </div>
-                </div>}
-
+                
                 <div class="columns is-multiline is-centered">
 
                     <div class="column is-one-quarter">
@@ -301,7 +313,7 @@ export default class UploadLectureMaster extends Component {
                                 <option>สาขาวิชาฟิสิกส์</option>
                                 <option>สาขาวิชาเคมี</option>
                                 <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
-                                <option>สาขาวิชาคณิตศาสตร์ประกันภัย</option>
+                                <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
                                 <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
                                 <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
                                 <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
@@ -393,6 +405,14 @@ export default class UploadLectureMaster extends Component {
                     </div>
                 </div>
 
+                {/* เพิ่มเติม */}
+                {this.state.showNotification && <article class="message is-primary">
+                    <div class="message-body ">
+                        Format ไฟล์ข้อมูลถูกต้องสามารถอัปโหลดไฟล์ข้อมูลได้
+                    </div>
+                </article>}
+
+
 
                 <div class="container level-right">
                     <div class="columns is-multiline is-centered">
@@ -401,13 +421,14 @@ export default class UploadLectureMaster extends Component {
                                 <span class="icon is-small">
                                     <i class="fas fa-check"></i>
                                 </span>
-                                <span>อัพโหลดข้อมูล</span>
+                                {!this.state.isPending && <span>บันทึกข้อมูล</span>}
+                                {this.state.isPending && <span>กำลังบันทึกข้อมูล...</span>}
                             </button>
                         </div>
                     </div>
                 </div>
                 {this.state.showPopup && <Popup clickPopup={this.clickPopup} textAleart={this.state.textAleart} />}
-                {this.state.showPopupSave && <PopupSaveFile clickPopupSave={this.clickPopupSave} textAleart={this.textAleartSave} />}
+                {this.state.showPopupSave && <PopupSaveFile clickPopupSave={this.clickPopupSave} textAleart={this.textAleartSave} sendApi = {this.sendMessageApi} />}
                 {this.state.showPopupDanger && <PopupDanger clickPopupDanger={this.clickPopupDanger} textAleart={this.textAleartDanger} />}
             </Fragment>
         )

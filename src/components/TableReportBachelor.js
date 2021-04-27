@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { useState, useEffect } from 'react';
 import CheckBox3 from './CheckBox3';
+import CreateForm from './CreateForm';
 export const TableReportBachelor = props => {
 
     const AWS = require('aws-sdk/global');
@@ -13,7 +14,8 @@ export const TableReportBachelor = props => {
 
     const [listFiles, setListFiles] = useState([]);
 
-    async function ReadFileFromS3() {
+    useEffect(() => {
+        // async function ReadFileFromS3() {
 
         var prefixLectrue = 'public/' + props.department + '/ภาระงานสอน/ปริญญาตรี/';
         const paramsLecture = {
@@ -24,7 +26,8 @@ export const TableReportBachelor = props => {
         var arrData = [];
         var arrBufferCourse = [];
         var count = 1;
-        await s3.listObjectsV2(paramsLecture, (err, data) => {
+        // await 
+        s3.listObjectsV2(paramsLecture, (err, data) => {
 
             var contents = data.Contents;
 
@@ -44,16 +47,17 @@ export const TableReportBachelor = props => {
                 contents.forEach(content => {
                     // console.log(content);
                     // console.log(((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาตรี/')[1]).split('/')[0]);
+                    var checkYearSemester = ((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาตรี/')[1]).split('/')[1]; 
                     var checkCourse = ((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาตรี/')[1]).split('/')[0];
-                    var checkLecture = ((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาตรี/')[1]).split('/')[1];
-
-                    if (course == checkCourse && checkLecture == 'วิชาบรรยาย-วิชาปฏิบัติ') {
+                    var checkLecture = ((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาตรี/')[1]).split('/')[2];
+                    
+                    if (course == checkCourse && checkLecture == 'วิชาบรรยาย-วิชาปฏิบัติ' && checkYearSemester == props.yearSemesterSalaryRound) { //เพิ่มเงือนไข 2563_1
                         arrBufferLecture.push(content.Key);
                     }
-                    if (course == checkCourse && checkLecture == 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
+                    if (course == checkCourse && checkLecture == 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา' && checkYearSemester == props.yearSemesterSalaryRound) {
                         arrBufferAcademy.push(content.Key);
                     }
-
+ 
                 })
                 var lengthh = arrBufferLecture.length;
                 test.push(arrBufferLecture[lengthh - 1])
@@ -70,11 +74,14 @@ export const TableReportBachelor = props => {
                 //ตรวจสอบเเต่ละไฟล์ว่สตรงกับรอบเงินเดือนไหม ถ้าตรงให้ใส่ true หรือ tag is-primary (เพื่อบอกสี)
 
                 var value = '';
-                var buffer1 = ((list).split('/')[6]).split('_');
+                var buffer1 = ((list).split('/')[7]).split('_');
                 var bufferYear = buffer1[0];
                 var bufferSemester = buffer1[1];
                 var semesterYear = bufferYear + "_" + bufferSemester + "_";
                 var statuss ='';
+
+                console.log(semesterYear);
+                console.log(props.yearSemesterSalaryRound);
 
                 if (semesterYear === props.yearSemesterSalaryRound) {
                     value = 'tag is-primary';
@@ -87,9 +94,11 @@ export const TableReportBachelor = props => {
                 // 
                 arrShow.push({
                     ['id']: count,
-                    ['course']: ((list).split('/')[4]).split(' ')[1],
-                    ['lecture']: (list).split('/')[5],
-                    ['file']: (list).split('/')[5],
+                    ['department']: props.department ,
+                    ['level'] : (list).split('/')[3],
+                    ['course']: (((list).split('/')[4]).split(' ')[1]).split('สาขาวิชา')[1],
+                    ['lecture']: (list).split('/')[6],
+                    ['filePath']: list,
                     ['isChecked']: value,
                     ['status'] : statuss
                 })
@@ -100,15 +109,17 @@ export const TableReportBachelor = props => {
 
         });
 
-    }
+    // }
+    }, [])
+
+    
 
     return (
         <Fragment>
-            <button onClick={ReadFileFromS3}>test</button>
+            {/* <button onClick={ReadFileFromS3}>test</button> */}
             <tbody>
                 <tr>
                     <th>ปริญญาตรี</th>
-                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -118,13 +129,12 @@ export const TableReportBachelor = props => {
                         <td></td>
                         <td>{list.course}</td>
                         <td>{list.lecture}</td>
-                        <td></td>
                         <td><span class={`${list.isChecked}`}>{list.status}</span></td>
                         
                     </tr>
                 ))}
             </tbody>
-
+            {/* <CreateForm sendMessage = {listFiles}/>  */}
         </Fragment>
 
     )

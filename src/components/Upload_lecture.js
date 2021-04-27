@@ -16,10 +16,12 @@ export default class Upload_lecture extends Component {
 
 
   state = {
-    showUploadBachelor: false,
+    showUploadBachelor: true,
     showUploadMaster: false,
     showUploadDoctor: false
   }
+
+
 
 
   handleRadiosBachelor = () => {
@@ -73,8 +75,19 @@ export default class Upload_lecture extends Component {
             <div class="column"></div>
             <div class="column is-four-fifths">
 
-              <div class="card">
+              <div class="card ">
 
+{/*  */}
+                {/* <article class="message is-primary">
+                  <div class="message-header">
+                    <p>primary</p>
+                    <button class="delete" aria-label="delete"></button>
+                  </div>
+                  <div class="message-body">
+                    Format ไฟล์ข้อมูลถูกต้องสามารถอัปโหลดไฟล์ข้อมูลได้
+                  </div>
+                </article> */}
+{/*  */}
                 <div class="card-content ">
                   <div class="content">
                     <section class="section is-small">
@@ -115,6 +128,17 @@ export default class Upload_lecture extends Component {
             </div>
             <div class="column"></div>
           </div>
+
+
+{/*  */}
+          {/* <article class="message is-primary">
+            <div class="message-body">
+              <strong>
+                Format ไฟล์ข้อมูลถูกต้องสามารถอัปโหลดไฟล์ข้อมูลได้
+              </strong>
+            </div>
+          </article> */}
+{/*  */}
 
 
         </div>
