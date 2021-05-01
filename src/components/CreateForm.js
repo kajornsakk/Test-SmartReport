@@ -13,7 +13,7 @@ export const CreateForm = props => {
         <Fragment>
             <div class="columns is-multiline is-centered">
                 <div class="field">
-                    <button class="button is-primary" onClick={creactReport}>สร้างแบบฟอร์ม</button>
+                    <button class="button is-primary" onClick={creactReport}>สร้างแบบฟอร์ม Refresh</button>
                 </div>
             </div>
         </Fragment>

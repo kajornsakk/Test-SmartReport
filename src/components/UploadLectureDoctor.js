@@ -5,6 +5,7 @@ import Amplify, { Storage } from 'aws-amplify';
 import Popup from './Popup';
 import PopupSaveFile from './PopupSaveFile';
 import PopupDanger from './PopupDanger';
+import PopupLoading from './PopupLoading';
 
 const config = require('../config.json');
 
@@ -44,8 +45,8 @@ export default class UploadLectureDoctor extends Component {
         textAleartDanger: ''
     }
     state = {
-        isPending :false,
-        filePathToSendApi :''
+        isPending: false,
+        filePathToSendApi: ''
     }
     clickPopup = (e) => {
         this.setState({ showPopup: !this.state.showPopup })
@@ -80,12 +81,104 @@ export default class UploadLectureDoctor extends Component {
         this.setState({ course: e.target.value })
     }
 
-    sendMessageApi = (e)=>{
+    compareTableName = () => {
+
+        let departmentName = '';
+        //department
+        if (this.state.department === 'สาขาวิชาวิทยาการคอมพิวเตอร์') {
+            departmentName = 'ComputerScience';
+        }
+        else if (this.state.department === 'สาขาวิชาฟิสิกส์') {
+            departmentName = 'Physics';
+        }
+        else if (this.state.department === 'สาขาวิชาเคมี') {
+            departmentName = 'Chemistry';
+        }
+        else if (this.state.department === 'สาขาวิชาเทคโนโลยีชีวภาพ') {
+            departmentName = 'Biotechnology';
+        }
+        else if (this.state.department === 'สาขาวิชาคณิตศาสตร์และสถิติ') {
+            departmentName = 'MathematicsAndStatistics';
+        }
+        else if (this.state.department === 'สาขาวิชาเทคโนโลยีการเกษตร') {
+            departmentName = 'Agricultural';
+        }
+        else if (this.state.department === 'สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม') {
+            departmentName = 'EnvironmentalScience';
+        }
+        else if (this.state.department === 'สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน') {
+            departmentName = 'SustainableDevelopment';
+        }
+        else if (this.state.department === 'สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร') {
+            departmentName = 'FoodScience';
+        }
+        else if (this.state.department === 'สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ') {
+            departmentName = 'MaterialsAndTextile';
+        }
+
+        //course
+        let courseName = '';
+        if (this.state.course === 'ปรัชญาดุษฎีบัณฑิต สาขาวิชาคณิตศาสตร์ (หลักสูตรนานาชาติ)') {
+            courseName = 'Mathematics';
+        }
+        else if (this.state.course === 'ปรัชญาดุษฎีบัณฑิต สาขาวิชาเคมี (หลักสูตรนานาชาติ)') {
+            courseName = 'Chemistry';
+        }
+        else if (this.state.course === 'ปรัชญาดุษฎีบัณฑิต สาขาวิชาเทคโนโลยีชีวภาพและเกษตร') {
+            courseName = ''; //////
+        }
+        else if (this.state.course === 'ปรัชญาดุษฎีบัณฑิต สาขาวิชาฟิสิกส์') {
+            courseName = 'Physics';
+        }
+        else if (this.state.course === 'ปรัชญาดุษฎีบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์ (หลักสูตรทวิภาษา)') {
+            courseName = 'ComputerScience';
+        }
+        else if (this.state.course === 'ปรัชญาดุษฎีบัณฑิต สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร') {
+            courseName = 'FoodScience';
+        }
+        else if (this.state.course === 'ปรัชญาดุษฎีบัณฑิต สาขาวิชาการจัดการสิ่งแวดล้อม') {
+            courseName = 'EnvironmentalManagement';
+        }
+        else if (this.state.course === 'ปรัชญาดุษฎีบัณฑิต สาขาวิชาสถิติ (หลักสูตรนานาชาติ)') {
+            courseName = 'Statistics';
+        }
+
+        // version
+        let versionName = ''
+        if (this.state.version === 'วิชาบรรยาย') {
+            versionName = 'Class';
+        }
+        else if (this.state.version === 'วิทยานิพนธ์') {
+            versionName = 'Thesis';
+        }
+
+
+        return "Doctor_" + departmentName + "_" + courseName + "_" + versionName + "_" + this.state.semester + "-" + this.state.year;
+    }
+
+    sendMessageApi = (e) => {
         console.log("send message to API Doctor");
-        //ต้องการไฟล์ path
-        var filePath =[];
-        filePath.push({['filePath']:this.state.filePathToSendApi})
-        console.log(filePath);
+        // เรียกใช้ func ไปเทียบค่ามาเป็นชื่อ table
+        let tableNameFromFunction = this.compareTableName()
+        let fileName = (this.state.filePathToSendApi).split("/")[6];
+        let filePath = (this.state.filePathToSendApi).split(fileName)[0];
+
+        console.log(tableNameFromFunction);
+        var arrToSend = {
+            "httpMethod": "POST",
+            "tableName": tableNameFromFunction, // ต้อง map ค่า thai -> eng 
+            "bucketName": filePath, // this.state.filePath
+            "fileName": fileName // this.state.fileName
+        }
+        console.log(arrToSend);
+
+        // if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
+        //     //call lambda lecture
+
+        // }
+        // if (this.state.version === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
+        //     //call lambda specail Project
+        // }
     }
 
 
@@ -257,28 +350,35 @@ export default class UploadLectureDoctor extends Component {
 
     saveFile = (e) => {
 
-        this.setState({isPending:true});
+        this.setState({ isPending: true });
         const DASH_DMYHMS = 'DD-MM-YYYY HH:mm:ss';
         const timeStamp = moment().format(DASH_DMYHMS);
-        var fileName = this.state.department + "/" + "ภาระงานสอน" + "/ปริญญาเอก/" + this.state.course + "/"+ this.state.year+"_"+this.state.semester+"_"+"/" + this.state.version + "/" +
+        var fileName = this.state.department + "/" + "ภาระงานสอน" + "/ปริญญาเอก/" + this.state.course + "/" + this.state.year + "_" + this.state.semester + "_" + "/" + this.state.version + "/" +
             this.state.year + "_" + this.state.semester + "_" + this.state.department + "_" + this.state.version + "_" + timeStamp + ".xlsx";
 
         if (this.state.chack) {
             Storage.put(fileName, this.state.file)
                 .then(() => {
                     // 
-                    this.setState({filePathToSendApi: fileName});
+                    this.setState({ filePathToSendApi: fileName });
                     e.preventDefault();
-                    this.setState({
-                        isPending:false,
-                        showNotification:false
-                    })
-                    console.log('sueccessfully saved file!');
-                    // เพิ่ม
-                    this.setState({
-                        textAleartSave: 'Successfully save file!',
-                        showPopupSave: true
-                    })
+
+                    this.sendMessageApi();
+                    setTimeout(() => {
+
+                        this.setState({ timer: true })
+                        this.setState({
+                            isPending: false,
+                            showNotification: false
+                        })
+                        console.log('sueccessfully saved file!');
+                        this.setState({
+                            textAleartSave: 'Successfully save file!',
+                            showPopupSave: true
+                        })
+
+                    }, 35000);
+
                     this.setState({ fileUrl: '', file: '', filename: '' })
                 })
                 .catch(err => {
@@ -419,9 +519,25 @@ export default class UploadLectureDoctor extends Component {
                         </div>
                     </div>
                 </div>
-                {this.state.showPopup && <Popup clickPopup={this.clickPopup} textAleart={this.state.textAleart} />}
-                {this.state.showPopupSave && <PopupSaveFile clickPopupSave={this.clickPopupSave} textAleart={this.textAleartSave} sendApi = {this.sendMessageApi} />}
-                {this.state.showPopupDanger && <PopupDanger clickPopupDanger={this.clickPopupDanger} textAleart={this.textAleartDanger} />}
+
+                {this.state.isPending && <PopupLoading />}
+
+                {this.state.showPopup && <Popup 
+                    clickPopup={this.clickPopup} 
+                    textAleart={this.state.textAleart} 
+                    />}
+
+                {this.state.showPopupSave && <PopupSaveFile 
+                    clickPopupSave={this.clickPopupSave} 
+                    textAleart={this.textAleartSave} 
+                    // sendApi={this.sendMessageApi} 
+                    />}
+
+                {this.state.showPopupDanger && <PopupDanger 
+                    clickPopupDanger={this.clickPopupDanger} 
+                    textAleart={this.textAleartDanger} 
+                    />}
+
             </Fragment>
         )
     }

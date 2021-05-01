@@ -4,6 +4,7 @@ import PopupReportIndividual from './PopupReportIndividual';
 import TableReportBachelor from './TableReportBachelor';
 import TableReportDoctor from './TableReportDoctor';
 import TableReportMaster from './TableReportMaster';
+import DataReportIndividual2 from './DataReportIndividual2';
 
 export default class DataReportIndividual extends Component {
 
@@ -19,8 +20,8 @@ export default class DataReportIndividual extends Component {
         namePresentationForIndividual: '',
         statusArticleForIndividual: '',
         statusPresentationForIndividual: '',
-        statusShowArticle:'',
-        statusShowPresentation:'',
+        statusShowArticle: '',
+        statusShowPresentation: '',
     }
 
     state = {
@@ -158,7 +159,7 @@ export default class DataReportIndividual extends Component {
             this.setState({
                 filePresentationForIndividual: filename,
                 namePresentationForIndividual: namePresentation,
-                statusPresentationForIndividual : check,
+                statusPresentationForIndividual: check,
                 statusShowArticle: statusShow
             })
         })
@@ -218,7 +219,7 @@ export default class DataReportIndividual extends Component {
                                             </tr>
                                         </thead>
 
-                                        {this.state.showTableForindividual && <TableReportBachelor
+                                        {/* {this.state.showTableForindividual && <TableReportBachelor
                                             yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
                                             department={this.props.department}
                                         />}
@@ -230,6 +231,14 @@ export default class DataReportIndividual extends Component {
                                         {this.state.showTableForindividual && <TableReportDoctor
                                             yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
                                             department={this.props.department}
+                                        />} */}
+
+                                    {/* ----------------Test--------------------- */}
+                                        {this.state.showTableForindividual && <DataReportIndividual2
+                                            yearSemesterSalaryRound={this.state.yearAndSemesterForSalaryRound}
+                                            department={this.props.department}
+                                            salaryRound = {this.props.salaryRound}
+                                            year = {this.props.year}
                                         />}
 
 
@@ -278,6 +287,14 @@ export default class DataReportIndividual extends Component {
                     </div>}
 
                 </div>
+
+                {/* <div class="container">
+                    <div class="columns is-multiline is-centered">
+                        <div class="field">
+                            <button class="button is-primary" >สร้าง</button>
+                        </div>
+                    </div>
+                </div> */}
             </Fragment>
 
 

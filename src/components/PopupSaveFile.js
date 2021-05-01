@@ -4,7 +4,7 @@ export default class PopupSaveFile extends Component {
 
     handleClick = () => {
         this.props.clickPopupSave();
-        this.props.sendApi();
+        // this.props.sendApi();
     }
 
     render() {

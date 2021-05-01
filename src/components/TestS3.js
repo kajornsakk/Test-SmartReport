@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { Storage } from 'aws-amplify'
 import * as XLSX from 'xlsx';
+import axios from 'axios';
 
 
 export const TestS3 = props => {
@@ -89,9 +90,46 @@ export const TestS3 = props => {
 
     }
 
+    function CallAPI () {
+
+        var arrToSend = {
+            "httpMethod" : "POST",
+            "tableName":"Master_Computer_Computer_Class_1/63",
+            "bucketName":"public/สาขาวิชาวิทยาการคอมพิวเตอร์/ภาระงานสอน/ปริญญาตรี/วิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์/2563_1_/วิชาบรรยาย-วิชาปฏิบัติ/",
+            "fileName": "2563_1_สาขาวิชาวิทยาการคอมพิวเตอร์_วิชาบรรยาย-วิชาปฏิบัติ_24-04-2021 18:33:31.xlsx"
+        }
+        var obj = JSON.parse('{ "httpMethod":"POST", "tableName":"This is Table Name"}');
+
+        var apiUrl = "https://7hy0cukj2f.execute-api.us-east-1.amazonaws.com/Prod/bachelor-class-function";
+                        let axiosConfig = {
+                            headers: {
+                                'Content-Type': 'application/json;charset=UTF-8',
+                                'Access-Control-Allow-Origin': "*",
+                                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+                            }
+                        };
+                        axios.post(apiUrl, arrToSend)
+                            .then((res => {
+                                console.log(res);
+                                console.log(res.data.Response);
+
+                                if (res.status === '200') {
+                                    alert('The email has been sent')
+                                }
+
+                            }))
+                            .catch((error) => {
+                                if (error.response) {
+                                    console.log(error.response);
+                                } else if (error.request) {
+                                    console.log(error.request);
+                                }
+                            })
+
+    }
     return (
         <Fragment>
-            <button onClick={clickTest}>Click Test</button>
+            <button onClick={CallAPI}>Click Test</button>
         </Fragment>
 
     )

@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react'
 import DataReportIndividual from './DataReportIndividual';
+import DataReportIndividual2 from './DataReportIndividual2';
 import DataReportForeveryone from './DataReportForeveryone';
+import DataReportForeveryone2 from './DataReportForeveryone2';
 import CreateForm from './CreateForm';
 
 export default class Report extends Component {
@@ -69,135 +71,6 @@ export default class Report extends Component {
         this.setState({ instructorName: e.target.value });
     }
 
-    chackFileForEveryone = () => {
-
-        this.setState({ showTableForeveryone: true });
-
-        const AWS = require('aws-sdk/global');
-        const S3 = require('aws-sdk/clients/s3');
-
-        AWS.config.update({
-            accessKeyId: 'AKIAJJOOQS6RRWQUJKNQ',
-            secretAccessKey: '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',
-            region: 'us-east-1'
-        });
-        const s3 = new AWS.S3();
-
-        if (this.state.salaryRound == 'รอบ1 เดือน เมษายน') {
-            var numyear = parseInt(this.state.year) - 1;
-            console.log(numyear);
-            var semeter = 1;
-        }
-        else if (this.state.salaryRound == 'รอบ2 เดือน ตุลาคม') {
-            var numyear = parseInt(this.state.year) - 1;
-            var semeter = 2;
-        }
-        var numyear_semeter = numyear + '_' + semeter + '_';
-
-        var branch = ["สาขาวิชาวิทยาการคอมพิวเตอร์", "สาขาวิชาเคมี", "สาขาวิชาฟิสิกส์", "สาขาวิชาเทคโนโลยีชีวภาพ", "สาขาวิชาคณิตศาสตร์ประกันภัย",
-            "สาขาวิชาเทคโนโลยีการเกษตร", "สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม", "สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน", "สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร",
-            "สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ"];
-        var i;
-        for (i = 0; i < branch.length; i++) {
-            if (this.state.department == branch[i]) {
-                var prefixLectrue1 = 'public/' + branch[i] + '/ภาระงานสอน/ปริญญาตรี/วิชาบรรยาย-วิชาปฏิบัติ/' + numyear_semeter + '';
-                var prefixLectrue2 = 'public/' + branch[i] + '/ภาระงานสอน/ปริญญาตรี/วิชาบรรยาย-วิชาปฏิบัติ/';
-                var prefixPathSenior1 = 'public/' + branch[i] + '/ภาระงานสอน/ปริญญาตรี/ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา/' + numyear_semeter + '';
-                var prefixPathSenior2 = 'public/' + branch[i] + '/ภาระงานสอน/ปริญญาตรี/ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา/';
-            }
-        }
-
-        // Lecture for everyone
-        const paramsLecture = {
-            Bucket: 'amplifys3storagegetestnd132251-dev',
-            Delimiter: '',
-            Prefix: prefixLectrue1,
-        };
-
-        s3.listObjectsV2(paramsLecture, (err, data) => {
-            var file_name1 = (data.Contents[0].Key).split(prefixLectrue2);
-            var filename = file_name1[1] + "";
-            this.setState({ lectureFilenameForeveryone: filename })
-        })
-
-        //Senior  for everyone
-        const paramsSenior = {
-            Bucket: 'amplifys3storagegetestnd132251-dev',
-            Delimiter: '',
-            Prefix: prefixPathSenior1,
-        };
-
-        s3.listObjectsV2(paramsSenior, (err, data) => {
-            var file_name1 = (data.Contents[0].Key).split(prefixPathSenior2);
-            var filename = file_name1[1] + "";
-            this.setState({ seniorProjectFilenameForeveryone: filename })
-        })
-
-        // article for individual
-        var prefixArticle = 'public/สาขาวิชาวิทยาการคอมพิวเตอร์/ผลงานทางวิชาการ/รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ/ประภาพร รัตนธำรง_';
-        const paramsArticle = {
-            Bucket: 'amplifys3storagegetestnd132251-dev',
-            Delimiter: '',
-            Prefix: prefixArticle,
-        };
-
-        s3.listObjectsV2(paramsArticle, (err, data) => {
-            // console.log(data);
-            var file_name1 = (data.Contents[0].Key).split('public/สาขาวิชาวิทยาการคอมพิวเตอร์/ผลงานทางวิชาการ/รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ/');
-            var filename = file_name1[1] + "";
-            this.setState({ articleForeveryone: filename })
-        })
-
-        // Presentation for individual
-        var prefixPresentation = 'public/สาขาวิชาวิทยาการคอมพิวเตอร์/ผลงานทางวิชาการ/รายงานการเสนอผลงานในที่ประชุมวิชาการ/ประภาพร รัตนธำรง_';
-        const paramsPresentation = {
-            Bucket: 'amplifys3storagegetestnd132251-dev',
-            Delimiter: '',
-            Prefix: prefixPresentation,
-        };
-
-        s3.listObjectsV2(paramsPresentation, (err, data) => {
-            var file_name1 = (data.Contents[0].Key).split('public/สาขาวิชาวิทยาการคอมพิวเตอร์/ผลงานทางวิชาการ/รายงานการเสนอผลงานในที่ประชุมวิชาการ/');
-            var filename = file_name1[1] + "";
-            this.setState({ presentationForeveryone: filename })
-        })
-
-        // Test get งานวิชาการ #####################################################
-        var instructor = ["ประภาพร รัตนธำรง", "วนิดา พฤทธิวิทยา", "นุชชากร งามเสาวรส", "เสาวลักษณ์ วรรธนาภา", "ธนาธร ทะนานทอง",
-            "เยาวดี เต็มธนาภัทร์", "เด่นดวง ประดับสุวรรณ"];
-        const paramsTest = {
-            Bucket: 'amplifys3storagegetestnd132251-dev',
-            Delimiter: '',
-            Prefix: 'public/',
-        };
-
-        var arr = [];
-        var arrArtical = [];
-        var arrPresentation = [];
-        s3.listObjectsV2(paramsTest, (err, data) => {
-            console.log(data.Contents);
-            // วนลูปสาขา กับ ชื่ออาจารย์
-            var iT;
-            for (iT = 0; iT < data.Contents.length; iT++) {
-                // console.log(data.Contents[iT].Key);
-                arr.push(data.Contents[iT].Key);
-            }
-            for (let index = 0; index < arr.length; index++) {
-                // console.log(arr[index]);
-                var buffer = arr[index].split('/');
-                // console.log(buffer);
-                if (buffer[1] == this.state.department && buffer[3] == 'รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ') {
-                    // console.log(arr[index]);
-                    arrArtical.push(arr[index]);
-                }
-                if (buffer[1] == this.state.department && buffer[3] == 'รายงานการเสนอผลงานในที่ประชุมวิชาการ') {
-                    arrPresentation.push(arr[index]);
-                    // this.setState({objectList: arr[index]})
-                }
-            }
-        })
-
-    }
 
     render() {
 
@@ -285,6 +158,12 @@ export default class Report extends Component {
 
                                             </div>
 
+                                        </div>
+                                    </div>
+
+                                    <div class="container">
+                                        <div class="columns is-multiline is-centered">
+
                                             <div class="column is-one-quarter">
                                                 <div class="field">
                                                     <label class="label">ปี พ.ศ. :</label>
@@ -302,24 +181,59 @@ export default class Report extends Component {
 
                                             </div>
 
+                                            {this.state.showSelectRadioForindividual && <div class="column is-one-quarter">
+                                                <div class="field">
+                                                    <label class="label">รายชื่อ :</label>
+                                                </div>
+
+                                                <div class="select" value={this.state.instructor} onChange={this.onChangeinstructorName}>
+                                                    <select>
+                                                        <option>โปรดเลือก</option>
+                                                        <option>ประภาพร รัตนธำรง</option>
+                                                        <option>วนิดา พฤทธิวิทยา</option>
+                                                        <option>นุชชากร งามเสาวรส</option>
+                                                        <option>เสาวลักษณ์ วรรธนาภา</option>
+                                                        <option>ธนาธร ทะนานทอง</option>
+                                                        <option>เยาวดี เต็มธนาภัทร์</option>
+                                                        <option>เด่นดวง ประดับสุวรรณ</option>
+                                                    </select>
+                                                </div>
+                                            </div>}
+
                                         </div>
                                     </div>
 
-                                    <div class="container">
-                                        <div class="columns is-multiline is-centered">
+                                    {/* {this.state.showSelectRadioForeveryone && <DataReportForeveryone
+                                        salaryRound={this.state.salaryRound} year={this.state.year} department={this.state.department} />} */}
+                                    {/* {this.state.showSelectRadioForindividual && <DataReportIndividual
+                                        salaryRound={this.state.salaryRound} year={this.state.year} department={this.state.department} />} */}
 
-
-
-                                        </div>
-                                    </div>
-
-                                    {this.state.showSelectRadioForeveryone && <DataReportForeveryone
-                                        salaryRound={this.state.salaryRound} year={this.state.year} department={this.state.department} />}
-                                    {this.state.showSelectRadioForindividual && <DataReportIndividual
-                                        salaryRound={this.state.salaryRound} year={this.state.year} department={this.state.department} />}
 
                                 </section>
+
+                                {/* -------------------------------test----------------------- */}
+
+                                <section class="section is-small">
+                                    {this.state.showSelectRadioForeveryone && <DataReportForeveryone2
+                                        salaryRound={this.state.salaryRound}
+                                        year={this.state.year}
+                                        department={this.state.department}
+                                        instructor={this.state.instructorName}
+                                    />}
+                                </section>
+
+                                <section class="section is-small">
+                                    {this.state.showSelectRadioForindividual && <DataReportIndividual2
+                                        salaryRound={this.state.salaryRound}
+                                        year={this.state.year}
+                                        department={this.state.department}
+                                        instructor={this.state.instructorName} />}
+                                </section>
+
+
+
                             </div>
+
                         </div>
                         <div class="column"></div>
                     </div>
@@ -330,7 +244,7 @@ export default class Report extends Component {
                         </div>
                     </div> */}
 
-                    <CreateForm />
+                    {/* <CreateForm /> */}
 
 
 

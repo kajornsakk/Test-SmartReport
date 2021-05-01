@@ -5,6 +5,7 @@ import Amplify, { Storage } from 'aws-amplify';
 import Popup from './Popup';
 import PopupSaveFile from './PopupSaveFile';
 import PopupDanger from './PopupDanger';
+import PopupLoading from './PopupLoading';
 
 const config = require('../config.json');
 
@@ -81,12 +82,122 @@ export default class UploadLectureMaster extends Component {
         this.setState({ course: e.target.value })
     }
 
+    compareTableName = () => {
+
+        let departmentName = '';
+        //department
+        if (this.state.department === 'สาขาวิชาวิทยาการคอมพิวเตอร์') {
+            departmentName = 'ComputerScience';
+        }
+        else if (this.state.department === 'สาขาวิชาฟิสิกส์') {
+            departmentName = 'Physics';
+        }
+        else if (this.state.department === 'สาขาวิชาเคมี') {
+            departmentName = 'Chemistry';
+        }
+        else if (this.state.department === 'สาขาวิชาเทคโนโลยีชีวภาพ') {
+            departmentName = 'Biotechnology';
+        }
+        else if (this.state.department === 'สาขาวิชาคณิตศาสตร์และสถิติ') {
+            departmentName = 'MathematicsAndStatistics';
+        }
+        else if (this.state.department === 'สาขาวิชาเทคโนโลยีการเกษตร') {
+            departmentName = 'Agricultural';
+        }
+        else if (this.state.department === 'สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม') {
+            departmentName = 'EnvironmentalScience';
+        }
+        else if (this.state.department === 'สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน') {
+            departmentName = 'SustainableDevelopment';
+        }
+        else if (this.state.department === 'สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร') {
+            departmentName = 'FoodScience';
+        }
+        else if (this.state.department === 'สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ') {
+            departmentName = 'MaterialsAndTextile';
+        }
+
+        //course
+        let courseName = '';
+        if (this.state.course === 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาการจัดการเกษตรอินทรีย์') {
+            courseName = '';//////
+        }
+        else if (this.state.course === 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาการพัฒนาทรัพยากรมนุษย์และผลิตภัณฑ์นวัตกรรมอาหาร') {
+            courseName = '';//////
+        }
+        else if (this.state.course === 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาคณิตศาสตร์') {
+            courseName = 'Mathematics';
+        }
+        else if (this.state.course === 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาสถิติประยุกต์') {
+            courseName = 'AppliedStatistics';
+        }
+        else if (this.state.course === 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาเคมี') {
+            courseName = 'Chemistry';
+        }
+        else if (this.state.course === 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาเทคโนโลยีการเกษตร') {
+            courseName = 'Agricultural';
+        }
+        else if (this.state.course === 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาเทคโนโลยีชีวภาพ') {
+            courseName = 'Biotechnology';
+        }
+        else if (this.state.course === 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน') {
+            courseName = 'SustainableDevelopment';
+        }
+        else if (this.state.course === 'วิทยาศาสตรมหาบัณฑิต สาขาวิชานวัตกรรมและเทคโนโลยีวัสดุ') {
+            courseName = 'Materials';
+        }
+        else if (this.state.course === 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาฟิสิกส์') {
+            courseName = 'Physics';
+        }
+        else if (this.state.course === 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์') {
+            courseName = 'ComputerScience';
+        }
+        else if (this.state.course === 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร') {
+            courseName = 'FoodScience';
+        }
+        else if (this.state.course === 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาศาสตร์สิ่งแวดล้อม') {
+            courseName = 'EnvironmentalScience';
+        }
+        
+
+        // version
+        let versionName = ''
+        if(this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ'){
+            versionName = 'Class';
+        }
+        else if(this.state.version === 'วิทยานิพนธ์-สารนิพนธ์'){
+            versionName = 'Thesis';
+        }
+
+
+        return "Master_"+departmentName+"_"+courseName+"_"+versionName+"_"+this.state.semester+"-"+this.state.year;
+    }
+
     sendMessageApi = (e)=>{
         console.log("send message to API Master");
-        //ต้องการไฟล์ path
-        var filePath =[];
-        filePath.push({['filePath']:this.state.filePathToSendApi})
-        console.log(filePath);
+
+        let tableNameFromFunction = this.compareTableName()
+        let fileName = (this.state.filePathToSendApi).split("/")[6];
+        let filePath = (this.state.filePathToSendApi).split(fileName)[0];
+
+        console.log(tableNameFromFunction);
+        var arrToSend = {
+            "httpMethod": "POST",
+            "tableName": tableNameFromFunction, // ต้อง map ค่า thai -> eng 
+            "bucketName": filePath, // this.state.filePath
+            "fileName": fileName // this.state.fileName
+        }
+        console.log(arrToSend);
+
+        // if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
+        //     //call lambda lecture
+            
+        // }
+        // if (this.state.version === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
+        //     //call lambda specail Project
+        // }
+
+
     }
 
 
@@ -272,15 +383,23 @@ export default class UploadLectureMaster extends Component {
                     // 
                     this.setState({filePathToSendApi: fileName});
                     e.preventDefault();
-                    this.setState({
-                        isPending:false,
-                        showNotification:false
-                    })
-                    console.log('sueccessfully saved file!');
-                    this.setState({
-                        textAleartSave: 'Successfully save file!',
-                        showPopupSave: true
-                    })
+
+                    this.sendMessageApi();
+                    setTimeout(() => {
+
+                        this.setState({ timer: true })
+                        this.setState({
+                            isPending: false,
+                            showNotification: false
+                        })
+                        console.log('sueccessfully saved file!');
+                        this.setState({
+                            textAleartSave: 'Successfully save file!',
+                            showPopupSave: true
+                        })
+
+                    }, 35000);
+
                     this.setState({ fileUrl: '', file: '', filename: '' })
                 })
                 .catch(err => {
@@ -427,9 +546,25 @@ export default class UploadLectureMaster extends Component {
                         </div>
                     </div>
                 </div>
-                {this.state.showPopup && <Popup clickPopup={this.clickPopup} textAleart={this.state.textAleart} />}
-                {this.state.showPopupSave && <PopupSaveFile clickPopupSave={this.clickPopupSave} textAleart={this.textAleartSave} sendApi = {this.sendMessageApi} />}
-                {this.state.showPopupDanger && <PopupDanger clickPopupDanger={this.clickPopupDanger} textAleart={this.textAleartDanger} />}
+
+                {this.state.isPending && <PopupLoading />}
+
+                {this.state.showPopup && <Popup 
+                    clickPopup={this.clickPopup} 
+                    textAleart={this.state.textAleart} 
+                    />}
+
+                {this.state.showPopupSave && <PopupSaveFile 
+                    clickPopupSave={this.clickPopupSave} 
+                    textAleart={this.textAleartSave} 
+                    // sendApi = {this.sendMessageApi} 
+                    />}
+                
+                {this.state.showPopupDanger && <PopupDanger 
+                    clickPopupDanger={this.clickPopupDanger} 
+                    textAleart={this.textAleartDanger} 
+                    />}
+
             </Fragment>
         )
     }

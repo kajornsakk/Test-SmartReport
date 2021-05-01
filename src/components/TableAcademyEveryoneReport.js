@@ -193,7 +193,7 @@ export const TableAcademyEveryoneReport = props => {
 
 
     }, [])
-
+ 
 
     function handleAllChecked(event) {
         let lists = listShow;

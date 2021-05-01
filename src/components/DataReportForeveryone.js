@@ -108,6 +108,8 @@ export default class DataReportForeveryone extends Component {
                                     />}
 
 
+
+
                                 </table>
                             </div>
                         </section>
