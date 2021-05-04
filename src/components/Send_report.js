@@ -133,7 +133,7 @@ export default class Send_report extends Component {
                         <div class="column is-four-fifths">
                             <div class="card">
                                 <section class="section is-small">
-                                    <div class="container">
+
                                         <div class="columns is-multiline is-centered">
 
                                             <div class="column is-one-quarter">
@@ -187,22 +187,25 @@ export default class Send_report extends Component {
                                                 <div class="select" value={this.state.salaryRoundSend} onChange={this.onChangeSalaryRoundSend}>
                                                     <select>
                                                         <option>โปรดเลือก</option>
-                                                        <option>รอบเลื่อนเงินเดือน1</option>
-                                                        <option>รอบเลื่อนเงินเดือน2</option>
+                                                        <option>รอบ1 เดือน เมษายน</option>
+                                                        <option>รอบ2 เดือน ตุลาคม</option>
                                                     </select>
                                                 </div>
 
                                             </div>
 
  
-
+ 
                                         </div>
 
-                                        <ListObjects department={this.state.departmemtSend} year={this.state.yearSend} salaryRound={this.state.salaryRoundSend}/>
-                                      
-                                    </div>
-                                    
+                                        
+                                 
                                 </section>
+                                
+                                <section class="section is-small">
+                                    <ListObjects department={this.state.departmemtSend} year={this.state.yearSend} salaryRound={this.state.salaryRoundSend}/>
+                                </section>
+                                
                             </div>
                         </div>
                         <div class="column"></div>

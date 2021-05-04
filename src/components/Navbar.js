@@ -33,17 +33,17 @@ export default class Navbar extends Component {
             <a href="/Report" className="navbar-item">
               สร้างฟอร์มภาระงาน
             </a>
-            <a href="/TestS3" className="navbar-item">
+            {/* <a href="/TestS3" className="navbar-item">
               Test
-            </a>
+            </a> */}
           </div>
 
           <div className="navbar-end">
             <div className="navbar-item">
               <div className="buttons">
-                <a href="/register" className="button is-primary">
+                {/* <a href="/register" className="button is-primary">
                   <strong>ลงทะเบียน</strong>
-                </a>
+                </a> */}
                 <a href="/login" className="button is-light" >
                   ล็อกอิน
                   {/* <AmplifySignOut /> */}

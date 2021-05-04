@@ -107,14 +107,14 @@ export default class Upload_academy extends Component {
                     // var serial = d.AX+{i};
                     // console.log(serial);
                     var serial;
-                    if(this.state.version === 'รายงานบทความ/ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ'){
+                    if (this.state.version === 'รายงานบทความ/ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ') {
                         serial = ws[XLSX.utils.encode_cell({ r: i, c: 49 })].v;
                     }
 
-                    if(this.state.version === 'รายงานการเสนอผลงานในที่ประชุมวิชาการ'){
+                    if (this.state.version === 'รายงานการเสนอผลงานในที่ประชุมวิชาการ') {
                         serial = ws[XLSX.utils.encode_cell({ r: i, c: 8 })].v;
                     }
-                    
+
                     var utc_days = Math.floor(serial - 25569);
                     var utc_value = utc_days * 86400;
                     var date_info = new Date(utc_value * 1000);
@@ -446,83 +446,82 @@ export default class Upload_academy extends Component {
                         <div class="column"></div>
                         <div class="column is-four-fifths">
                             <div class="card">
+
                                 <section class="section is-small">
-                                    <div class="container">
-                                        <div class="columns is-multiline is-centered">
 
-                                            <div class="column is-one-quarter">
-                                                <div class="field">
-                                                    <label class="label">สาขาวิชา :</label>
-                                                </div>
+                                    <div class="columns is-multiline is-centered">
 
-                                                <div class="select" value={this.state.department} onChange={this.onChangeDepartment}>
-                                                    <select>
-                                                        <option>โปรดเลือก</option>
-                                                        <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
-                                                        <option>สาขาวิชาฟิสิกส์</option>
-                                                        <option>สาขาวิชาเคมี</option>
-                                                        <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
-                                                        <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
-                                                        <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
-                                                        <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
-                                                        <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
-                                                        <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
-                                                        <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
-                                                    </select>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="column is-one-quarter">
-                                                <div class="field">
-                                                    <label class="label">ประเภท :</label>
-                                                </div>
-
-                                                <div class="select" value={this.state.version} onChange={this.onChangeVersion}>
-                                                    <select>
-                                                        <option>โปรดเลือก</option>
-                                                        <option>รายงานบทความ/ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ</option>
-                                                        <option>รายงานการเสนอผลงานในที่ประชุมวิชาการ</option>
-                                                    </select>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="column is-one-quarter">
-                                                <div class="field">
-                                                    <label class="label">ชื่อเจ้าของผลงาน :</label>
-                                                </div>
-
-                                                <div class="select" value={this.state.professor} onChange={this.onChangeProfessor}>
-                                                    <select>
-                                                        <option>โปรดเลือก</option>
-                                                        <option>ประภาพร รัตนธำรง</option>
-                                                        <option>วนิดา พฤทธิวิทยา</option>
-                                                        <option>นุชชากร งามเสาวรส</option>
-                                                        <option>เสาวลักษณ์ วรรธนาภา</option>
-                                                        <option>ธนาธร ทะนานทอง</option>
-                                                        <option>เยาวดี เต็มธนาภัทร์</option>
-                                                        <option>เด่นดวง ประดับสุวรรณ</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="container">
-                                        <div class="columns is-multiline is-centered">
+                                        <div class="column is-one-quarter">
                                             <div class="field">
-                                                <div class="column is-one-quarter">
-                                                    <input type='file' className="selectfile" onChange={this.handleChange} />
-                                                </div>
+                                                <label class="label">สาขาวิชา :</label>
+                                            </div>
+
+                                            <div class="select" value={this.state.department} onChange={this.onChangeDepartment}>
+                                                <select>
+                                                    <option>โปรดเลือก</option>
+                                                    <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
+                                                    <option>สาขาวิชาฟิสิกส์</option>
+                                                    <option>สาขาวิชาเคมี</option>
+                                                    <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
+                                                    <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
+                                                    <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
+                                                    <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
+                                                    <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
+                                                    <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
+                                                    <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
+                                                </select>
                                             </div>
 
                                         </div>
+
+                                        <div class="column is-one-quarter">
+                                            <div class="field">
+                                                <label class="label">ประเภท :</label>
+                                            </div>
+
+                                            <div class="select" value={this.state.version} onChange={this.onChangeVersion}>
+                                                <select>
+                                                    <option>โปรดเลือก</option>
+                                                    <option>รายงานบทความ/ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ</option>
+                                                    <option>รายงานการเสนอผลงานในที่ประชุมวิชาการ</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="column is-one-quarter">
+                                            <div class="field">
+                                                <label class="label">ชื่อเจ้าของผลงาน :</label>
+                                            </div>
+
+                                            <div class="select" value={this.state.professor} onChange={this.onChangeProfessor}>
+                                                <select>
+                                                    <option>โปรดเลือก</option>
+                                                    <option>ประภาพร รัตนธำรง</option>
+                                                    <option>วนิดา พฤทธิวิทยา</option>
+                                                    <option>นุชชากร งามเสาวรส</option>
+                                                    <option>เสาวลักษณ์ วรรธนาภา</option>
+                                                    <option>ธนาธร ทะนานทอง</option>
+                                                    <option>เยาวดี เต็มธนาภัทร์</option>
+                                                    <option>เด่นดวง ประดับสุวรรณ</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
                                     </div>
-                                    <div class="container level-right">
-                                        <div class="columns is-multiline is-centered">
-                                            <div class="colum is-one-quarter">
+
+                                    <div class="columns is-multiline is-centered">
+                                        <div class="field">
+                                            <div class="column is-one-quarter">
+                                                <input type='file' className="selectfile" onChange={this.handleChange} />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="columns is-multiline is-centered">
+                                        <div class="field">
+                                            <div class="column is-one-quarter">
                                                 <button class="button is-primary " onClick={this.saveFile}>
                                                     <span class="icon is-small">
                                                         <i class="fas fa-check"></i>

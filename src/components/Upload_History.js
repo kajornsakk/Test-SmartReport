@@ -64,8 +64,7 @@ export default class Upload_History extends Component {
                         <div class="column is-four-fifths">
                             <div class="card">
                                 <section class="section is-small">
-                                    <div class="container">
-
+                                    
                                         {/* Radio Button */}
                                         <div class="columns is-multiline is-centered">
                                             <div class="column is-one-quarter">
@@ -85,7 +84,6 @@ export default class Upload_History extends Component {
                                         {this.state.showRadiosDataLecture && <SelectDataLectureUploadHistory />}
                                         {this.state.showRadiosDataAcademy && <SelectDataAcademyUploadHistory />}
 
-                                    </div>
                                 </section>
                             </div>
                         </div>

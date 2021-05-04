@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import * as XLSX from 'xlsx';
+import axios from 'axios';
 import moment from 'moment';
 import Amplify, { Storage } from 'aws-amplify';
 import Popup from './Popup';
@@ -46,8 +47,8 @@ export default class UploadLectureMaster extends Component {
         textAleartDanger: ''
     }
     state = {
-        isPending :false,
-        filePathToSendApi :''
+        isPending: false,
+        filePathToSendApi: ''
     }
     clickPopup = (e) => {
         this.setState({ showPopup: !this.state.showPopup })
@@ -158,44 +159,99 @@ export default class UploadLectureMaster extends Component {
         else if (this.state.course === 'วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาศาสตร์สิ่งแวดล้อม') {
             courseName = 'EnvironmentalScience';
         }
-        
+
 
         // version
         let versionName = ''
-        if(this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ'){
+        if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
             versionName = 'Class';
         }
-        else if(this.state.version === 'วิทยานิพนธ์-สารนิพนธ์'){
+        else if (this.state.version === 'วิทยานิพนธ์-สารนิพนธ์') {
             versionName = 'Thesis';
+        }
+        else if (this.state.version === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+            versionName = 'SpecialTopic';
         }
 
 
-        return "Master_"+departmentName+"_"+courseName+"_"+versionName+"_"+this.state.semester+"-"+this.state.year;
+        return "Master_" + departmentName + "_" + courseName + "_" + versionName + "_" + this.state.semester + "-" + this.state.year;
     }
 
-    sendMessageApi = (e)=>{
+    sendMessageApi = (e) => {
         console.log("send message to API Master");
 
         let tableNameFromFunction = this.compareTableName()
         let fileName = (this.state.filePathToSendApi).split("/")[6];
-        let filePath = (this.state.filePathToSendApi).split(fileName)[0];
+        let filePath = this.state.filePathToSendApi;
 
         console.log(tableNameFromFunction);
         var arrToSend = {
-            "httpMethod": "POST",
-            "tableName": tableNameFromFunction, // ต้อง map ค่า thai -> eng 
-            "bucketName": filePath, // this.state.filePath
-            "fileName": fileName // this.state.fileName
+            "bucketName": "amplifys3smartreport142809-dev", // ต้อง map ค่า thai -> eng 
+            "fileName": filePath, // this.state.filePath
+            "tableName": tableNameFromFunction // this.state.fileName
         }
         console.log(arrToSend);
 
-        // if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
-        //     //call lambda lecture
-            
-        // }
-        // if (this.state.version === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
-        //     //call lambda specail Project
-        // }
+        if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
+            var apiUrl = "https://wnypwoakmc.execute-api.us-east-1.amazonaws.com/Prod/master-class-function";
+            axios.post(apiUrl, arrToSend)
+                .then((res => {
+                    console.log(res);
+                    console.log(res.data.Response);
+
+                    if (res.status === '200') {
+                        alert('The email has been sent')
+                    }
+
+                }))
+                .catch((error) => {
+                    if (error.response) {
+                        console.log(error.response);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    }
+                })
+        }
+        if (this.state.version === 'วิทยานิพนธ์-สารนิพนธ์') {
+            var apiUrl = "https://wnypwoakmc.execute-api.us-east-1.amazonaws.com/Prod/master-thesis-function";
+            axios.post(apiUrl, arrToSend)
+                .then((res => {
+                    console.log(res);
+                    console.log(res.data.Response);
+
+                    if (res.status === '200') {
+                        alert('The email has been sent')
+                    }
+
+                }))
+                .catch((error) => {
+                    if (error.response) {
+                        console.log(error.response);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    }
+                })
+        }
+        if (this.state.version === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+            var apiUrl = "https://wnypwoakmc.execute-api.us-east-1.amazonaws.com/Prod/master-specialproject-function";
+            axios.post(apiUrl, arrToSend)
+                .then((res => {
+                    console.log(res);
+                    console.log(res.data.Response);
+
+                    if (res.status === '200') {
+                        alert('The email has been sent')
+                    }
+
+                }))
+                .catch((error) => {
+                    if (error.response) {
+                        console.log(error.response);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    }
+                })
+        }
 
 
     }
@@ -362,6 +418,68 @@ export default class UploadLectureMaster extends Component {
 
             }
 
+            if (this.state.version === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+
+                var buffer = (d.A3.v).split(" ");
+                var buffer2 = buffer[1].split("/");
+                var DepartmentFromFile = ((d.A1.v).split(" "))[1];
+                var SemesterFromFile = buffer2[0];
+                var YearFromFile = buffer2[1];
+                var SpecialTopicFromFile = d.N5.v;
+                var CourseFromFile = d.D2.v;
+                var EducationFromFile = d.L2.v;
+
+                console.log(DepartmentFromFile);
+                console.log(SemesterFromFile);
+                console.log(YearFromFile);
+                console.log(SpecialTopicFromFile);
+
+                if (this.state.department === DepartmentFromFile && SpecialTopicFromFile === 'ปัญหาพิเศษ'
+                    && this.state.year === YearFromFile && this.state.semester === SemesterFromFile
+                    && CourseFromFile === this.state.course && EducationFromFile === 'ปริญญาโท') {
+
+                    this.setState({ chack: true })
+                    // alert('Good!! (ป.โท เอก วิทยานิพนธ์) --> Format ถูกต้องสามารถอัปโหลดข้อมูลได้');
+                    this.setState({
+                        showNotification: true
+                    })
+                } else {
+                    var arrTextAleart = [];
+                    if (DepartmentFromFile !== this.state.department) {
+                        arrTextAleart.push('"สาขาวิชา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ department: '' })
+                    }
+                    if (SpecialTopicFromFile !== 'ปัญหาพิเศษ') {
+                        arrTextAleart.push('"ประเภท" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ version: '' })
+                    }
+                    if (SemesterFromFile !== this.state.semester) {
+                        arrTextAleart.push('"ภาคการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ semester: '' })
+                    }
+                    if (YearFromFile !== this.state.year) {
+                        arrTextAleart.push('"ปีการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ year: '' })
+                    }
+                    if (CourseFromFile !== this.state.course) {
+                        arrTextAleart.push('"หลักสูตร" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ course: '' })
+                    }
+                    if (EducationFromFile !== 'ปริญญาโท') {
+                        arrTextAleart.push('"ระดับการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ educationlevel: '' })
+                    }
+                    // alert(text_alert);
+                    // เพิ่ม
+                    this.setState({
+                        textAleart: arrTextAleart,
+                        showPopup: true
+                    })
+                }
+
+            }
+
+
         })
             .catch(err => {
                 alert('Format ไฟล์ข้อมูลไม่ถูกต้อง!!');
@@ -371,17 +489,17 @@ export default class UploadLectureMaster extends Component {
 
     saveFile = (e) => {
 
-        this.setState({isPending:true});
+        this.setState({ isPending: true });
         const DASH_DMYHMS = 'DD-MM-YYYY HH:mm:ss';
         const timeStamp = moment().format(DASH_DMYHMS);
-        var fileName = this.state.department + "/" + "ภาระงานสอน" + "/ปริญญาโท/" + this.state.course + "/"+ this.state.year+"_"+this.state.semester+"_"+"/" + this.state.version + "/" +
+        var fileName = this.state.department + "/" + "ภาระงานสอน" + "/ปริญญาโท/" + this.state.course + "/" + this.state.year + "_" + this.state.semester + "_" + "/" + this.state.version + "/" +
             this.state.year + "_" + this.state.semester + "_" + this.state.department + "_" + this.state.version + "_" + timeStamp + ".xlsx";
 
         if (this.state.chack) {
             Storage.put(fileName, this.state.file)
                 .then(() => {
                     // 
-                    this.setState({filePathToSendApi: fileName});
+                    this.setState({ filePathToSendApi: "public/"+fileName });
                     e.preventDefault();
 
                     this.sendMessageApi();
@@ -417,7 +535,7 @@ export default class UploadLectureMaster extends Component {
     render() {
         return (
             <Fragment>
-                
+
                 <div class="columns is-multiline is-centered">
 
                     <div class="column is-one-quarter">
@@ -470,58 +588,54 @@ export default class UploadLectureMaster extends Component {
                     </div>
                 </div>
 
-                <div class="container">
-                    <div class="columns is-multiline is-centered">
-
-                        <div class="column is-one-quarter">
-                            <div class="field">
-                                <label class="label">ประเภท :</label>
-                            </div>
-
-                            <div class="select" value={this.state.version} onChange={this.onChangeVersion}>
-                                <select>
-                                    <option>โปรดเลือก</option>
-                                    <option>วิชาบรรยาย-วิชาปฏิบัติ</option>
-                                    <option>วิทยานิพนธ์-สารนิพนธ์</option>
-                                </select>
-                            </div>
-
+                <div class="columns is-multiline is-centered">
+                    <div class="column is-one-quarter">
+                        <div class="field">
+                            <label class="label">ประเภท :</label>
                         </div>
 
-                        <div class="column is-one-quarter">
-                            <div class="field">
-                                <label class="label">ปีการศึกษา :</label>
-                            </div>
-
-                            <input class="input" type="text" placeholder="25XX" value={this.state.year} onChange={this.onChangeYear}></input>
-                        </div>
-
-                        <div class="column is-one-quarter">
-                            <div class="field">
-                                <label class="label">ภาคการศึกษา :</label>
-                            </div>
-
-                            <div class="select" value={this.state.semester} onChange={this.onChangeSemester}>
-                                <select>
-                                    <option>โปรดเลือก</option>
-                                    <option>1</option>
-                                    <option>2</option>
-                                </select>
-                            </div>
+                        <div class="select" value={this.state.version} onChange={this.onChangeVersion}>
+                            <select>
+                                <option>โปรดเลือก</option>
+                                <option>วิชาบรรยาย-วิชาปฏิบัติ</option>
+                                <option>วิทยานิพนธ์-สารนิพนธ์</option>
+                                <option>ปัญหาพิเศษ-วิชาสัมมนา</option>
+                            </select>
                         </div>
 
                     </div>
+
+                    <div class="column is-one-quarter">
+                        <div class="field">
+                            <label class="label">ปีการศึกษา :</label>
+                        </div>
+
+                        <input class="input" type="text" placeholder="25XX" value={this.state.year} onChange={this.onChangeYear}></input>
+                    </div>
+
+                    <div class="column is-one-quarter">
+                        <div class="field">
+                            <label class="label">ภาคการศึกษา :</label>
+                        </div>
+
+                        <div class="select" value={this.state.semester} onChange={this.onChangeSemester}>
+                            <select>
+                                <option>โปรดเลือก</option>
+                                <option>1</option>
+                                <option>2</option>
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
 
-                <div class="container">
-                    <div class="columns is-multiline is-centered">
-                        <div class="field">
-                            <div class="column is-one-quarter">
-                                <input type='file' className="selectfile" onChange={this.handleChange} />
-                            </div>
+                <div class="columns is-multiline is-centered">
+                    <div class="field">
+                        <div class="column is-one-quarter">
+                            <input type='file' className="selectfile" onChange={this.handleChange} />
                         </div>
-
                     </div>
+
                 </div>
 
                 {/* เพิ่มเติม */}
@@ -531,11 +645,9 @@ export default class UploadLectureMaster extends Component {
                     </div>
                 </article>}
 
-
-
-                <div class="container level-right">
-                    <div class="columns is-multiline is-centered">
-                        <div class="colum is-one-quarter">
+                <div class="columns is-multiline is-centered">
+                    <div class="field">
+                        <div class="column is-one-quarter">
                             <button class="button is-primary " onClick={this.saveFile}>
                                 <span class="icon is-small">
                                     <i class="fas fa-check"></i>
@@ -549,21 +661,21 @@ export default class UploadLectureMaster extends Component {
 
                 {this.state.isPending && <PopupLoading />}
 
-                {this.state.showPopup && <Popup 
-                    clickPopup={this.clickPopup} 
-                    textAleart={this.state.textAleart} 
-                    />}
+                {this.state.showPopup && <Popup
+                    clickPopup={this.clickPopup}
+                    textAleart={this.state.textAleart}
+                />}
 
-                {this.state.showPopupSave && <PopupSaveFile 
-                    clickPopupSave={this.clickPopupSave} 
-                    textAleart={this.textAleartSave} 
-                    // sendApi = {this.sendMessageApi} 
-                    />}
-                
-                {this.state.showPopupDanger && <PopupDanger 
-                    clickPopupDanger={this.clickPopupDanger} 
-                    textAleart={this.textAleartDanger} 
-                    />}
+                {this.state.showPopupSave && <PopupSaveFile
+                    clickPopupSave={this.clickPopupSave}
+                    textAleart={this.textAleartSave}
+                // sendApi = {this.sendMessageApi} 
+                />}
+
+                {this.state.showPopupDanger && <PopupDanger
+                    clickPopupDanger={this.clickPopupDanger}
+                    textAleart={this.textAleartDanger}
+                />}
 
             </Fragment>
         )

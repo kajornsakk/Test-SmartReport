@@ -89,9 +89,9 @@ export default class Upload_lecture extends Component {
                 </article> */}
 {/*  */}
                 <div class="card-content ">
-                  <div class="content">
-                    <section class="section is-small">
-                      <div class="container">
+                  {/* <div class="content"> */}
+                    <section class="section is-small ">
+                      {/* <div class="container"> */}
 
                         <div class="columns is-multiline is-centered">
 
@@ -119,10 +119,10 @@ export default class Upload_lecture extends Component {
                         {this.state.showUploadMaster && <UploadLectureMaster />}
                         {this.state.showUploadDoctor && <UploadLectureDoctor />}
 
-                      </div>
+                      {/* </div> */}
 
                     </section>
-                  </div>
+                  {/* </div> */}
                 </div>
               </div>
             </div>

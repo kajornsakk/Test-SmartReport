@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import * as XLSX from 'xlsx';
+import axios from 'axios';
 import moment from 'moment';
 import Amplify, { Storage } from 'aws-amplify';
 import Popup from './Popup';
@@ -151,6 +152,9 @@ export default class UploadLectureDoctor extends Component {
         else if (this.state.version === 'วิทยานิพนธ์') {
             versionName = 'Thesis';
         }
+        else if (this.state.version === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+            versionName = 'SpecialTopic';
+        }
 
 
         return "Doctor_" + departmentName + "_" + courseName + "_" + versionName + "_" + this.state.semester + "-" + this.state.year;
@@ -161,24 +165,82 @@ export default class UploadLectureDoctor extends Component {
         // เรียกใช้ func ไปเทียบค่ามาเป็นชื่อ table
         let tableNameFromFunction = this.compareTableName()
         let fileName = (this.state.filePathToSendApi).split("/")[6];
-        let filePath = (this.state.filePathToSendApi).split(fileName)[0];
+        let filePath = this.state.filePathToSendApi;
 
         console.log(tableNameFromFunction);
         var arrToSend = {
-            "httpMethod": "POST",
-            "tableName": tableNameFromFunction, // ต้อง map ค่า thai -> eng 
-            "bucketName": filePath, // this.state.filePath
-            "fileName": fileName // this.state.fileName
+            "bucketName": "amplifys3smartreport142809-dev", // ต้อง map ค่า thai -> eng 
+            "fileName": filePath, // this.state.filePath
+            "tableName": tableNameFromFunction // this.state.fileName
         }
         console.log(arrToSend);
 
-        // if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
-        //     //call lambda lecture
+        if (this.state.version === 'วิชาบรรยาย') {
 
-        // }
-        // if (this.state.version === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
-        //     //call lambda specail Project
-        // }
+            var apiUrl = "https://wnypwoakmc.execute-api.us-east-1.amazonaws.com/Prod/doctoral-class-function";
+            axios.post(apiUrl, arrToSend)
+                .then((res => {
+                    console.log(res);
+                    console.log(res.data.Response);
+
+                    if (res.status === '200') {
+                        alert('The email has been sent')
+                    }
+
+                }))
+                .catch((error) => {
+                    if (error.response) {
+                        console.log(error.response);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    }
+                })
+
+        }
+        if (this.state.version === 'วิทยานิพนธ์') {
+
+            var apiUrl = "https://wnypwoakmc.execute-api.us-east-1.amazonaws.com/Prod/doctoral-thesis-function";
+            axios.post(apiUrl, arrToSend)
+                .then((res => {
+                    console.log(res);
+                    console.log(res.data.Response);
+
+                    if (res.status === '200') {
+                        alert('The email has been sent')
+                    }
+
+                }))
+                .catch((error) => {
+                    if (error.response) {
+                        console.log(error.response);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    }
+                })
+
+        }
+        if (this.state.version === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+
+            var apiUrl = "https://wnypwoakmc.execute-api.us-east-1.amazonaws.com/Prod/doctoral-specialproject-function";
+            axios.post(apiUrl, arrToSend)
+                .then((res => {
+                    console.log(res);
+                    console.log(res.data.Response);
+
+                    if (res.status === '200') {
+                        alert('The email has been sent')
+                    }
+
+                }))
+                .catch((error) => {
+                    if (error.response) {
+                        console.log(error.response);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    }
+                })
+        }
+
     }
 
 
@@ -341,6 +403,67 @@ export default class UploadLectureDoctor extends Component {
 
             }
 
+            if (this.state.version === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+
+                var buffer = (d.A3.v).split(" ");
+                var buffer2 = buffer[1].split("/");
+                var DepartmentFromFile = ((d.A1.v).split(" "))[1];
+                var SemesterFromFile = buffer2[0];
+                var YearFromFile = buffer2[1];
+                var SpecialTopicFromFile = d.N5.v;
+                var CourseFromFile = d.D2.v;
+                var EducationFromFile = d.L2.v;
+
+                console.log(DepartmentFromFile);
+                console.log(SemesterFromFile);
+                console.log(YearFromFile);
+                console.log(SpecialTopicFromFile);
+
+                if (this.state.department === DepartmentFromFile && SpecialTopicFromFile === 'ปัญหาพิเศษ'
+                    && this.state.year === YearFromFile && this.state.semester === SemesterFromFile
+                    && CourseFromFile === this.state.course && EducationFromFile === 'ปริญญาเอก') {
+
+                    this.setState({ chack: true })
+                    // alert('Good!! (ป.โท เอก วิทยานิพนธ์) --> Format ถูกต้องสามารถอัปโหลดข้อมูลได้');
+                    this.setState({
+                        showNotification: true
+                    })
+                } else {
+                    var arrTextAleart = [];
+                    if (DepartmentFromFile !== this.state.department) {
+                        arrTextAleart.push('"สาขาวิชา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ department: '' })
+                    }
+                    if (SpecialTopicFromFile !== 'ปัญหาพิเศษ') {
+                        arrTextAleart.push('"ประเภท" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ version: '' })
+                    }
+                    if (SemesterFromFile !== this.state.semester) {
+                        arrTextAleart.push('"ภาคการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ semester: '' })
+                    }
+                    if (YearFromFile !== this.state.year) {
+                        arrTextAleart.push('"ปีการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ year: '' })
+                    }
+                    if (CourseFromFile !== this.state.course) {
+                        arrTextAleart.push('"หลักสูตร" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ course: '' })
+                    }
+                    if (EducationFromFile !== 'ปริญญาเอก') {
+                        arrTextAleart.push('"ระดับการศึกษา" ไม่ตรงกับข้อมูลนำเข้า');
+                        this.setState({ educationlevel: '' })
+                    }
+                    // alert(text_alert);
+                    // เพิ่ม
+                    this.setState({
+                        textAleart: arrTextAleart,
+                        showPopup: true
+                    })
+                }
+
+            }
+
         })
             .catch(err => {
                 alert('Format ไฟล์ข้อมูลไม่ถูกต้อง!!');
@@ -360,7 +483,7 @@ export default class UploadLectureDoctor extends Component {
             Storage.put(fileName, this.state.file)
                 .then(() => {
                     // 
-                    this.setState({ filePathToSendApi: fileName });
+                    this.setState({ filePathToSendApi: "public/"+fileName });
                     e.preventDefault();
 
                     this.sendMessageApi();
@@ -444,59 +567,58 @@ export default class UploadLectureDoctor extends Component {
                     </div>
                 </div>
 
-                <div class="container">
-                    <div class="columns is-multiline is-centered">
+                <div class="columns is-multiline is-centered">
 
-                        <div class="column is-one-quarter">
-                            <div class="field">
-                                <label class="label">ประเภท :</label>
-                            </div>
-
-                            <div class="select" value={this.state.version} onChange={this.onChangeVersion}>
-                                <select>
-                                    <option>โปรดเลือก</option>
-                                    <option>วิชาบรรยาย</option>
-                                    <option>วิทยานิพนธ์</option>
-                                </select>
-                            </div>
-
-                        </div>
-
-                        <div class="column is-one-quarter">
-                            <div class="field">
-                                <label class="label">ปีการศึกษา :</label>
-                            </div>
-
-                            <input class="input" type="text" placeholder="25XX" value={this.state.year} onChange={this.onChangeYear}></input>
-                        </div>
-
-                        <div class="column is-one-quarter">
-                            <div class="field">
-                                <label class="label">ภาคการศึกษา :</label>
-                            </div>
-
-                            <div class="select" value={this.state.semester} onChange={this.onChangeSemester}>
-                                <select>
-                                    <option>โปรดเลือก</option>
-                                    <option>1</option>
-                                    <option>2</option>
-                                </select>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="container">
-                    <div class="columns is-multiline is-centered">
+                    <div class="column is-one-quarter">
                         <div class="field">
-                            <div class="column is-one-quarter">
-                                <input type='file' className="selectfile" onChange={this.handleChange} />
-                            </div>
+                            <label class="label">ประเภท :</label>
+                        </div>
+
+                        <div class="select" value={this.state.version} onChange={this.onChangeVersion}>
+                            <select>
+                                <option>โปรดเลือก</option>
+                                <option>วิชาบรรยาย</option>
+                                <option>วิทยานิพนธ์</option>
+                                <option>ปัญหาพิเศษ-วิชาสัมมนา</option>
+                            </select>
                         </div>
 
                     </div>
+
+                    <div class="column is-one-quarter">
+                        <div class="field">
+                            <label class="label">ปีการศึกษา :</label>
+                        </div>
+
+                        <input class="input" type="text" placeholder="25XX" value={this.state.year} onChange={this.onChangeYear}></input>
+                    </div>
+
+                    <div class="column is-one-quarter">
+                        <div class="field">
+                            <label class="label">ภาคการศึกษา :</label>
+                        </div>
+
+                        <div class="select" value={this.state.semester} onChange={this.onChangeSemester}>
+                            <select>
+                                <option>โปรดเลือก</option>
+                                <option>1</option>
+                                <option>2</option>
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
+
+
+                <div class="columns is-multiline is-centered">
+                    <div class="field">
+                        <div class="column is-one-quarter">
+                            <input type='file' className="selectfile" onChange={this.handleChange} />
+                        </div>
+                    </div>
+
+                </div>
+
 
                 {/* เพิ่มเติม */}
                 {this.state.showNotification && <article class="message is-primary">
@@ -506,9 +628,9 @@ export default class UploadLectureDoctor extends Component {
                 </article>}
 
 
-                <div class="container level-right">
-                    <div class="columns is-multiline is-centered">
-                        <div class="colum is-one-quarter">
+                <div class="columns is-multiline is-centered">
+                    <div class="field">
+                        <div class="column is-one-quarter">
                             <button class="button is-primary " onClick={this.saveFile}>
                                 <span class="icon is-small">
                                     <i class="fas fa-check"></i>
@@ -522,21 +644,21 @@ export default class UploadLectureDoctor extends Component {
 
                 {this.state.isPending && <PopupLoading />}
 
-                {this.state.showPopup && <Popup 
-                    clickPopup={this.clickPopup} 
-                    textAleart={this.state.textAleart} 
-                    />}
+                {this.state.showPopup && <Popup
+                    clickPopup={this.clickPopup}
+                    textAleart={this.state.textAleart}
+                />}
 
-                {this.state.showPopupSave && <PopupSaveFile 
-                    clickPopupSave={this.clickPopupSave} 
-                    textAleart={this.textAleartSave} 
-                    // sendApi={this.sendMessageApi} 
-                    />}
+                {this.state.showPopupSave && <PopupSaveFile
+                    clickPopupSave={this.clickPopupSave}
+                    textAleart={this.textAleartSave}
+                // sendApi={this.sendMessageApi} 
+                />}
 
-                {this.state.showPopupDanger && <PopupDanger 
-                    clickPopupDanger={this.clickPopupDanger} 
-                    textAleart={this.textAleartDanger} 
-                    />}
+                {this.state.showPopupDanger && <PopupDanger
+                    clickPopupDanger={this.clickPopupDanger}
+                    textAleart={this.textAleartDanger}
+                />}
 
             </Fragment>
         )

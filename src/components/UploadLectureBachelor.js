@@ -179,15 +179,15 @@ export default class UploadLectureBachelor extends Component {
 
         // version
         let versionName = ''
-        if(this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ'){
+        if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
             versionName = 'Class';
         }
-        else if(this.state.version === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา'){
+        else if (this.state.version === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
             versionName = 'SpecialProject';
         }
 
 
-        return "Bachelor_"+departmentName+"_"+courseName+"_"+versionName+"_"+this.state.semester+"-"+this.state.year;
+        return "Bachelor_" + departmentName + "_" + courseName + "_" + versionName + "_" + this.state.semester + "-" + this.state.year;
     }
 
     sendMessageApi = () => {
@@ -196,24 +196,79 @@ export default class UploadLectureBachelor extends Component {
         // เรียกใช้ func ไปเทียบค่ามาเป็นชื่อ table
         let tableNameFromFunction = this.compareTableName()
         let fileName = (this.state.filePathToSendApi).split("/")[6];
-        let filePath = (this.state.filePathToSendApi).split(fileName)[0];
+        let filePath = this.state.filePathToSendApi;
 
         console.log(tableNameFromFunction);
+        // var arrToSend = {
+        //     "httpMethod": "POST",
+        //     "tableName": tableNameFromFunction, // ต้อง map ค่า thai -> eng 
+        //     "bucketName": filePath, // this.state.filePath
+        //     "fileName": fileName // this.state.fileName
+        // }
         var arrToSend = {
-            "httpMethod": "POST",
-            "tableName": tableNameFromFunction, // ต้อง map ค่า thai -> eng 
-            "bucketName": filePath, // this.state.filePath
-            "fileName": fileName // this.state.fileName
+            "bucketName": "amplifys3smartreport142809-dev", // ต้อง map ค่า thai -> eng 
+            "fileName": filePath, // this.state.filePath
+            "tableName": tableNameFromFunction // this.state.fileName
         }
         console.log(arrToSend);
 
-        // if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
-        //     //call lambda lecture
-            
-        // }
-        // if (this.state.version === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
-        //     //call lambda specail Project
-        // }
+        if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
+            //call lambda lecture
+            var apiUrl = "https://wnypwoakmc.execute-api.us-east-1.amazonaws.com/Prod/bachelor-class-function";
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Access-Control-Allow-Origin': "*",
+                    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+                }
+            };
+            axios.post(apiUrl, arrToSend)
+                .then((res => {
+                    console.log(res);
+                    console.log(res.data.Response);
+
+                    if (res.status === '200') {
+                        alert('The email has been sent')
+                    }
+
+                }))
+                .catch((error) => {
+                    if (error.response) {
+                        console.log(error.response);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    }
+                })
+
+        }
+        if (this.state.version === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
+            //call lambda specail Project
+            var apiUrl = "https://wnypwoakmc.execute-api.us-east-1.amazonaws.com/Prod/bachelor-specialproject-function";
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Access-Control-Allow-Origin': "*",
+                    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+                }
+            };
+            axios.post(apiUrl, arrToSend)
+                .then((res => {
+                    console.log(res);
+                    console.log(res.data.Response);
+
+                    if (res.status === '200') {
+                        alert('The email has been sent')
+                    }
+
+                }))
+                .catch((error) => {
+                    if (error.response) {
+                        console.log(error.response);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    }
+                })
+        }
 
     }
 
@@ -393,7 +448,7 @@ export default class UploadLectureBachelor extends Component {
             Storage.put(fileName, this.state.file)
                 .then(() => {
                     // 
-                    this.setState({ filePathToSendApi: fileName });
+                    this.setState({ filePathToSendApi: "public/"+fileName });
                     e.preventDefault();
 
                     this.sendMessageApi();
@@ -493,59 +548,59 @@ export default class UploadLectureBachelor extends Component {
                     </div>
                 </div>
 
-                <div class="container">
-                    <div class="columns is-multiline is-centered">
+                {/* <div class="container"> */}
+                <div class="columns is-multiline is-centered">
 
-                        <div class="column is-one-quarter">
-                            <div class="field">
-                                <label class="label">ประเภท :</label>
-                            </div>
-
-                            <div class="select" value={this.state.version} onChange={this.onChangeVersion}>
-                                <select>
-                                    <option>โปรดเลือก</option>
-                                    <option>วิชาบรรยาย-วิชาปฏิบัติ</option>
-                                    <option>ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา</option>
-                                </select>
-                            </div>
-
-                        </div>
-
-                        <div class="column is-one-quarter">
-                            <div class="field">
-                                <label class="label">ปีการศึกษา :</label>
-                            </div>
-
-                            <input class="input" type="text" placeholder="25XX" value={this.state.year} onChange={this.onChangeYear}></input>
-                        </div>
-
-                        <div class="column is-one-quarter">
-                            <div class="field">
-                                <label class="label">ภาคการศึกษา :</label>
-                            </div>
-
-                            <div class="select" value={this.state.semester} onChange={this.onChangeSemester}>
-                                <select>
-                                    <option>โปรดเลือก</option>
-                                    <option>1</option>
-                                    <option>2</option>
-                                </select>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="container">
-                    <div class="columns is-multiline is-centered">
+                    <div class="column is-one-quarter">
                         <div class="field">
-                            <div class="column is-one-quarter">
-                                <input type='file' className="selectfile" onChange={this.handleChange} />
-                            </div>
+                            <label class="label">ประเภท :</label>
+                        </div>
+
+                        <div class="select" value={this.state.version} onChange={this.onChangeVersion}>
+                            <select>
+                                <option>โปรดเลือก</option>
+                                <option>วิชาบรรยาย-วิชาปฏิบัติ</option>
+                                <option>ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา</option>
+                            </select>
                         </div>
 
                     </div>
+
+                    <div class="column is-one-quarter">
+                        <div class="field">
+                            <label class="label">ปีการศึกษา :</label>
+                        </div>
+
+                        <input class="input" type="text" placeholder="25XX" value={this.state.year} onChange={this.onChangeYear}></input>
+                    </div>
+
+                    <div class="column is-one-quarter">
+                        <div class="field">
+                            <label class="label">ภาคการศึกษา :</label>
+                        </div>
+
+                        <div class="select" value={this.state.semester} onChange={this.onChangeSemester}>
+                            <select>
+                                <option>โปรดเลือก</option>
+                                <option>1</option>
+                                <option>2</option>
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
+                {/* </div> */}
+
+                {/* <div class="container"> */}
+                <div class="columns is-multiline is-centered">
+                    <div class="field">
+                        <div class="column is-one-quarter">
+                            <input type='file' className="selectfile" onChange={this.handleChange} />
+                        </div>
+                    </div>
+
+                </div>
+                {/* </div> */}
 
                 {/*  */}
 
@@ -566,9 +621,9 @@ export default class UploadLectureBachelor extends Component {
                 </article>}
 
 
-                <div class="container level-right">
-                    <div class="columns is-multiline is-centered">
-                        <div class="colum is-one-quarter">
+                <div class="columns is-multiline is-centered">
+                    <div class="field">
+                        <div class="column is-one-quarter">
                             <button class="button is-primary " onClick={this.saveFile}>
                                 <span class="icon is-small">
                                     <i class="fas fa-check"></i>
@@ -591,7 +646,7 @@ export default class UploadLectureBachelor extends Component {
                 {this.state.showPopupSave && <PopupSaveFile
                     clickPopupSave={this.clickPopupSave}
                     textAleart={this.textAleartSave}
-                    // sendApi={this.sendMessageApi}
+                // sendApi={this.sendMessageApi}
                 />}
 
                 {this.state.showPopupDanger && <PopupDanger

@@ -15,7 +15,7 @@ export const ListObjects = props => {
 
     var prefix1 = 'reports/' + props.department + '/ปีงบประมาณ' + props.year + '/' + props.salaryRound + '/';
     const paramsLecture = {
-        Bucket: 'amplifys3smartreport142809-dev',
+        Bucket: 'guy-bucket-test',
         Delimiter: '',
         Prefix: prefix1,
     };
@@ -24,8 +24,17 @@ export const ListObjects = props => {
     const [showTable, setshowTable] = useState(false);
     const [isPending, setisPending] = useState(false)
 
+    const [department, setdepartment] = useState();
+    const [year, setyear] = useState();
+    const [salaryRound, setsalaryRound] = useState();
+
     // useEffect(() => {
     async function listObjectFroms3() {
+
+        setdepartment(props.department);
+        setyear(props.year);
+        setsalaryRound(props.salaryRound);
+
         await s3.listObjectsV2(paramsLecture, (err, data) => {
             if (err) {
                 console.log(err, err.stack);
@@ -34,14 +43,7 @@ export const ListObjects = props => {
                 console.log(data.Contents);
                 var contents = data.Contents;
                 var arrData = [];
-                var name = 'name';
                 var time = 'time';
-                let department = 'department';
-                let salaryRound = 'salaryRound';
-                let isChecked = 'isChecked';
-                let id = 'id';
-                let year = 'year';
-                let month = 'month';
                 let count = 1;
                 // สำหรับเลื่อนเงินเดือน
 
@@ -55,13 +57,13 @@ export const ListObjects = props => {
                         monthSalaryRound = '1 ตุลาคม';
                     }
                     arrData.push({
-                        [id]: count,
-                        [name]: ((((content.Key).split('/'))[4]).split('_'))[1],
-                        [department]: ((((content.Key).split('/'))[4]).split('_'))[2],
-                        [month]: monthSalaryRound,
-                        [salaryRound]: ((((content.Key).split('/'))[4]).split('_'))[3],
-                        [year]: ((((content.Key).split('/'))[4]).split('_'))[4],
-                        [isChecked]: false
+                        ['id']: count,
+                        ['name']: ((((content.Key).split('/'))[4]).split('_'))[1],
+                        ['department']: ((((content.Key).split('/'))[4]).split('_'))[2],
+                        ['month']: monthSalaryRound,
+                        ['salaryRound']: ((((content.Key).split('/'))[4]).split('_'))[3],
+                        ['year']: ((((content.Key).split('/'))[4]).split('_'))[4],
+                        ['isChecked']: false
                     });
                     count++;
                 })
@@ -94,18 +96,16 @@ export const ListObjects = props => {
         setListFiles(lists);
         console.log(listFiles);
     }
-
+ 
 
     return (
         <Fragment>
 
-            <div class="container">
-                <div class="columns is-multiline is-centered">
-                    <div class="field">
-                        <button class="button is-primary" onClick={listObjectFroms3}>
-                            {!isPending && <span>ค้นหา</span>}
-                            {isPending && <span>กำลังค้นหา...</span>}</button>
-                    </div>
+            <div class="columns is-multiline is-centered">
+                <div class="field">
+                    <button class="button is-primary" onClick={listObjectFroms3}>
+                        {!isPending && <span>ค้นหา</span>}
+                        {isPending && <span>กำลังค้นหา...</span>}</button>
                 </div>
             </div>
 
@@ -119,33 +119,41 @@ export const ListObjects = props => {
                     </div>
                 </div> */}
 
-                {showTable && <div class="column is-centered">
-                    <table class="table is-striped is-fullwidth">
-                        <thead>
-                            <th>ชื่ออาจารย์</th>
-                            <th>สาขาวิชา</th>
-                            <th>สำหรับเลื่อนเงินเดือน</th>
-                            <th>ช่วงเวลาผลงาน</th>
-                            <th>เลือก</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td><input type="checkbox" value="checkedall" onClick={handleAllChecked} />เลือกทั้งหมด</td>
-                            </tr>
-                            {listFiles &&
-                                listFiles.map((namee, index) => (
-                                    <CheckBox2 handleCheckChieldElement={handleCheckChieldElement} {...namee} />
-                                ))}
- 
-                        </tbody>
-                    </table>
-                </div>}
+                {showTable &&
+                    <div class="column is-centered">
+                        <table class="table is-striped is-fullwidth">
+                            <thead>
+                                <th>ชื่ออาจารย์</th>
+                                <th>สาขาวิชา</th>
+                                <th>สำหรับเลื่อนเงินเดือน</th>
+                                <th>ช่วงเวลาผลงาน</th>
+                                <th>เลือก</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><input type="checkbox" value="checkedall" onClick={handleAllChecked} />เลือกทั้งหมด</td>
+                                </tr>
+                                {listFiles &&
+                                    listFiles.map((namee, index) => (
+                                        <CheckBox2 handleCheckChieldElement={handleCheckChieldElement} {...namee} />
+                                    ))}
+
+                            </tbody>
+                        </table>
+                    </div>}
             </div>
-            {showTable && <SendEmail data={listFiles} />}
+
+            {showTable && <SendEmail
+                data={listFiles}
+                department={department}
+                year={year}
+                salaryRound={salaryRound}
+            />}
+
         </Fragment>
 
     )

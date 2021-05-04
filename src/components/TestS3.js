@@ -94,13 +94,11 @@ export const TestS3 = props => {
 
         var arrToSend = {
             "httpMethod" : "POST",
-            "tableName":"Master_Computer_Computer_Class_1/63",
-            "bucketName":"public/สาขาวิชาวิทยาการคอมพิวเตอร์/ภาระงานสอน/ปริญญาตรี/วิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์/2563_1_/วิชาบรรยาย-วิชาปฏิบัติ/",
-            "fileName": "2563_1_สาขาวิชาวิทยาการคอมพิวเตอร์_วิชาบรรยาย-วิชาปฏิบัติ_24-04-2021 18:33:31.xlsx"
+            "tableName":"Test2",
         }
         var obj = JSON.parse('{ "httpMethod":"POST", "tableName":"This is Table Name"}');
 
-        var apiUrl = "https://7hy0cukj2f.execute-api.us-east-1.amazonaws.com/Prod/bachelor-class-function";
+        var apiUrl = "https://7hy0cukj2f.execute-api.us-east-1.amazonaws.com/Prod/create-table-function";
                         let axiosConfig = {
                             headers: {
                                 'Content-Type': 'application/json;charset=UTF-8',

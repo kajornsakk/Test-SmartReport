@@ -21,6 +21,7 @@ export const CheckBox3 = props => {
         </Fragment>
 
 
+        // original
         // <tr>
         //     <td>{props.name}</td>
         //     <td>{props.department}</td>

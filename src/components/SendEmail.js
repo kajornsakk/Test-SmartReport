@@ -8,7 +8,7 @@ import React, { Component, Fragment } from 'react'
 export default class SendEmail extends Component {
 
     state = {
-        showPopupSendSuccess: false
+        showPopupSendSuccess: false,
     }
 
     clickPopupClose = (e) => {
@@ -16,6 +16,13 @@ export default class SendEmail extends Component {
     }
 
     onClickSend = () => {
+
+        let department =this.props.department;
+        let year = this.props.year;
+        let salaryRound = this.props.salaryRound;
+        console.log(typeof department);
+        console.log(typeof year);
+        console.log(typeof salaryRound);
 
         let dataFromProps = this.props.data;
         const listTosend = [];
@@ -72,58 +79,64 @@ export default class SendEmail extends Component {
                     let name = 'name';
                     let email = 'email';
                     let link = 'link';
+
                     for (let j = 0; j < listTosend.length; j++) {
                         for (let i = 0; i < arrInstructorsListExcel.length; i++) {
                             if (listTosend[j] === arrInstructorsListExcel[i]) {
                                 const s3 = new AWS.S3();
-                                var params = { Bucket: "guy-bucket-test", Key: listTosend[j] };
+                                var keyName = 'reports/'+department+'/ปีงบประมาณ'+year+'/'+salaryRound+'/แบบฟอร์มรายงานผลการปฏิบัติงาน__ประภาพร รัตนธำรง__สาขาวิชาวิทยาการคอมพิวเตอร์_กรกฎาคม-ธันวาคม_2561.xlsx';
+                                var params = { Bucket: "guy-bucket-test", Key: keyName };
+                                //'reports/'+department+'/ปีงบประมาณ'+year+'/'+salaryRound+'/แบบฟอร์มรายงานผลการปฏิบัติงาน__ประภาพร รัตนธำรง__สาขาวิชาวิทยาการคอมพิวเตอร์_กรกฎาคม-ธันวาคม_2561.xlsx'
+                                console.log(listTosend[j]);
                                 var url = s3.getSignedUrl('getObject', params);
+                                console.log(url);
                                 arrToSend.push(
                                     {
                                         [name]: arrInstructorsListExcel[i],
                                         [email]: arrEmail[i],
                                         [link]: url
-                                    })
+                                })
+
                             }
                         }
                     }
                     console.log(arrToSend);
 
-                    if (arrToSend.length >= 1) {
-                        // Send Email
-                        var apiUrl = "https://amy1ptw2q6.execute-api.us-east-1.amazonaws.com/dev/lecture";
-                        let axiosConfig = {
-                            headers: {
-                                'Content-Type': 'application/json;charset=UTF-8',
-                                "Access-Control-Allow-Origin": "*",
-                                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-                            }
-                        };
-                        axios.post(apiUrl, arrToSend)
-                            .then((res => {
-                                console.log(res);
-                                //set arr respone to sate
-                                // setresponseFromSendEmail(res.data.Response)
-                                console.log(res.data.Response);
+                    // if (arrToSend.length >= 1) {
+                    //     // Send Email
+                    //     var apiUrl = "https://amy1ptw2q6.execute-api.us-east-1.amazonaws.com/dev/lecture";
+                    //     let axiosConfig = {
+                    //         headers: {
+                    //             'Content-Type': 'application/json;charset=UTF-8',
+                    //             "Access-Control-Allow-Origin": "*",
+                    //             'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+                    //         }
+                    //     };
+                    //     axios.post(apiUrl, arrToSend)
+                    //         .then((res => {
+                    //             console.log(res);
+                    //             //set arr respone to sate
+                    //             // setresponseFromSendEmail(res.data.Response)
+                    //             console.log(res.data.Response);
 
 
-                                if (res.status === '200') {
-                                    alert('The email has been sent')
-                                }
+                    //             if (res.status === '200') {
+                    //                 alert('The email has been sent')
+                    //             }
 
-                            }))
-                            .catch((error) => {
-                                if (error.response) {
-                                    console.log(error.response);
-                                } else if (error.request) {
-                                    console.log(error.request);
-                                }
-                            })
-                        this.setState({ showPopupSendSuccess: true })
-                    }
-                    else {
-                        alert('โปรดเลือกรายการส่งอีเมล')
-                    }
+                    //         }))
+                    //         .catch((error) => {
+                    //             if (error.response) {
+                    //                 console.log(error.response);
+                    //             } else if (error.request) {
+                    //                 console.log(error.request);
+                    //             }
+                    //         })
+                    //     this.setState({ showPopupSendSuccess: true })
+                    // }
+                    // else {
+                    //     alert('โปรดเลือกรายการส่งอีเมล')
+                    // }
 
                 }
             }
@@ -136,12 +149,13 @@ export default class SendEmail extends Component {
     render() {
         return (
             <Fragment>
+                
                 <div class="columns is-multiline is-centered">
                     <div class="field">
                         <button class="button is-primary" onClick={this.onClickSend}>ส่งฟอร์มภาระงาน</button>
                     </div>
                 </div>
-                
+
                 {this.state.showPopupSendSuccess && <PopupSendSuccess
                     clickPopup={this.clickPopupClose}
                 />}

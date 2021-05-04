@@ -2,6 +2,8 @@ import React, { Fragment, useState } from 'react'
 import AWS from 'aws-sdk';
 import TableAcademyEveryoneReport from './TableAcademyEveryoneReport';
 import CheckBox3 from './CheckBox3';
+import PopupCreateForm from './PopupCreateForm';
+import PopupCreateSuccess from './PopupCreateSuccess';
 
 export const DataReportForeveryone2 = props => {
 
@@ -20,13 +22,41 @@ export const DataReportForeveryone2 = props => {
     const [listShow, setlistShow] = useState([]); // ผลงานวิชาการ
 
     const [showTableForEveryone, setshowTableForEveryone] = useState(false);
+    const [showPopupLoading, setShowPopupLoading] = useState(false);
+    const [showPopupSucces, setshowPopupSucces] = useState(false)
+
+    function clickPopupClose () {
+        setshowPopupSucces(!showPopupSucces);
+        window.location.reload(false);
+    }
 
     function CallAPI() {
+        setShowPopupLoading(true);
+
         console.log(listFiles);
         console.log(listFilesMaster);
         console.log(listFilesDoctor);
-        console.log(listShow);
+        console.log(listShow); // เอา listShow ที่เป็น true เเล้ว get ชื่อส่ง API
+
+        var arrTosend = [];
+        listShow.forEach(list => {
+            if (list.status === "มีผลงาน") {
+                arrTosend.push({
+                    ['name']: list.name,
+                    ['department'] : props.department
+                })
+            }
+        })
+        console.log(arrTosend);
+
+        setTimeout(() => {
+            setShowPopupLoading(false);
+            setshowPopupSucces(true);
+        }, 35000);
+
         // window.location.reload(false);
+
+
     }
 
     async function ShowTable() {
@@ -371,110 +401,75 @@ export const DataReportForeveryone2 = props => {
             var arrBufferArtical = [];
             arrData.forEach(list => {
                 if (list.file === 'รายงานการเสนอผลงานในที่ประชุมวิชาการ') {
-                   if((list.round).split(" ")[0] === (props.salaryRound).split(" ")[0]) 
-                    arrBufferCon.push({
-                        ['name']: list.name,
-                        ['round']: list.round,
-                        ['status'] : true,
-                        ['file']: list.file,
-                        ['filePath']: list.filePath,
-                        ['time']: list.time
-                    })
-                    else{
-
+                    if ((list.round).split(" ")[0] === (props.salaryRound).split(" ")[0])
                         arrBufferCon.push({
                             ['name']: list.name,
                             ['round']: list.round,
-                            ['status'] : false,
+                            ['status']: true,
                             ['file']: list.file,
                             ['filePath']: list.filePath,
                             ['time']: list.time
                         })
-
-                    }
                 }
-                else if (list.file === 'รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ' ) {
-                    if((list.round).split(" ")[0] === (props.salaryRound).split(" ")[0]){
+                else if (list.file === 'รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ') {
+                    if ((list.round).split(" ")[0] === (props.salaryRound).split(" ")[0]) {
                         arrBufferArtical.push({
                             ['name']: list.name,
                             ['round']: list.round,
-                            ['status'] : true,
+                            ['status']: true,
                             ['file']: list.file,
                             ['filePath']: list.filePath,
                             ['time']: list.time
                         })
                     }
-                    else{
-                        arrBufferArtical.push({
-                            ['name']: list.name,
-                            ['round']: list.round,
-                            ['status'] : false,
-                            ['file']: list.file,
-                            ['filePath']: list.filePath,
-                            ['time']: list.time
-                        })
-                    }
-                    
+
                 }
             })
             console.log(arrBufferCon);
             console.log(arrBufferArtical);
 
-            // var arrTest = [
-            //  { "con": [arrBufferCon]},
-            //  { "artical" :[arrBufferArtical]}
-            // ];
-            var arrTest = [
-                { con: [arrBufferCon]},
-                { artical :[arrBufferArtical]}
-               ];
-            console.log(arrTest);
-            // arrTest.con.forEach(list =>{
-            //     console.log(list);
-            // })
+
 
             // หาจำนวนอาจารย์
             const arrInstructor = [...(new Set(arrData.map(({ name }) => name)))];
             console.log(arrInstructor);
 
-            // console.log(arrBufferCon.reverse()); // reverse ให้ไฟล์ล่าสุดอยู่ตัวเเรก
-            // console.log(arrBufferArtical.reverse()); // reverse ให้ไฟล์ล่าสุดอยู่ตัวเเรก
 
-            // ------------------------------------------------------------------
-
-
-            // console.log(arrConRound1);
-            // console.log(arrConRound2);
-
-            var arrMerge ;
-
-            if ((props.salaryRound).split(" ")[0] === 'รอบ1') {
-                console.log((props.salaryRound).split(" ")[0]);
-            }
-            if ((props.salaryRound).split(" ")[0] === 'รอบ2') {
-                console.log((props.salaryRound).split(" ")[0]);
-            }
-
-
-
-            // console.log(arrConRound1);
-            // console.log(arrConRound2);
-            // console.log(arrArticalRound1);
-            // console.log(arrArticalRound2);
-
-            // ------------------------------------------------------------------
-
-            //วนเทียบชื่ออาจารย์ที่เป็นประเภทนั้นๆ เเล้วเอาไฟล์ล่าสุดมาใน arr
+            var roundToCheck = props.salaryRound + "_" + props.year;
             var arrCon = [];
             arrInstructor.forEach(instructor => {
                 var count = 0;
                 arrBufferCon.forEach(list => {
-                    if (list.name === instructor) {
+                    if (list.name === instructor && list.round === roundToCheck && list.status === true) {
 
                         if (count === 0) {
                             arrCon.push({
                                 ['name']: list.name,
                                 ['round']: list.round,
+                                ['status']: list.status,
+                                ['file']: list.file,
+                                ['filePath']: list.filePath,
+                                ['time']: list.time
+                            })
+                        }
+                        count++; //break
+
+                    }
+                })
+            })
+            // console.log(arrCon);
+
+            var arrArtical = [];
+            arrInstructor.forEach(instructor => {
+                var count = 0;
+                arrBufferArtical.forEach(list => {
+                    if (list.name === instructor && list.round === roundToCheck && list.status === true) {
+
+                        if (count === 0) {
+                            arrArtical.push({
+                                ['name']: list.name,
+                                ['round']: list.round,
+                                ['status']: list.status,
                                 ['file']: list.file,
                                 ['filePath']: list.filePath,
                                 ['time']: list.time
@@ -486,77 +481,83 @@ export const DataReportForeveryone2 = props => {
                 })
             })
             console.log(arrCon);
-
-            var arrArtical = [];
-            arrInstructor.forEach(instructor => {
-                var count = 0;
-                arrBufferArtical.forEach(list => {
-                    if (list.name === instructor) {
-
-                        if (count === 0) {
-                            arrArtical.push({
-                                ['name']: list.name,
-                                ['round']: list.round,
-                                ['file']: list.file,
-                                ['filePath']: list.filePath,
-                                ['time']: list.time
-                            })
-                        }
-                        count++; //break
-
-                    }
-                })
-            })
             console.log(arrArtical);
+
             var arrMerge = arrCon.concat(arrArtical);
             console.log(arrMerge);
 
-            // //รอบ 1
-            // var startdate1 = new Date('07/01/2021'); //  01 / 07 / 20
-            // var enddate1 = new Date('12/31/2021'); //   31 / 12 / 20
-            // // รอบ2
-            // var startdate2 = new Date('01/01/2021'); //   01 / 01 /20
-            // var enddate2 = new Date('06/31/2021'); //   31 / 06 / 20
-
-            // var date = new Date('02/02/2020');
-
-            // // var time = (((list.filePath).split('/')[4]).split('_')[3]).split(' ')[0];
 
             arrInstructor.forEach(instructor => {
-                arrMerge.forEach(list => {
-                    if (instructor === list.name) {
-                        var roundToCheck = props.salaryRound + "_" + props.year;
-                        var check = 'ไม่พบข้อมูล';
-                        var statusShow = false;
-                        if (list.round === roundToCheck) {
-                            check = 'มีผลงาน';
-                            statusShow = true;
-                        }
-                        if (list.round === roundToCheck) {
-                            check = 'มีผลงาน';
-                            statusShow = true;
-                        }
-                        // console.log(check);
-                        arrOutput.push({
-                            ['name']: list.name,
-                            ['round']: list.round,
-                            ['file']: list.file,
-                            ['filePath']: list.filePath,
-                            ['status']: check,
-                            ['isChecked']: false,
-                            ['statusShow']: statusShow
-                        })
+                var checkCon = false;
+                var checkArtical = false;
+                arrMerge.forEach((list, index) => {
+                    if (instructor === list.name && list.file === 'รายงานการเสนอผลงานในที่ประชุมวิชาการ') {
+                        checkCon = true;
                     }
-
+                    if (instructor === list.name && list.file === 'รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ') {
+                        checkArtical = true;
+                    }
                 })
+
+                if (checkCon === true) {
+                    arrOutput.push({
+                        ['name']: instructor,
+                        ['status']: 'มีผลงาน',
+                        ['file']: 'รายงานการเสนอผลงานในที่ประชุมวิชาการ',
+                        ['isChecked']: false,
+                        ['statusShow']: 'is-size-6 has-text-primary',
+                        ['showSelect']: true,
+                    })
+                }
+                if (checkArtical === true) {
+                    arrOutput.push({
+                        ['name']: instructor,
+                        ['status']: 'มีผลงาน',
+                        ['file']: 'รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ',
+                        ['isChecked']: false,
+                        ['statusShow']: 'is-size-6 has-text-primary',
+                        ['showSelect']: true,
+                    })
+                }
+                // else {
+                if (checkCon === false) {
+                    arrOutput.push({
+                        ['name']: instructor,
+                        ['status']: 'ไม่พบข้อมูล',
+                        ['file']: 'รายงานการเสนอผลงานในที่ประชุมวิชาการ',
+                        ['isChecked']: false,
+                        ['statusShow']: 'is-size-6 has-text-grey',
+                        ['showSelect']: false,
+                    })
+                }
+                if (checkArtical === false) {
+                    arrOutput.push({
+                        ['name']: instructor,
+                        ['status']: 'ไม่พบข้อมูล',
+                        ['file']: 'รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ',
+                        ['isChecked']: false,
+                        ['statusShow']: 'is-size-6 has-text-grey',
+                        ['showSelect']: false,
+                    })
+                }
+
+                // }
+
+
             })
+
             console.log(arrOutput);
+            //รวมผลงานจากที่เเยกเป็นสอง index ให้รวมมาเป็น index เดียวกัน
+            // var arrToShow = [];
+            // arrOutput.forEach(list => {
+            //     if(){
+
+            //     }
+            // })
+
+
+
             setlistShow(arrOutput);
-
-
-
-
-
         })
 
         setshowTableForEveryone(true);
@@ -704,6 +705,96 @@ export const DataReportForeveryone2 = props => {
                 </section>
             </div>}
 
+            {/* <div class="card">
+                <section class="section is-small">
+                    <div class="columns is-multiline is-centered">
+                        <table class="table is-striped is-fullwidth">
+                            <thead>
+                                <tr>
+                                    <th>รายชื่อ</th>
+                                    <th>ชื่อไฟล์</th>
+                                    <th>สถานะ</th>
+                                    <th>เลือก</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th><input type="checkbox" value="checkedall" onClick={handleAllChecked} /> เลือกทั้งหมด</th>
+                                </tr>
+                                
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th>วนิดา พฤทธิวิทยา</th>
+                                    <td>รายงานการเสนอผลงานในที่ประชุมวิชาการ</td>
+                                    <td><span class="is-size-6 has-text-primary">มีผลงาน</span></td>
+                                    <td><input type="checkbox"/> เลือก</td>
+                                </tr>
+                                <tr>
+                                    <th>วนิดา พฤทธิวิทยา</th>
+                                    <td>รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ</td>
+                                    <td><span class="is-size-6 has-text-primary">มีผลงาน</span></td>
+                                    <td><input type="checkbox"/> เลือก</td>
+                                </tr>
+                                
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th>ประภาพร รัตนธำรง</th>
+                                    <td>รายงานการเสนอผลงานในที่ประชุมวิชาการ</td>
+                                    <td><span class="is-size-6 has-text-grey">ไม่พบข้อมูล</span></td>
+                                    <td>{false && <input type="checkbox">เลือก</input> }</td>
+                                </tr>
+                                <tr>
+                                    <th>ประภาพร รัตนธำรง</th>
+                                    <td>รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ</td>
+                                    <td><span class="is-size-6 has-text-primary">มีผลงาน</span></td>
+                                    <td><input type="checkbox"/> เลือก</td>
+                                </tr>
+                                
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th>ประภาพร รัตนธำรง</th>
+                                    <td>รายงานการเสนอผลงานในที่ประชุมวิชาการ</td>
+                                    <td><span class="is-size-6 has-text-grey">ไม่พบข้อมูล</span></td>
+                                    <td>{false && <input type="checkbox">เลือก</input> }</td>
+                                </tr>
+                                <tr>
+                                    <th>ประภาพร รัตนธำรง</th>
+                                    <td>รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ</td>
+                                    <td><span class="is-size-6 has-text-primary">มีผลงาน</span></td>
+                                    <td><input type="checkbox"/> เลือก</td>
+                                </tr>
+
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div> */}
+
+            {/* --------------------------------------------------------------------- */}
+            
+            {showPopupLoading && <PopupCreateForm />}
+            {showPopupSucces && <PopupCreateSuccess clickPopupClose = {clickPopupClose}/>}
+            
             {showTableForEveryone &&
                 <section class="section is-small">
                     <div class="columns is-multiline is-centered">
