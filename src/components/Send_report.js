@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import {  useEffect } from 'react';
+import { useEffect } from 'react';
 import CheckBox from './CheckBox';
 import ListObjects from './ListObjects';
 import SendEmail from './SendEmail';
@@ -25,8 +25,8 @@ export default class Send_report extends Component {
         salaryRoundSend: ''
     }
     state = { listDataWorkload: [] }
-    state = { showObjectList: false}
-    state = {showTable : false}
+    state = { showObjectList: false }
+    state = { showTable: false }
 
 
 
@@ -38,7 +38,7 @@ export default class Send_report extends Component {
     }
     onChangeSalaryRoundSend = (e) => {
         this.setState({ salaryRoundSend: e.target.value })
-        this.setState({showTable:true})
+        this.setState({ showTable: true })
     }
 
     onClickSearch = () => {
@@ -46,8 +46,8 @@ export default class Send_report extends Component {
         console.log(this.state.yearSend);
         console.log(this.state.salaryRoundSend);
 
-        
-        this.setState({showObjectList: true});
+
+        this.setState({ showObjectList: true });
 
         // const AWS = require('aws-sdk/global');
         // const S3 = require('aws-sdk/clients/s3');
@@ -67,7 +67,7 @@ export default class Send_report extends Component {
         // };
 
         // // useEffect(()=>{
-            
+
         // // })
         // s3.listObjectsV2(paramsLecture, (err, data) => {
         //     var contents = data.Contents;
@@ -125,6 +125,12 @@ export default class Send_report extends Component {
                                 </a>
                             </li>
 
+                            <li >
+                                <a href="/SendEmailHistory" className="navbar-item" ><span class="icon is-small" ><i class="far fa-file-alt" aria-hidden="true"></i></span>
+                                     ประวัติการส่งแบบฟอร์ม
+                                </a>
+                            </li>
+
                         </ul>
                     </div>
 
@@ -134,86 +140,88 @@ export default class Send_report extends Component {
                             <div class="card">
                                 <section class="section is-small">
 
-                                        <div class="columns is-multiline is-centered">
+                                    <div class="columns is-multiline is-centered">
 
-                                            <div class="column is-one-quarter">
-                                                <div class="field">
-                                                    <label class="label">สาขาวิชา :</label>
-                                                </div>
-
-                                                <div class="select" value={this.state.departmemtSend} onChange={this.onChangeDepartmentSend}>
-                                                    <select>
-                                                        <option>โปรดเลือก</option>
-                                                        <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
-                                                        <option>สาขาวิชาฟิสิกส์</option>
-                                                        <option>สาขาวิชาเคมี</option>
-                                                        <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
-                                                        <option>สาขาวิชาคณิตศาสตร์ประกันภัย</option>
-                                                        <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
-                                                        <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
-                                                        <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
-                                                        <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
-                                                        <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
-                                                    </select>
-                                                </div>
-
+                                        <div class="column is-one-quarter">
+                                            <div class="field">
+                                                <label class="label">สาขาวิชา :</label>
                                             </div>
 
-                                            <div class="column is-one-quarter">
-                                                {/* <div class="field">
+                                            <div class="select" value={this.state.departmemtSend} onChange={this.onChangeDepartmentSend}>
+                                                <select>
+                                                    <option>โปรดเลือก</option>
+                                                    <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
+                                                    <option>สาขาวิชาฟิสิกส์</option>
+                                                    <option>สาขาวิชาเคมี</option>
+                                                    <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
+                                                    <option>สาขาวิชาคณิตศาสตร์ประกันภัย</option>
+                                                    <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
+                                                    <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
+                                                    <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
+                                                    <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
+                                                    <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="column is-one-quarter">
+                                            {/* <div class="field">
                                                     <label class="label">ปีงบประมาณ :</label>
                                                 </div>
 
                                                 <input class="input" type="text" placeholder="25XX" value={this.state.yearSend} onChange={this.onChangeYearSend}></input> */}
-                                                <div class="field">
-                                                    <label class="label">ปีงบประมาณ :</label>
-                                                </div>
-
-                                                <div class="select" value={this.state.yearSend} onChange={this.onChangeYearSend}>
-                                                    <select>
-                                                        <option>โปรดเลือก</option>
-                                                        <option>2562</option>
-                                                        <option>2563</option>
-                                                        <option>2564</option>
-                                                    </select>
-                                                </div>
+                                            <div class="field">
+                                                <label class="label">ปีงบประมาณ :</label>
                                             </div>
 
-                                            <div class="column is-one-quarter">
-                                                <div class="field">
-                                                    <label class="label">รอบเลื่อนเงินเดือน :</label>
-                                                </div>
-
-                                                <div class="select" value={this.state.salaryRoundSend} onChange={this.onChangeSalaryRoundSend}>
-                                                    <select>
-                                                        <option>โปรดเลือก</option>
-                                                        <option>รอบ1 เดือน เมษายน</option>
-                                                        <option>รอบ2 เดือน ตุลาคม</option>
-                                                    </select>
-                                                </div>
-
+                                            <div class="select" value={this.state.yearSend} onChange={this.onChangeYearSend}>
+                                                <select>
+                                                    <option>โปรดเลือก</option>
+                                                    <option>2562</option>
+                                                    <option>2563</option>
+                                                    <option>2564</option>
+                                                    <option>2565</option>
+                                                </select>
                                             </div>
-
- 
- 
                                         </div>
 
-                                        
-                                 
+                                        <div class="column is-one-quarter">
+                                            <div class="field">
+                                                <label class="label">รอบเลื่อนเงินเดือน :</label>
+                                            </div>
+
+                                            <div class="select" value={this.state.salaryRoundSend} onChange={this.onChangeSalaryRoundSend}>
+                                                <select>
+                                                    <option>โปรดเลือก</option>
+                                                    <option>รอบ1 เดือน เมษายน</option>
+                                                    <option>รอบ2 เดือน ตุลาคม</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+
+
+
+                                    </div>
+
+
+
                                 </section>
-                                
-                                <section class="section is-small">
-                                    <ListObjects department={this.state.departmemtSend} year={this.state.yearSend} salaryRound={this.state.salaryRoundSend}/>
-                                </section>
-                                
+
                             </div>
+
+                            <section class="section is-small">
+                                <ListObjects department={this.state.departmemtSend} year={this.state.yearSend} salaryRound={this.state.salaryRoundSend} />
+                            </section>
+
                         </div>
                         <div class="column"></div>
                     </div>
 
                     {/* <SendEmail data={this.state.listFileNameSends} /> */}
-                                
-                    
+
+
                 </div>
             </Fragment>
         )

@@ -51,9 +51,11 @@ export default class UploadLectureBachelor extends Component {
     }
     clickPopup = (e) => {
         this.setState({ showPopup: !this.state.showPopup })
+        window.location.reload(false);
     }
     clickPopupSave = (e) => {
         this.setState({ showPopupSave: !this.state.showPopupSave })
+        window.location.reload(false);
     }
     clickPopupDanger = (e) => {
         this.setState({ showPopupDanger: !this.state.showPopupDanger })
@@ -212,63 +214,63 @@ export default class UploadLectureBachelor extends Component {
         }
         console.log(arrToSend);
 
-        if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
-            //call lambda lecture
-            var apiUrl = "https://wnypwoakmc.execute-api.us-east-1.amazonaws.com/Prod/bachelor-class-function";
-            let axiosConfig = {
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8',
-                    'Access-Control-Allow-Origin': "*",
-                    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-                }
-            };
-            axios.post(apiUrl, arrToSend)
-                .then((res => {
-                    console.log(res);
-                    console.log(res.data.Response);
+        // if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
+        //     //call lambda lecture
+        //     var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/bachelor-class-function";
+        //     let axiosConfig = {
+        //         headers: {
+        //             'Content-Type': 'application/json;charset=UTF-8',
+        //             'Access-Control-Allow-Origin': "*",
+        //             'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+        //         }
+        //     };
+        //     axios.post(apiUrl, arrToSend)
+        //         .then((res => {
+        //             console.log(res);
+        //             console.log(res.data.Response);
 
-                    if (res.status === '200') {
-                        alert('The email has been sent')
-                    }
+        //             if (res.status === '200') {
+        //                 alert('The email has been sent')
+        //             }
 
-                }))
-                .catch((error) => {
-                    if (error.response) {
-                        console.log(error.response);
-                    } else if (error.request) {
-                        console.log(error.request);
-                    }
-                })
+        //         }))
+        //         .catch((error) => {
+        //             if (error.response) {
+        //                 console.log(error.response);
+        //             } else if (error.request) {
+        //                 console.log(error.request);
+        //             }
+        //         })
 
-        }
-        if (this.state.version === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
-            //call lambda specail Project
-            var apiUrl = "https://wnypwoakmc.execute-api.us-east-1.amazonaws.com/Prod/bachelor-specialproject-function";
-            let axiosConfig = {
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8',
-                    'Access-Control-Allow-Origin': "*",
-                    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-                }
-            };
-            axios.post(apiUrl, arrToSend)
-                .then((res => {
-                    console.log(res);
-                    console.log(res.data.Response);
+        // }
+        // if (this.state.version === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
+        //     //call lambda specail Project
+        //     var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/bachelor-specialproject-function";
+        //     let axiosConfig = {
+        //         headers: {
+        //             'Content-Type': 'application/json;charset=UTF-8',
+        //             'Access-Control-Allow-Origin': "*",
+        //             'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+        //         }
+        //     };
+        //     axios.post(apiUrl, arrToSend)
+        //         .then((res => {
+        //             console.log(res);
+        //             console.log(res.data.Response);
 
-                    if (res.status === '200') {
-                        alert('The email has been sent')
-                    }
+        //             if (res.status === '200') {
+        //                 alert('The email has been sent')
+        //             }
 
-                }))
-                .catch((error) => {
-                    if (error.response) {
-                        console.log(error.response);
-                    } else if (error.request) {
-                        console.log(error.request);
-                    }
-                })
-        }
+        //         }))
+        //         .catch((error) => {
+        //             if (error.response) {
+        //                 console.log(error.response);
+        //             } else if (error.request) {
+        //                 console.log(error.request);
+        //             }
+        //         })
+        // }
 
     }
 
@@ -490,7 +492,8 @@ export default class UploadLectureBachelor extends Component {
         return (
             <Fragment>
 
-                <div class="columns is-multiline is-centered">
+                <div class="columns is-multiline">
+                <div class="column is-one-quarter"></div>
 
                     <div class="column is-one-quarter">
                         <div class="field">
@@ -549,7 +552,8 @@ export default class UploadLectureBachelor extends Component {
                 </div>
 
                 {/* <div class="container"> */}
-                <div class="columns is-multiline is-centered">
+                <div class="columns is-multiline">
+                <div class="column is-one-quarter"></div>
 
                     <div class="column is-one-quarter">
                         <div class="field">
@@ -621,7 +625,8 @@ export default class UploadLectureBachelor extends Component {
                 </article>}
 
 
-                <div class="columns is-multiline is-centered">
+                <div class="columns is-multiline">
+                <div class="column"></div>
                     <div class="field">
                         <div class="column is-one-quarter">
                             <button class="button is-primary " onClick={this.saveFile}>

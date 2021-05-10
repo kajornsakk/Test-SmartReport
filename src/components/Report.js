@@ -92,6 +92,12 @@ export default class Report extends Component {
                                 </a>
                             </li>
 
+                            <li >
+                                <a href="/SendEmailHistory" className="navbar-item" ><span class="icon is-small" ><i class="far fa-file-alt" aria-hidden="true"></i></span>
+                                     ประวัติการส่งแบบฟอร์ม
+                                </a>
+                            </li>
+
                         </ul>
                     </div>
 
@@ -213,26 +219,25 @@ export default class Report extends Component {
 
                                 {/* -------------------------------test----------------------- */}
 
+                            </div>
+                            {this.state.showSelectRadioForindividual &&
                                 <section class="section is-small">
-                                    {this.state.showSelectRadioForeveryone && <DataReportForeveryone2
+                                    <DataReportIndividual2
+                                        salaryRound={this.state.salaryRound}
+                                        year={this.state.year}
+                                        department={this.state.department}
+                                        instructor={this.state.instructorName} />
+                                </section>}
+
+                            {this.state.showSelectRadioForeveryone &&
+                                <section class="section is-small">
+                                    <DataReportForeveryone2
                                         salaryRound={this.state.salaryRound}
                                         year={this.state.year}
                                         department={this.state.department}
                                         instructor={this.state.instructorName}
-                                    />}
-                                </section>
-
-                                <section class="section is-small">
-                                    {this.state.showSelectRadioForindividual && <DataReportIndividual2
-                                        salaryRound={this.state.salaryRound}
-                                        year={this.state.year}
-                                        department={this.state.department}
-                                        instructor={this.state.instructorName} />}
-                                </section>
-
-
-
-                            </div>
+                                    />
+                                </section>}
 
                         </div>
                         <div class="column"></div>

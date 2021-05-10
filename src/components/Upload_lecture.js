@@ -77,7 +77,7 @@ export default class Upload_lecture extends Component {
 
               <div class="card ">
 
-{/*  */}
+                {/*  */}
                 {/* <article class="message is-primary">
                   <div class="message-header">
                     <p>primary</p>
@@ -87,41 +87,41 @@ export default class Upload_lecture extends Component {
                     Format ไฟล์ข้อมูลถูกต้องสามารถอัปโหลดไฟล์ข้อมูลได้
                   </div>
                 </article> */}
-{/*  */}
+                {/*  */}
                 <div class="card-content ">
                   {/* <div class="content"> */}
-                    <section class="section is-small ">
-                      {/* <div class="container"> */}
+                  <section class="section is-small ">
+                    {/* <div class="container"> */}
 
-                        <div class="columns is-multiline is-centered">
+                    <div class="columns is-multiline">
+                      <div class="column is-one-quarter"></div>
 
-                          <div class="column is-one-quarter">
-                            <label for="flexRadioDefault1">
-                              <input type="radio" value="option1" name="flexRadioDefault" id="flexRadioDefault1"
-                                onChange={this.handleRadiosBachelor} />ปริญญาตรี</label>
-                          </div>
+                      <div class="column is-one-quarter">
+                        <label for="flexRadioDefault1">
+                          <input type="radio" value="option1" name="flexRadioDefault" id="flexRadioDefault1"
+                            onChange={this.handleRadiosBachelor} />ปริญญาตรี</label>
+                      </div>
 
-                          <div class="column is-one-quarter">
-                            <label for="flexRadioDefault1">
-                              <input type="radio" value="option2" name="flexRadioDefault" id="flexRadioDefault2"
-                                onChange={this.handleRadiosMaster} />ปริญญาโท</label>
-                          </div>
+                      <div class="column is-one-quarter">
+                        <label for="flexRadioDefault1">
+                          <input type="radio" value="option2" name="flexRadioDefault" id="flexRadioDefault2"
+                            onChange={this.handleRadiosMaster} />ปริญญาโท</label>
+                      </div>
 
-                          <div class="column is-one-quarter">
-                            <label for="flexRadioDefault1">
-                              <input type="radio" value="option2" name="flexRadioDefault" id="flexRadioDefault2"
-                                onChange={this.handleRadiosDoctor} />ปริญญาเอก</label>
-                          </div>
+                      <div class="column is-one-quarter">
+                        <label for="flexRadioDefault1">
+                          <input type="radio" value="option2" name="flexRadioDefault" id="flexRadioDefault2"
+                            onChange={this.handleRadiosDoctor} />ปริญญาเอก</label>
+                      </div>
+                    </div>
 
-                        </div>
+                    {this.state.showUploadBachelor && <UploadLectureBachelor />}
+                    {this.state.showUploadMaster && <UploadLectureMaster />}
+                    {this.state.showUploadDoctor && <UploadLectureDoctor />}
 
-                        {this.state.showUploadBachelor && <UploadLectureBachelor />}
-                        {this.state.showUploadMaster && <UploadLectureMaster />}
-                        {this.state.showUploadDoctor && <UploadLectureDoctor />}
+                    {/* </div> */}
 
-                      {/* </div> */}
-
-                    </section>
+                  </section>
                   {/* </div> */}
                 </div>
               </div>
@@ -130,7 +130,7 @@ export default class Upload_lecture extends Component {
           </div>
 
 
-{/*  */}
+          {/*  */}
           {/* <article class="message is-primary">
             <div class="message-body">
               <strong>
@@ -138,7 +138,7 @@ export default class Upload_lecture extends Component {
               </strong>
             </div>
           </article> */}
-{/*  */}
+          {/*  */}
 
 
         </div>

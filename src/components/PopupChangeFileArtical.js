@@ -16,6 +16,7 @@ export const PopupChangeFileArtical = props => {
                     ['id']: 1,
                     ['departmwnt']: list.department,
                     ['type']: list.type,
+                    ['filePath'] : list.filePath,
                     ['time']: list.file,
                     ['isChecked']: list.isChecked
                 })
@@ -68,6 +69,7 @@ export const PopupChangeFileArtical = props => {
                             ['department']: props.department,
                             ['type']: 'รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ',
                             ['file']: ((list.Key).split("/")[5]).split("_")[3],
+                            ['filePath'] : list.Key,
                             ['isChecked']: false
                         })
                         count++;

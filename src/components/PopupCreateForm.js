@@ -9,6 +9,7 @@ export default class PopupCreateForm extends Component {
                     <div class="modal-card">
                         <section class="modal-card-body">
                             <p>กำลังสร้างแบบฟอร์ม...</p>
+                            <progress class="progress is-small is-primary" max="100">15%</progress>
                         </section>
                         
                     </div>

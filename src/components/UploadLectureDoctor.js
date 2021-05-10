@@ -51,9 +51,11 @@ export default class UploadLectureDoctor extends Component {
     }
     clickPopup = (e) => {
         this.setState({ showPopup: !this.state.showPopup })
+        window.location.reload(false);
     }
     clickPopupSave = (e) => {
         this.setState({ showPopupSave: !this.state.showPopupSave })
+        window.location.reload(false);
     }
     clickPopupDanger = (e) => {
         this.setState({ showPopupDanger: !this.state.showPopupDanger })
@@ -175,71 +177,71 @@ export default class UploadLectureDoctor extends Component {
         }
         console.log(arrToSend);
 
-        if (this.state.version === 'วิชาบรรยาย') {
+        // if (this.state.version === 'วิชาบรรยาย') {
 
-            var apiUrl = "https://wnypwoakmc.execute-api.us-east-1.amazonaws.com/Prod/doctoral-class-function";
-            axios.post(apiUrl, arrToSend)
-                .then((res => {
-                    console.log(res);
-                    console.log(res.data.Response);
+        //     var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/doctoral-class-function";
+        //     axios.post(apiUrl, arrToSend)
+        //         .then((res => {
+        //             console.log(res);
+        //             console.log(res.data.Response);
 
-                    if (res.status === '200') {
-                        alert('The email has been sent')
-                    }
+        //             if (res.status === '200') {
+        //                 alert('The email has been sent')
+        //             }
 
-                }))
-                .catch((error) => {
-                    if (error.response) {
-                        console.log(error.response);
-                    } else if (error.request) {
-                        console.log(error.request);
-                    }
-                })
+        //         }))
+        //         .catch((error) => {
+        //             if (error.response) {
+        //                 console.log(error.response);
+        //             } else if (error.request) {
+        //                 console.log(error.request);
+        //             }
+        //         })
 
-        }
-        if (this.state.version === 'วิทยานิพนธ์') {
+        // }
+        // if (this.state.version === 'วิทยานิพนธ์') {
 
-            var apiUrl = "https://wnypwoakmc.execute-api.us-east-1.amazonaws.com/Prod/doctoral-thesis-function";
-            axios.post(apiUrl, arrToSend)
-                .then((res => {
-                    console.log(res);
-                    console.log(res.data.Response);
+        //     var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/doctoral-thesis-function";
+        //     axios.post(apiUrl, arrToSend)
+        //         .then((res => {
+        //             console.log(res);
+        //             console.log(res.data.Response);
 
-                    if (res.status === '200') {
-                        alert('The email has been sent')
-                    }
+        //             if (res.status === '200') {
+        //                 alert('The email has been sent')
+        //             }
 
-                }))
-                .catch((error) => {
-                    if (error.response) {
-                        console.log(error.response);
-                    } else if (error.request) {
-                        console.log(error.request);
-                    }
-                })
+        //         }))
+        //         .catch((error) => {
+        //             if (error.response) {
+        //                 console.log(error.response);
+        //             } else if (error.request) {
+        //                 console.log(error.request);
+        //             }
+        //         })
 
-        }
-        if (this.state.version === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+        // }
+        // if (this.state.version === 'ปัญหาพิเศษ-วิชาสัมมนา') {
 
-            var apiUrl = "https://wnypwoakmc.execute-api.us-east-1.amazonaws.com/Prod/doctoral-specialproject-function";
-            axios.post(apiUrl, arrToSend)
-                .then((res => {
-                    console.log(res);
-                    console.log(res.data.Response);
+        //     var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/doctoral-specialproject-function";
+        //     axios.post(apiUrl, arrToSend)
+        //         .then((res => {
+        //             console.log(res);
+        //             console.log(res.data.Response);
 
-                    if (res.status === '200') {
-                        alert('The email has been sent')
-                    }
+        //             if (res.status === '200') {
+        //                 alert('The email has been sent')
+        //             }
 
-                }))
-                .catch((error) => {
-                    if (error.response) {
-                        console.log(error.response);
-                    } else if (error.request) {
-                        console.log(error.request);
-                    }
-                })
-        }
+        //         }))
+        //         .catch((error) => {
+        //             if (error.response) {
+        //                 console.log(error.response);
+        //             } else if (error.request) {
+        //                 console.log(error.request);
+        //             }
+        //         })
+        // }
 
     }
 

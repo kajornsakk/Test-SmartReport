@@ -7,6 +7,7 @@ import Amplify, { Storage } from 'aws-amplify';
 import Popup from './Popup';
 import PopupSaveFile from './PopupSaveFile';
 import PopupDanger from './PopupDanger';
+import PopupLoading from './PopupLoading';
 const config = require('../config.json');
 
 export default class Upload_academy extends Component {
@@ -53,9 +54,13 @@ export default class Upload_academy extends Component {
     }
     clickPopup = (e) => {
         this.setState({ showPopup: !this.state.showPopup })
+        window.location.reload(false);
+        this.setState({ fileUrl: '', file: '', filename: '' })
     }
     clickPopupSave = (e) => {
         this.setState({ showPopupSave: !this.state.showPopupSave })
+        window.location.reload(false);
+        this.setState({ fileUrl: '', file: '', filename: '' })
     }
     clickPopupDanger = (e) => {
         this.setState({ showPopupDanger: !this.state.showPopupDanger })
@@ -128,6 +133,11 @@ export default class Upload_academy extends Component {
                     var startdate2 = new Date((new Date().getFullYear()) - 1, '12', '01'); //   01 / 01 /20
                     var enddate2 = new Date(new Date().getFullYear(), '05', '30'); //   31 / 06 / 20
 
+                    console.log(startdate1);
+                    console.log(enddate1);
+                    console.log(startdate2);
+                    console.log(enddate2);
+
                     if (dateFile >= startdate1 && dateFile <= enddate1) {
                         console.log('รอบ1');
                         CheckRound1++;
@@ -187,7 +197,8 @@ export default class Upload_academy extends Component {
 
 
 
-                if (DepartmentFromFile == this.state.department && VersionFromFile == this.state.version && ProfessorFromFile == this.state.professor) {
+                if (DepartmentFromFile == this.state.department && VersionFromFile == this.state.version && ProfessorFromFile == this.state.professor
+                    && this.state.checkRound1 >= 1 || this.state.checkRound2 >= 1) {
                     this.setState({
                         showNotification: true
                     })
@@ -204,9 +215,9 @@ export default class Upload_academy extends Component {
                     if (ProfessorFromFile != this.state.professor) {
                         arrTextAleart.push('"ชื่อเจ้าของผลงาน" ไม่ตรงกับข้อมูลนำเข้า');
                     }
-                    // if (this.state.checkRound1 === 0 && this.state.checkRound2 === 0){
-                    //     arrTextAleart.push('"ข้อมูลไม่อัพเดท" ผลงานไม่อยู่ในช่วงที่กำหนด');
-                    // }
+                    if (this.state.checkRound1 < 1 && this.state.checkRound2 < 1){
+                        arrTextAleart.push('"ข้อมูลไม่อัพเดท" ผลงานไม่อยู่ในช่วงที่กำหนด');
+                    }
                     this.setState({
                         textAleart: arrTextAleart,
                         showPopup: true
@@ -219,7 +230,8 @@ export default class Upload_academy extends Component {
                 var VersionFromFile = d.AH2.v;
                 var ProfessorFromFile = d.N2.v;
 
-                if (DepartmentFromFile == this.state.department && VersionFromFile == this.state.version && ProfessorFromFile == this.state.professor) {
+                if (DepartmentFromFile == this.state.department && VersionFromFile == this.state.version && ProfessorFromFile == this.state.professor
+                    && this.state.checkRound1 >= 1 || this.state.checkRound2 >= 1) {
                     this.setState({
                         showNotification: true
                     })
@@ -236,9 +248,9 @@ export default class Upload_academy extends Component {
                     if (ProfessorFromFile != this.state.professor) {
                         arrTextAleart.push('"ชื่อเจ้าของผลงาน" ไม่ตรงกับข้อมูลนำเข้า');
                     }
-                    // if (this.state.checkRound1 === 0 && this.state.checkRound2 === 0){
-                    //     arrTextAleart.push('"ข้อมูลไม่อัพเดท" ผลงานไม่อยู่ในช่วงที่กำหนด');
-                    // }
+                    if (this.state.checkRound1 < 1 && this.state.checkRound2 < 1){
+                        arrTextAleart.push('"ข้อมูลไม่อัพเดท" ผลงานไม่อยู่ในช่วงที่กำหนด');
+                    }
                     this.setState({
                         textAleart: arrTextAleart,
                         showPopup: true
@@ -330,7 +342,7 @@ export default class Upload_academy extends Component {
                                 filePathToSendApi: fileName,
                                 typeToSendApi: bufferVersion
                             });
-                            e.preventDefault();
+                            // e.preventDefault();
                             this.setState({
                                 isPending: false,
                                 showNotification: false
@@ -341,9 +353,9 @@ export default class Upload_academy extends Component {
                                 showPopupSave: true
                             })
 
-                            this.setState({ fileUrl: '', file: '', filename: '' })
+                            // this.setState({ fileUrl: '', file: '', filename: '' })
                             //this.state.filename;
-                            e.preventDefault();
+                            // e.preventDefault();
                         })
                         .catch(err => {
                             console.log('error upload file!', err)
@@ -363,7 +375,7 @@ export default class Upload_academy extends Component {
                                 filePathToSendApi: fileName,
                                 typeToSendApi: bufferVersion
                             });
-                            e.preventDefault();
+                            // e.preventDefault();
                             this.setState({
                                 isPending: false,
                                 showNotification: false
@@ -374,9 +386,9 @@ export default class Upload_academy extends Component {
                                 showPopupSave: true
                             })
 
-                            this.setState({ fileUrl: '', file: '', filename: '' })
+                            // this.setState({ fileUrl: '', file: '', filename: '' })
                             //this.state.filename;
-                            e.preventDefault();
+                            // e.preventDefault();
                         })
                         .catch(err => {
                             console.log('error upload file!', err)
@@ -387,6 +399,8 @@ export default class Upload_academy extends Component {
                         })
                 }
             }
+            this.setState({ fileUrl: '', file: '', filename: '' })
+            e.preventDefault();
         }
 
         //---------------------------------------------
@@ -407,15 +421,6 @@ export default class Upload_academy extends Component {
     render() {
         return (
             <Fragment>
-                {/* เพิ่มเติม */}
-                {this.state.showNotification && <div class="container">
-                    <div class="columns is-multiline is-centered">
-                        <div class="notification is-primary is-light">
-                            <button class="delete" onClick={this.clickNotification}></button>
-                            Format ถูกต้องสามารถอัปโหลดข้อมูลได้
-                        </div>
-                    </div>
-                </div>}
 
                 <div className="box cta ">
 
@@ -519,6 +524,16 @@ export default class Upload_academy extends Component {
 
                                     </div>
 
+                                    {this.state.showNotification &&
+                                        <article class="message is-primary">
+                                            <div class="message-body ">
+                                                Format ไฟล์ข้อมูลถูกต้องสามารถอัปโหลดไฟล์ข้อมูลได้<br/>
+                                                {this.state.nameFloderRound1}<br/>
+                                                {this.state.nameFloderRound2}
+                                            </div>
+                                        </article>}
+
+
                                     <div class="columns is-multiline is-centered">
                                         <div class="field">
                                             <div class="column is-one-quarter">
@@ -544,6 +559,7 @@ export default class Upload_academy extends Component {
 
                 </div>
 
+                {this.state.isPending && <PopupLoading />}
                 {this.state.showPopup && <Popup clickPopup={this.clickPopup} textAleart={this.state.textAleart} />}
                 {this.state.showPopupSave && <PopupSaveFile clickPopupSave={this.clickPopupSave} textAleart={this.textAleartSave} sendApi={this.sendMessageApi} />}
                 {this.state.showPopupDanger && <PopupDanger clickPopupDanger={this.clickPopupDanger} textAleart={this.textAleartDanger} />}

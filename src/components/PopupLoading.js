@@ -16,6 +16,7 @@ export default class PopupLoading extends Component {
                     <div class="modal-card">
                         <section class="modal-card-body">
                             <p>กำลังอัปโหลดข้อมูล...</p>
+                            <progress class="progress is-small is-primary" max="100">15%</progress>
                         </section>
                         
                     </div>

@@ -13,7 +13,7 @@ export const ListObjects = props => {
     });
     const s3 = new AWS.S3();
 
-    var prefix1 = 'reports/' + props.department + '/ปีงบประมาณ' + props.year + '/' + props.salaryRound + '/';
+    var prefix1 = 'reports/' + props.department + '/' + props.year + '/' + props.salaryRound + '/';
     const paramsLecture = {
         Bucket: 'guy-bucket-test',
         Delimiter: '',
@@ -34,6 +34,10 @@ export const ListObjects = props => {
         setdepartment(props.department);
         setyear(props.year);
         setsalaryRound(props.salaryRound);
+
+        console.log(props.department);
+        console.log(props.year);
+        console.log(props.salaryRound);
 
         await s3.listObjectsV2(paramsLecture, (err, data) => {
             if (err) {
@@ -96,65 +100,67 @@ export const ListObjects = props => {
         setListFiles(lists);
         console.log(listFiles);
     }
- 
+
 
     return (
         <Fragment>
 
+            
             <div class="columns is-multiline is-centered">
                 <div class="field">
                     <button class="button is-primary" onClick={listObjectFroms3}>
-                        {!isPending && <span>ค้นหา</span>}
+                        {!isPending && <span>ค้นหารายการ</span>}
                         {isPending && <span>กำลังค้นหา...</span>}</button>
                 </div>
             </div>
 
-            <div class="columns is-multiline is-centered">
+            {showTable && <div><br />
+                <span class="is-size-4 has-text-primary">
+                    รายการแบบฟอร์ม
+                        </span>
+                <br /></div>}
 
-                {/* <div class="columns is-multiline is-centered">
-                    <div class="field1">
-                        <button class="button is-primary" onClick={listObjectFroms3}>
-                            {!isPending && <span>ค้นหา</span>}
-                            {isPending && <span>กำลังค้นหา...</span>}</button>
-                    </div>
-                </div> */}
+            {showTable &&
+                <div class="card">
+                    <section class="section is-small">
+                        <div class="columns is-multiline is-centered">
+                            <table class="table is-striped is-fullwidth">
+                                <thead>
+                                    <th>ชื่ออาจารย์</th>
+                                    <th>สาขาวิชา</th>
+                                    <th>สำหรับเลื่อนเงินเดือน</th>
+                                    <th>ช่วงเวลาผลงาน</th>
+                                    <th>เลือก</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><input type="checkbox" value="checkedall" onClick={handleAllChecked} />เลือกทั้งหมด</td>
+                                    </tr>
+                                    {listFiles &&
+                                        listFiles.map((namee, index) => (
+                                            <CheckBox2 handleCheckChieldElement={handleCheckChieldElement} {...namee} />
+                                        ))}
 
-                {showTable &&
-                    <div class="column is-centered">
-                        <table class="table is-striped is-fullwidth">
-                            <thead>
-                                <th>ชื่ออาจารย์</th>
-                                <th>สาขาวิชา</th>
-                                <th>สำหรับเลื่อนเงินเดือน</th>
-                                <th>ช่วงเวลาผลงาน</th>
-                                <th>เลือก</th>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td><input type="checkbox" value="checkedall" onClick={handleAllChecked} />เลือกทั้งหมด</td>
-                                </tr>
-                                {listFiles &&
-                                    listFiles.map((namee, index) => (
-                                        <CheckBox2 handleCheckChieldElement={handleCheckChieldElement} {...namee} />
-                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>}
 
-                            </tbody>
-                        </table>
-                    </div>}
-            </div>
+            {
+                showTable && <SendEmail
+                    data={listFiles}
+                    department={department}
+                    year={year}
+                    salaryRound={salaryRound}
+                />
+            }
 
-            {showTable && <SendEmail
-                data={listFiles}
-                department={department}
-                year={year}
-                salaryRound={salaryRound}
-            />}
-
-        </Fragment>
+        </Fragment >
 
     )
 }

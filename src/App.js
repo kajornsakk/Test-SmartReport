@@ -24,6 +24,7 @@ import aws_exports from './aws-exports';
 import { AmplifySignOut, withAuthenticator } from '@aws-amplify/ui-react';
 import Send_report from './components/Send_report';
 import Upload_History from './components/Upload_History';
+import SendEmailHistory from './components/SendEmailHistory';
 Amplify.configure(aws_exports);
 
 library.add(faEdit);
@@ -45,6 +46,7 @@ class App extends Component {
               <Route exact path="/Send_report" component={Send_report} />
               <Route exact path="/Upload_History" component={Upload_History} />
               <Route exact path="/TestS3" component={TestS3} />
+              <Route exact path="/SendEmailHistory" component={SendEmailHistory} />
               <Route exact path="/admin" component={ProductAdmin} />
               <Route exact path="/login" component={LogIn} />
               <Route exact path="/register" component={Register} />

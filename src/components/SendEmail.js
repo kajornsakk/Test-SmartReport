@@ -1,30 +1,28 @@
 // import React, { Fragment, useState } from 'react'
 import * as XLSX from 'xlsx';
 import axios from 'axios';
+import moment from 'moment';
 import PopupSendSuccess from './PopupSendSuccess';
 
-import React, { Component, Fragment } from 'react'
+import React, { Component, Fragment, useState } from 'react'
 
-export default class SendEmail extends Component {
+// export default class SendEmail extends Component {
+export const SendEmail = props => {
 
-    state = {
-        showPopupSendSuccess: false,
+    // state = {
+    //     showPopupSendSuccess: false,
+    // }
+    const [showPopupSendSuccess, setshowPopupSendSuccess] = useState(false);
+    const [showMessageSendSuccess, setshowMessageSendSuccess] = useState([]);
+
+    function clickPopupClose() {
+        setshowPopupSendSuccess(!showPopupSendSuccess);
+        console.log(showMessageSendSuccess);
     }
 
-    clickPopupClose = (e) => {
-        this.setState({ showPopupSendSuccess: !this.state.showPopupSendSuccess });
-    }
+    async function onClickSend() {
 
-    onClickSend = () => {
-
-        let department =this.props.department;
-        let year = this.props.year;
-        let salaryRound = this.props.salaryRound;
-        console.log(typeof department);
-        console.log(typeof year);
-        console.log(typeof salaryRound);
-
-        let dataFromProps = this.props.data;
+        let dataFromProps = props.data;
         const listTosend = [];
         console.log(dataFromProps);
         for (let i = 0; i < dataFromProps.length; i++) {
@@ -34,7 +32,7 @@ export default class SendEmail extends Component {
                 listTosend.push(dataFromProps[i].name);
             }
         }
-        alert(listTosend + "To send in your Email");
+        // alert(listTosend + "To send in your Email");
 
         // เพิ่มเติม
         var AWS = require('aws-sdk');
@@ -52,7 +50,7 @@ export default class SendEmail extends Component {
         var arrInstructorsListExcel = [];
         var arrEmail = [];
         var arrToSend = [];
-        s3.getObject(
+        await s3.getObject(
             {
                 Bucket: "amplifys3storagegetestnd132251-dev",
                 Key: "email/email-instructor.xlsx"
@@ -76,67 +74,111 @@ export default class SendEmail extends Component {
                     }
 
                     // map ชื่อที่มาจาก checkbox กับชื่อเเละอีเมลใน s3 เเละเเปะลิงค์ดาวน์โหลด
-                    let name = 'name';
-                    let email = 'email';
-                    let link = 'link';
 
+                    let monthSearchFile = '';
+                    let yearSearchFile = '';
+                    if (props.salaryRound === "รอบ1 เดือน เมษายน") {
+                        monthSearchFile = 'กรกฎาคม-ธันวาคม';
+                        yearSearchFile = props.year;
+                    }
+                    if (props.salaryRound === "รอบ2 เดือน ตุลาคม") {
+                        monthSearchFile = 'มกราคม-มิถุนายน';
+                        yearSearchFile = props.year;
+                    }
+
+                    console.log(monthSearchFile);
+                    console.log(yearSearchFile);
+
+                    let d = 'สาขาวิชาวิทยาการคอมพิวเตอร์';
+                    let y = '2562';
+                    let s = 'รอบ1 เดือน เมษายน';
+                    console.log(d);
+                    console.log(y);
+                    console.log(typeof s);
+                    console.log(props.salaryRound);
+
+                    let count = 1;
                     for (let j = 0; j < listTosend.length; j++) {
                         for (let i = 0; i < arrInstructorsListExcel.length; i++) {
                             if (listTosend[j] === arrInstructorsListExcel[i]) {
                                 const s3 = new AWS.S3();
-                                var keyName = 'reports/'+department+'/ปีงบประมาณ'+year+'/'+salaryRound+'/แบบฟอร์มรายงานผลการปฏิบัติงาน__ประภาพร รัตนธำรง__สาขาวิชาวิทยาการคอมพิวเตอร์_กรกฎาคม-ธันวาคม_2561.xlsx';
+                                var keyName = `reports/${props.department}/${props.year}/${props.salaryRound}/แบบฟอร์มรายงานผลการปฏิบัติงาน_${arrInstructorsListExcel[i]}_${props.department}_${monthSearchFile}_${yearSearchFile}.xlsx`;
                                 var params = { Bucket: "guy-bucket-test", Key: keyName };
-                                //'reports/'+department+'/ปีงบประมาณ'+year+'/'+salaryRound+'/แบบฟอร์มรายงานผลการปฏิบัติงาน__ประภาพร รัตนธำรง__สาขาวิชาวิทยาการคอมพิวเตอร์_กรกฎาคม-ธันวาคม_2561.xlsx'
+
                                 console.log(listTosend[j]);
                                 var url = s3.getSignedUrl('getObject', params);
                                 console.log(url);
+
+                                let round = keyName.split("/")[3];
+                                let year = (keyName.split("/")[2]);
+                                let salaryRound = '';
+                                if (round === 'รอบ1 เดือน เมษายน') {
+                                    salaryRound = "round1_" + year;
+                                }
+                                if (round === 'รอบ2 เดือน ตุลาคม') {
+                                    salaryRound = "round2_" + year;
+                                }
+
+                                let department = keyName.split("/")[1];
+                                let status = 'ส่งเเล้ว';
+                                const DASH_DMYHMS = 'DD-MM-YYYY HH:mm:ss';
+                                let time = moment().format(DASH_DMYHMS);
+
                                 arrToSend.push(
                                     {
-                                        [name]: arrInstructorsListExcel[i],
-                                        [email]: arrEmail[i],
-                                        [link]: url
-                                })
+                                        ['ID']: time + " " + count,
+                                        ['instructor']: arrInstructorsListExcel[i],
+                                        ['email']: arrEmail[i],
+                                        ['link']: url,
+                                        ['department']: department,
+                                        ['salaryround']: salaryRound,
+                                        ['year']: year,
+                                        ['status']: status,
+                                        ['time']: time
+                                    })
+                                count++;
 
                             }
                         }
                     }
                     console.log(arrToSend);
 
-                    // if (arrToSend.length >= 1) {
-                    //     // Send Email
-                    //     var apiUrl = "https://amy1ptw2q6.execute-api.us-east-1.amazonaws.com/dev/lecture";
-                    //     let axiosConfig = {
-                    //         headers: {
-                    //             'Content-Type': 'application/json;charset=UTF-8',
-                    //             "Access-Control-Allow-Origin": "*",
-                    //             'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-                    //         }
-                    //     };
-                    //     axios.post(apiUrl, arrToSend)
-                    //         .then((res => {
-                    //             console.log(res);
-                    //             //set arr respone to sate
-                    //             // setresponseFromSendEmail(res.data.Response)
-                    //             console.log(res.data.Response);
+                    if (arrToSend.length >= 1) {
+                        // Send Email
+                        // https://amy1ptw2q6.execute-api.us-east-1.amazonaws.com/dev/lecture
+                        var apiUrl = "https://haw3rvgwd2.execute-api.us-east-1.amazonaws.com/dev/sendEmail";
+                        let axiosConfig = {
+                            headers: {
+                                'Content-Type': 'application/json;charset=UTF-8',
+                                "Access-Control-Allow-Origin": "*",
+                                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+                            }
+                        };
+                        axios.post(apiUrl, arrToSend)
+                            .then((res => {
 
+                                console.log(res);
+                                console.log(res.data);
+                                setshowMessageSendSuccess(res.data.resFromSave);
 
-                    //             if (res.status === '200') {
-                    //                 alert('The email has been sent')
-                    //             }
+                                console.log(res.status);
+                                if (res.status === 200) {
+                                    setshowPopupSendSuccess(true);
+                                }
 
-                    //         }))
-                    //         .catch((error) => {
-                    //             if (error.response) {
-                    //                 console.log(error.response);
-                    //             } else if (error.request) {
-                    //                 console.log(error.request);
-                    //             }
-                    //         })
-                    //     this.setState({ showPopupSendSuccess: true })
-                    // }
-                    // else {
-                    //     alert('โปรดเลือกรายการส่งอีเมล')
-                    // }
+                            }))
+                            .catch((error) => {
+                                if (error.response) {
+                                    console.log(error.response);
+                                } else if (error.request) {
+                                    console.log(error.request);
+                                }
+                            })
+                        // this.setState({ showPopupSendSuccess: true })
+                    }
+                    else {
+                        alert('โปรดเลือกรายการส่งอีเมล')
+                    }
 
                 }
             }
@@ -146,23 +188,31 @@ export default class SendEmail extends Component {
 
     }
 
-    render() {
-        return (
-            <Fragment>
-                
-                <div class="columns is-multiline is-centered">
+    // render() {
+    return (
+        <Fragment>
+
+            <section class="section is-small">
+                <div class="columns is-multiline">
+                    <div class="column"></div>
                     <div class="field">
-                        <button class="button is-primary" onClick={this.onClickSend}>ส่งฟอร์มภาระงาน</button>
+                        <button class="button is-primary" onClick={onClickSend}>ส่งฟอร์มภาระงาน</button>
                     </div>
                 </div>
+            </section>
 
-                {this.state.showPopupSendSuccess && <PopupSendSuccess
-                    clickPopup={this.clickPopupClose}
-                />}
-            </Fragment>
-        )
-    }
+            {showPopupSendSuccess && <PopupSendSuccess
+                clickPopup={clickPopupClose}
+                department={props.department}
+                year={props.year}
+                salaryRound={props.salaryRound}
+                dataToShow={showMessageSendSuccess}
+            />}
+        </Fragment>
+    )
+    // }
 }
+export default SendEmail
 
 
 // export const SendEmail = props => {

@@ -13,6 +13,7 @@ export const CheckBox3 = props => {
             <tr>
                 <td>{props.name}</td>
                 <td>{props.file}</td>
+                <td>{props.time}</td>
                 <td><span class={`${props.statusShow}`}>{props.status}</span></td>
                 <td><input key={props.id} onChange={props.handleCheckChieldElement} type="checkbox" 
                     name={props.name} ischecked={props.isChecked} ></input> เลือก</td>

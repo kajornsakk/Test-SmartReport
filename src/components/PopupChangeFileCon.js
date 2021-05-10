@@ -17,6 +17,7 @@ export const PopupChangeFileCon = props => {
                 arrToParent.push({
                     ['id']: 1,
                     ['departmwnt']: list.department,
+                    ['filePath']: list.filePath,
                     ['type']: list.type,
                     ['time']: list.file,
                     ['isChecked']: list.isChecked
@@ -69,6 +70,7 @@ export const PopupChangeFileCon = props => {
                             ['id']: count,
                             ['name']: props.instructor,
                             ['department']: props.department,
+                            ['filePath'] : list.Key,
                             ['type']: 'การเสนอผลงานในที่ประชุมวิชาการ',
                             ['file']: ((list.Key).split("/")[5]).split("_")[3],
                             ['isChecked']: false
