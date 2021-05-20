@@ -47,9 +47,9 @@ export const SendEmailHistory = props => {
             .then((res => {
                 console.log(res.data.dataResponse.Items);
                 // console.log(res.data.Response);
-                
 
-                if (res.status === 200 ) {
+
+                if (res.status === 200) {
                     setdataHistory(res.data.dataResponse.Items);
                     setshowDataHistory(true);
                 }
@@ -104,103 +104,108 @@ export const SendEmailHistory = props => {
                 {/* Search */}
                 <div class="columns">
                     <div class="column"></div>
-
                     <div class="column is-four-fifths">
+
+                        <span class="is-size-4 has-text-primary">
+                            ค้นหาประวัติส่งแบบฟอร์มภาระงาน
+                        </span>
+                        {/*  */}
+
                         <div class="card">
-                            <div class="columns">
-                                <div class="column"></div>
-                                <section class="section is-small">
-
-
+                            <div class="card-content ">
+                                <section class="section is-small ">
 
                                     <div class="field is-horizontal">
-
+                                        <div class="field-label is-normal">
+                                            <label class="label">สาขาวิชา:</label>
+                                        </div>
                                         <div class="field-body">
-
-                                            <div class="field-label is-normal">
-                                                <label class="label">Department</label>
-                                            </div>
-                                            <div class="field-body">
-                                                <div class="field ">
-                                                    <div class="control">
-                                                        <div class="select is-fullwidth" value={department} onChange={onChangeDepartment}>
-                                                            <select>
-                                                                <option>โปรดเลือก</option>
-                                                                <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
-                                                                <option>สาขาวิชาฟิสิกส์</option>
-                                                                <option>สาขาวิชาเคมี</option>
-                                                                <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
-                                                                <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
-                                                                <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
-                                                                <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
-                                                                <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
-                                                                <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
-                                                                <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
                                             <div class="field">
-                                                <label class="label">Round</label>
-                                            </div>
-                                            <div class="field-body">
-                                                <div class="field">
-                                                    <div class="control">
-                                                        <div class="select is-fullwidth" value={salaryRound} onChange={onChangeSalaryRounf}>
-                                                            <select>
-                                                                <option>โปรดเลือก</option>
-                                                                <option>รอบ 1 เดือน เมษายน</option>
-                                                                <option>รอบ 2 เดือน ตุลาคม</option>
-                                                            </select>
-                                                        </div>
+                                                <div class="control">
+                                                    <div class="select is-fullwidth" value={department} onChange={onChangeDepartment}>
+                                                        <select>
+                                                            <option>โปรดเลือก</option>
+                                                            <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
+                                                            <option>สาขาวิชาฟิสิกส์</option>
+                                                            <option>สาขาวิชาเคมี</option>
+                                                            <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
+                                                            <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
+                                                            <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
+                                                            <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
+                                                            <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
+                                                            <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
+                                                            <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="field is-horizontal">
 
-                                            <div class="field-label is-normal">
-                                                <label class="label">Year</label>
-                                            </div>
-                                            <div class="field-body">
-                                                <div class="field">
-                                                    <div class="control">
-                                                        <div class="select is-fullwidth" value={year} onChange={onChangeYear}>
-                                                            <select>
-                                                                <option>โปรดเลือก</option>
-                                                                <option>2562</option>
-                                                                <option>2563</option>
-                                                                <option>2564</option>
-                                                            </select>
-                                                        </div>
+                                        <div class="field-label is-normal">
+                                            <label class="label">รอบเลื่อนเงินเดือน:</label>
+                                        </div>
+                                        <div class="field-body">
+                                            <div class="field">
+                                                <div class="control">
+                                                    <div class="select is-fullwidth" value={salaryRound} onChange={onChangeSalaryRounf}>
+                                                        <select>
+                                                            <option>โปรดเลือก</option>
+                                                            <option>รอบ 1 เดือน เมษายน</option>
+                                                            <option>รอบ 2 เดือน ตุลาคม</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
 
-
-                                    <div class="columns is-multiline is-centered">
-                                        <div class="field">
-                                            <div class="column is-one-quarter">
-                                                <button class="button is-primary " onClick={fecthEmailHistory}>
-                                                    <span>ค้นหาข้อมูล</span>
-                                                </button>
+                                    <div class="field is-horizontal">
+                                        <div class="field-label is-normal">
+                                            <label class="label">ปีงบประมาณ:</label>
+                                        </div>
+                                        <div class="field-body">
+                                            <div class="field">
+                                                <div class="control">
+                                                <input class="input" type="text" placeholder="ปีงบประมาณ" value={year} onChange={onChangeYear}></input>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
                                 </section>
-                                <div class="column"></div>
                             </div>
+
                         </div>
+                        {/*  */}
+
+
+                        <section class="section is-small">
+                            <div class="columns is-multiline is-centered">
+                                <div class="field">
+                                    <div class="column is-one-quarter">
+                                        <button class="button is-primary " onClick={fecthEmailHistory}>
+                                            <span>ค้นหาข้อมูล</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
                     </div>
 
                     <div class="column"></div>
                 </div>
 
                 {/* Table */}
+
+                {/* {showDataHistory && <div><br />
+                <span class="is-size-4 has-text-primary">
+                    ประวัติส่งแบบฟอร์มผลการปฏิบัติงาน
+                        </span>
+                <br /></div>} */}
+
                 {showDataHistory && <div class="columns">
                     <div class="column"></div>
                     <div class="column is-four-fifths">

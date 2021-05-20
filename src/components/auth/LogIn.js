@@ -10,7 +10,8 @@ class LogIn extends Component {
     errors: {
       cognito: null,
       blankfield: false
-    }
+    },
+    showLoginError: false
   };
 
   clearErrorState = () => {
@@ -35,8 +36,25 @@ class LogIn extends Component {
     }
 
     // AWS Cognito integration here
-    let response = await Auth.signIn(this.state.username, this.state.password)
-    console.log(response);
+    try {
+      const user = await Auth.signIn(this.state.username, this.state.password)
+      console.log(user);
+      this.props.history.push("/");
+      this.props.auth.setAuthStatus(true);
+      this.props.auth.setUser(user);
+
+    } catch (error) {
+      this.setState({ showLoginError: true });
+      let err = null;
+      !error.message ? err = { "message": error } : err = error;
+      this.setState({
+        error: {
+          ...this.state.errors,
+          cognito: err
+        }
+      })
+    }
+
 
   };
 
@@ -49,53 +67,72 @@ class LogIn extends Component {
 
   render() {
     return (
-      <section className="section auth">
-        <div className="container">
-          <h1>Log in</h1>
-          <FormErrors formerrors={this.state.errors} />
+      <section className="hero">
+        <div className="hero-body">
+          <div class="columns pt-6">
+            <div class="column mt-6">
+              <img src="3094352.jpg" alt="conserve energy" />
+            </div>
+            <div class="column mt-6">
+              <section className="section auth">
+                <h1>SCI-TU Workload</h1>
+                <FormErrors formerrors={this.state.errors} />
 
-          <form onSubmit={this.handleSubmit}>
-            <div className="field">
-              <p className="control">
-                <input 
-                  className="input" 
-                  type="text"
-                  id="username"
-                  aria-describedby="usernameHelp"
-                  placeholder="Enter username or email"
-                  value={this.state.username}
-                  onChange={this.onInputChange}
-                />
-              </p>
+                <form onSubmit={this.handleSubmit}>
+                  <div className="field">
+                    <p className="control">
+                      <input
+                        className="input"
+                        type="text"
+                        id="username"
+                        aria-describedby="usernameHelp"
+                        placeholder="กรอกอีเมล"
+                        value={this.state.username}
+                        onChange={this.onInputChange}
+                      />
+                    </p>
+                  </div>
+                  <div className="field">
+                    <p className="control has-icons-left">
+                      <input
+                        className="input"
+                        type="password"
+                        id="password"
+                        placeholder="รหัสผ่าน"
+                        value={this.state.password}
+                        onChange={this.onInputChange}
+                      />
+                      <span className="icon is-small is-left">
+                        <i className="fas fa-lock"></i>
+                      </span>
+                    </p>
+                  </div>
+                  {this.state.showLoginError && <div className="field">
+                    <p className="control has-text-danger">
+                      รหัสผ่านหรืออีเมลไม่ถูกต้อง
+                    </p>
+                  </div>}
+                  {/* <div className="field">
+                    <p className="control">
+                      <a href="/register">ลงทะเบียน</a>
+                    </p>
+                  </div> */}
+                  <div className="field">
+                    <p className="control">
+                      <a href="/forgotpassword">ลืมรหัสผ่าน?</a>
+                    </p>
+                  </div>
+                  <div className="field">
+                    <p className="control">
+                      <button className="button is-primary">
+                        เข้าสู่ระบบ
+                      </button>
+                    </p>
+                  </div>
+                </form>
+              </section>
             </div>
-            <div className="field">
-              <p className="control has-icons-left">
-                <input 
-                  className="input" 
-                  type="password"
-                  id="password"
-                  placeholder="Password"
-                  value={this.state.password}
-                  onChange={this.onInputChange}
-                />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-lock"></i>
-                </span>
-              </p>
-            </div>
-            <div className="field">
-              <p className="control">
-                <a href="/forgotpassword">Forgot password?</a>
-              </p>
-            </div>
-            <div className="field">
-              <p className="control">
-                <button className="button is-success">
-                  Login
-                </button>
-              </p>
-            </div>
-          </form>
+          </div>
         </div>
       </section>
     );
@@ -103,3 +140,65 @@ class LogIn extends Component {
 }
 
 export default LogIn;
+
+
+
+//  <section className="section auth">
+//         <div className="container">
+//           <h1>เข้าสู่ระบบ</h1>
+//           <FormErrors formerrors={this.state.errors} />
+
+//           <form onSubmit={this.handleSubmit}>
+//             <div className="field">
+//               <p className="control">
+//                 <input
+//                   className="input"
+//                   type="text"
+//                   id="username"
+//                   aria-describedby="usernameHelp"
+//                   placeholder="กรอกอีเมล"
+//                   value={this.state.username}
+//                   onChange={this.onInputChange}
+//                 />
+//               </p>
+//             </div>
+//             <div className="field">
+//               <p className="control has-icons-left">
+//                 <input
+//                   className="input"
+//                   type="password"
+//                   id="password"
+//                   placeholder="รหัสผ่าน"
+//                   value={this.state.password}
+//                   onChange={this.onInputChange}
+//                 />
+//                 <span className="icon is-small is-left">
+//                   <i className="fas fa-lock"></i>
+//                 </span>
+//               </p>
+//             </div>
+//             {this.state.showLoginError && <div className="field">
+//               <p className="control has-text-danger">
+//                 รหัสผ่านหรืออีเมลไม่ถูกต้อง
+//               </p>
+//             </div>}
+//             <div className="field">
+//               <p className="control">
+//                 <a href="/register">ลงทะเบียน</a>
+//               </p>
+//             </div>
+//             <div className="field">
+//               <p className="control">
+//                 <a href="/forgotpassword">ลืมรหัสผ่าน?</a>
+//               </p>
+//             </div>
+//             <div className="field">
+//               <p className="control">
+//                 <button className="button is-primary">
+//                   เข้าสู่ระบบ
+//                 </button>
+//               </p>
+//             </div>
+//           </form>
+//         </div>
+//       </section> 

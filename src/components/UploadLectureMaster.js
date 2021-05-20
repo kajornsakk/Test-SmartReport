@@ -501,7 +501,7 @@ export default class UploadLectureMaster extends Component {
             Storage.put(fileName, this.state.file)
                 .then(() => {
                     // 
-                    this.setState({ filePathToSendApi: "public/"+fileName });
+                    this.setState({ filePathToSendApi: "public/" + fileName });
                     e.preventDefault();
 
                     this.sendMessageApi();
@@ -537,117 +537,135 @@ export default class UploadLectureMaster extends Component {
     render() {
         return (
             <Fragment>
-
-                <div class="columns is-multiline is-centered">
-
-                    <div class="column is-one-quarter">
-                        <div class="field">
-                            <label class="label">สาขาวิชา :</label>
-                        </div>
-
-                        <div class="select" value={this.state.department} onChange={this.onChangeDepartment}>
-                            <select>
-                                <option>โปรดเลือก</option>
-                                <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
-                                <option>สาขาวิชาฟิสิกส์</option>
-                                <option>สาขาวิชาเคมี</option>
-                                <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
-                                <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
-                                <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
-                                <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
-                                <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
-                                <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
-                                <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
-                            </select>
-                        </div>
-
+                {/*  */}
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">สาขาวิชา:</label>
                     </div>
-
-                    <div class="column is-one-quarter">
+                    <div class="field-body">
                         <div class="field">
-                            <label class="label">หลักสูตร :</label>
+                            <div class="control">
+                                <div class="select is-fullwidth" value={this.state.department} onChange={this.onChangeDepartment}>
+                                    <select>
+                                        <option>โปรดเลือก</option>
+                                        <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
+                                        <option>สาขาวิชาฟิสิกส์</option>
+                                        <option>สาขาวิชาเคมี</option>
+                                        <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
+                                        <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
+                                        <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
+                                        <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
+                                        <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
+                                        <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
+                                        <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
 
-                        <div class="select" value={this.state.course} onChange={this.onChangeCourse}>
-                            <select>
-                                <option>โปรดเลือก</option>
-                                <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาการจัดการเกษตรอินทรีย์</option>
-                                <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาการพัฒนาทรัพยากรมนุษย์และผลิตภัณฑ์นวัตกรรมอาหาร</option>
-                                <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาคณิตศาสตร์</option>
-                                <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาเคมี</option>
-                                <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาเทคโนโลยีการเกษตร</option>
-                                <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาเทคโนโลยีชีวภาพ</option>
-                                <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
-                                <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชานวัตกรรมและเทคโนโลยีวัสดุ</option>
-                                <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาฟิสิกส์</option>
-                                <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์</option>
-                                <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
-                                <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาศาสตร์สิ่งแวดล้อม</option>
-                                <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาสถิติประยุกต์</option>
-                            </select>
+                    <div class="field-label is-normal">
+                        <label class="label">หลักสูตร:</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <div class="select is-fullwidth" value={this.state.course} onChange={this.onChangeCourse}>
+                                    <select>
+                                        <option>โปรดเลือก</option>
+                                        <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาการจัดการเกษตรอินทรีย์</option>
+                                        <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาการพัฒนาทรัพยากรมนุษย์และผลิตภัณฑ์นวัตกรรมอาหาร</option>
+                                        <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาคณิตศาสตร์</option>
+                                        <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาเคมี</option>
+                                        <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาเทคโนโลยีการเกษตร</option>
+                                        <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาเทคโนโลยีชีวภาพ</option>
+                                        <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
+                                        <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชานวัตกรรมและเทคโนโลยีวัสดุ</option>
+                                        <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาฟิสิกส์</option>
+                                        <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์</option>
+                                        <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
+                                        <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาศาสตร์สิ่งแวดล้อม</option>
+                                        <option>วิทยาศาสตรมหาบัณฑิต สาขาวิชาสถิติประยุกต์</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
                 </div>
 
-                <div class="columns is-multiline is-centered">
-                    <div class="column is-one-quarter">
-                        <div class="field">
-                            <label class="label">ประเภท :</label>
-                        </div>
-
-                        <div class="select" value={this.state.version} onChange={this.onChangeVersion}>
-                            <select>
-                                <option>โปรดเลือก</option>
-                                <option>วิชาบรรยาย-วิชาปฏิบัติ</option>
-                                <option>วิทยานิพนธ์-สารนิพนธ์</option>
-                                <option>ปัญหาพิเศษ-วิชาสัมมนา</option>
-                            </select>
-                        </div>
-
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">ประเภท:</label>
                     </div>
-
-                    <div class="column is-one-quarter">
+                    <div class="field-body">
                         <div class="field">
-                            <label class="label">ปีการศึกษา :</label>
+                            <div class="control">
+                                <div class="select is-fullwidth" value={this.state.version} onChange={this.onChangeVersion}>
+                                    <select>
+                                        <option>โปรดเลือก</option>
+                                        <option>วิชาบรรยาย-วิชาปฏิบัติ</option>
+                                        <option>วิทยานิพนธ์-สารนิพนธ์</option>
+                                        <option>ปัญหาพิเศษ-วิชาสัมมนา</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-
-                        <input class="input" type="text" placeholder="25XX" value={this.state.year} onChange={this.onChangeYear}></input>
                     </div>
+                </div>
 
-                    <div class="column is-one-quarter">
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">ปี/ภาคการศึกษา:</label>
+                    </div>
+                    <div class="field-body">
                         <div class="field">
-                            <label class="label">ภาคการศึกษา :</label>
+                            <div class="control">
+                                <input class="input" type="text" placeholder="ปีการศึกษา" value={this.state.year} onChange={this.onChangeYear}></input>
+                            </div>
                         </div>
-
-                        <div class="select" value={this.state.semester} onChange={this.onChangeSemester}>
-                            <select>
-                                <option>โปรดเลือก</option>
-                                <option>1</option>
-                                <option>2</option>
-                            </select>
+                        <div class="field">
+                            <div class="control">
+                                <div class="select is-fullwidth" value={this.state.semester} onChange={this.onChangeSemester}>
+                                    <select>
+                                        <option>ภาคการศึกษา</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                 </div>
 
-                <div class="columns is-multiline is-centered">
-                    <div class="field">
-                        <div class="column is-one-quarter">
-                            <input type='file' className="selectfile" onChange={this.handleChange} />
-                        </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">ไฟล์อัปโหลด:</label>
                     </div>
-
+                    <div class="field-body">
+                        <span class="file-cta">
+                            <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label">
+                                <input type='file' className="selectfile" onChange={this.handleChange} />
+                            </span>
+                        </span>
+                    </div>
                 </div>
 
-                {/* เพิ่มเติม */}
+
                 {this.state.showNotification && <article class="message is-primary">
                     <div class="message-body ">
                         Format ไฟล์ข้อมูลถูกต้องสามารถอัปโหลดไฟล์ข้อมูลได้
                     </div>
                 </article>}
 
-                <div class="columns is-multiline is-centered">
+
+                <div class="columns is-multiline">
+                    <div class="column"></div>
                     <div class="field">
                         <div class="column is-one-quarter">
                             <button class="button is-primary " onClick={this.saveFile}>

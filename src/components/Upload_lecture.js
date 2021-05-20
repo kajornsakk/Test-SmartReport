@@ -74,26 +74,45 @@ export default class Upload_lecture extends Component {
           <div class="columns">
             <div class="column"></div>
             <div class="column is-four-fifths">
-
+              <span class="is-size-4 has-text-primary">
+                อัปโหลดข้อมูลภาระงานสอน
+              </span>
               <div class="card ">
-
-                {/*  */}
-                {/* <article class="message is-primary">
-                  <div class="message-header">
-                    <p>primary</p>
-                    <button class="delete" aria-label="delete"></button>
-                  </div>
-                  <div class="message-body">
-                    Format ไฟล์ข้อมูลถูกต้องสามารถอัปโหลดไฟล์ข้อมูลได้
-                  </div>
-                </article> */}
-                {/*  */}
                 <div class="card-content ">
-                  {/* <div class="content"> */}
                   <section class="section is-small ">
-                    {/* <div class="container"> */}
+                  <div class="field is-horizontal">
+                        <div class="field-label">
+                            <label class="label">ระดับการศึกษา: </label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field ">
+                                <div class="control">
+                                    <label class="radio">
+                                        <input type="radio" name="member" onChange={this.handleRadiosBachelor} />
+                                            ปริญญาตรี
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="field ">
+                                <div class="control">
+                                    <label class="radio">
+                                        <input type="radio" name="member" onChange={this.handleRadiosMaster}/>
+                                            ปริญญาโท
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="field ">
+                                <div class="control">
+                                    <label class="radio">
+                                        <input type="radio" name="member" onChange={this.handleRadiosDoctor}/>
+                                            ปริญญาเอก
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <div class="columns is-multiline">
+                    {/* <div class="columns is-multiline">
                       <div class="column is-one-quarter"></div>
 
                       <div class="column is-one-quarter">
@@ -113,7 +132,7 @@ export default class Upload_lecture extends Component {
                           <input type="radio" value="option2" name="flexRadioDefault" id="flexRadioDefault2"
                             onChange={this.handleRadiosDoctor} />ปริญญาเอก</label>
                       </div>
-                    </div>
+                    </div> */}
 
                     {this.state.showUploadBachelor && <UploadLectureBachelor />}
                     {this.state.showUploadMaster && <UploadLectureMaster />}

@@ -53,6 +53,7 @@ export const ListObjects = props => {
 
                 contents.forEach((content) => {
                     var rangMonth = ((((content.Key).split('/'))[4]).split('_'))[3];
+                    console.log(rangMonth);
                     var monthSalaryRound = '';
                     if (rangMonth === 'กรกฎาคม-ธันวาคม') {
                         monthSalaryRound = '1 เมษายน';
@@ -116,7 +117,7 @@ export const ListObjects = props => {
 
             {showTable && <div><br />
                 <span class="is-size-4 has-text-primary">
-                    รายการแบบฟอร์ม
+                    รายการแบบฟอร์มผลการปฏิบัติงาน
                         </span>
                 <br /></div>}
 

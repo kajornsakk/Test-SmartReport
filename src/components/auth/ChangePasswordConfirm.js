@@ -5,9 +5,15 @@ class ChangePasswordConfirmation extends Component {
     return (
       <section className="section auth">
         <div className="container">
-          <h1>Change Password</h1>
-          <p>Your password has been successfully updated!</p>
+          <h1>เปลี่ยนรหัสผ่านสำเร็จ</h1>
+          <p>ระบบอัปเดตรหัสผ่านของคุณเรียบร้อยแล้ว!</p>
+          <div className="field">
+            <p className="control">
+              <a href="/login">เข้าสู่ระบบ</a>
+            </p>
+          </div>
         </div>
+
       </section>
     );
   }

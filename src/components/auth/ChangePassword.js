@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FormErrors from "../FormErrors";
 import Validate from "../utility/FormValidation";
+import { Auth } from "aws-amplify";
 
 class ChangePassword extends Component {
   state = {
@@ -37,6 +38,19 @@ class ChangePassword extends Component {
     }
 
     // AWS Cognito integration here
+    try{
+      const user = await Auth.currentAuthenticatedUser();
+      console.log(user);
+      await Auth.changePassword(
+        user,
+        this.state.oldpassword,
+        this.state.newpassword
+      );
+      this.props.history.push("/changepasswordconfirmation");
+    }catch(error){
+      console.log(error);
+    }
+
   };
 
   onInputChange = event => {
@@ -50,7 +64,7 @@ class ChangePassword extends Component {
     return (
       <section className="section auth">
         <div className="container">
-          <h1>Change Password</h1>
+          <h1>เปลี่ยนรหัสผ่าน</h1>
           <FormErrors formerrors={this.state.errors} />
 
           <form onSubmit={this.handleSubmit}>
@@ -60,7 +74,7 @@ class ChangePassword extends Component {
                   className="input" 
                   type="password"
                   id="oldpassword"
-                  placeholder="Old password"
+                  placeholder="รหัสผ่าน"
                   value={this.state.oldpassword}
                   onChange={this.onInputChange}
                 />
@@ -75,7 +89,7 @@ class ChangePassword extends Component {
                   className="input"
                   type="password"
                   id="newpassword"
-                  placeholder="New password"
+                  placeholder="รหัสผ่านใหม่"
                   value={this.state.newpassword}
                   onChange={this.onInputChange}
                 />
@@ -90,7 +104,7 @@ class ChangePassword extends Component {
                   className="input"
                   type="password"
                   id="confirmpassword"
-                  placeholder="Confirm password"
+                  placeholder="ยืนยันรหัสผ่าน"
                   value={this.state.confirmpassword}
                   onChange={this.onInputChange}
                 />
@@ -101,13 +115,13 @@ class ChangePassword extends Component {
             </div>
             <div className="field">
               <p className="control">
-                <a href="/forgotpassword">Forgot password?</a>
+                <a href="/forgotpassword">ลืมรหัสผ่าน?</a>
               </p>
             </div>
             <div className="field">
               <p className="control">
                 <button className="button is-success">
-                  Change password
+                  เปลี่ยนรหัสผ่าน
                 </button>
               </p>
             </div>

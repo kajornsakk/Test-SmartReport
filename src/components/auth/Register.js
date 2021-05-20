@@ -8,6 +8,8 @@ class Register extends Component {
     username: "",
     email: "",
     password: "",
+    phone: "",
+    confirmCode: "",
     confirmpassword: "",
     errors: {
       cognito: null,
@@ -39,20 +41,21 @@ class Register extends Component {
     }
 
     // AWS Cognito integration here
-    const {username, email, password} = this.state;
-    try{
+    const { username, email, password, phone } = this.state;
+    try {
       const signUpResponse = await Auth.signUp({
         username,
         password,
-        attributes:{
+        attributes: {
           email: email
         }
       });
       console.log(signUpResponse);
-    }catch(error){
-      console.log(error);
+      this.props.history.push("/ConfirmSingUp");
+    } catch (error) {
+      console.log('error signing up:', error);
     }
-    
+
   };
 
   onInputChange = event => {
@@ -66,18 +69,18 @@ class Register extends Component {
     return (
       <section className="section auth">
         <div className="container">
-          <h1>Register</h1>
+          <h1>ลงทะเบียน</h1>
           <FormErrors formerrors={this.state.errors} />
 
           <form onSubmit={this.handleSubmit}>
             <div className="field">
               <p className="control">
-                <input 
-                  className="input" 
+                <input
+                  className="input"
                   type="text"
                   id="username"
                   aria-describedby="userNameHelp"
-                  placeholder="Enter username"
+                  placeholder="อีเมล"
                   value={this.state.username}
                   onChange={this.onInputChange}
                 />
@@ -85,12 +88,12 @@ class Register extends Component {
             </div>
             <div className="field">
               <p className="control has-icons-left has-icons-right">
-                <input 
-                  className="input" 
+                <input
+                  className="input"
                   type="email"
                   id="email"
                   aria-describedby="emailHelp"
-                  placeholder="Enter email"
+                  placeholder="ยืนยันอีเมล"
                   value={this.state.email}
                   onChange={this.onInputChange}
                 />
@@ -101,11 +104,11 @@ class Register extends Component {
             </div>
             <div className="field">
               <p className="control has-icons-left">
-                <input 
-                  className="input" 
+                <input
+                  className="input"
                   type="password"
                   id="password"
-                  placeholder="Password"
+                  placeholder="รหัสผ่าน"
                   value={this.state.password}
                   onChange={this.onInputChange}
                 />
@@ -116,11 +119,11 @@ class Register extends Component {
             </div>
             <div className="field">
               <p className="control has-icons-left">
-                <input 
-                  className="input" 
+                <input
+                  className="input"
                   type="password"
                   id="confirmpassword"
-                  placeholder="Confirm password"
+                  placeholder="ยืนยันรหัสผ่าน"
                   value={this.state.confirmpassword}
                   onChange={this.onInputChange}
                 />
@@ -129,21 +132,36 @@ class Register extends Component {
                 </span>
               </p>
             </div>
+
             <div className="field">
               <p className="control">
-                <a href="/forgotpassword">Forgot password?</a>
+                <a href="/ConfirmSingUp">Confirm Code</a>
+              </p>
+            </div>
+
+            <div className="field">
+              <p className="control">
+                <a href="/forgotpassword">ลืมรหัสผ่าน?</a>
               </p>
             </div>
             <div className="field">
               <p className="control">
-                <button className="button is-success">
-                  Register
+                <button className="button is-primary">
+                  ลงทะเบียน
                 </button>
               </p>
             </div>
           </form>
         </div>
+
+
+
+
+
+
       </section>
+
+
     );
   }
 }

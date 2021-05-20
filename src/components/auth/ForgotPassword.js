@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FormErrors from "../FormErrors";
 import Validate from "../utility/FormValidation";
+import { Auth } from "aws-amplify";
 
 class ForgotPassword extends Component {
   state = {
@@ -33,6 +34,13 @@ class ForgotPassword extends Component {
     }
 
     // AWS Cognito integration here
+    try {
+      await Auth.forgotPassword(this.state.email);
+      this.props.history.push('/forgotPasswordVerification')
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
   onInputChange = event => {
@@ -46,10 +54,10 @@ class ForgotPassword extends Component {
     return (
       <section className="section auth">
         <div className="container">
-          <h1>Forgot your password?</h1>
+          <h1>ลืมรหัสผ่านหรือไม่</h1>
           <p>
-            Please enter the email address associated with your account and we'll
-            email you a password reset link.
+            โปรดป้อนที่อยู่อีเมลที่เชื่อมโยงกับบัญชีของคุณ
+            ระบบจะส่งอีเมลลิงก์รีเซ็ตรหัสผ่านให้คุณ
           </p>
           <FormErrors formerrors={this.state.errors} />
 
@@ -61,7 +69,7 @@ class ForgotPassword extends Component {
                   className="input"
                   id="email"
                   aria-describedby="emailHelp"
-                  placeholder="Enter email"
+                  placeholder="กรอกอีเมล"
                   value={this.state.email}
                   onChange={this.onInputChange}
                 />
@@ -70,15 +78,15 @@ class ForgotPassword extends Component {
                 </span>
               </p>
             </div>
-            <div className="field">
+            {/* <div className="field">
               <p className="control">
                 <a href="/forgotpassword">Forgot password?</a>
               </p>
-            </div>
+            </div> */}
             <div className="field">
               <p className="control">
-                <button className="button is-success">
-                  Login
+                <button className="button is-primary">
+                  ยืนยัน
                 </button>
               </p>
             </div>

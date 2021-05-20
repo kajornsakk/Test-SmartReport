@@ -104,120 +104,138 @@ export default class Report extends Component {
                     <div class="columns">
                         <div class="column"></div>
                         <div class="column is-four-fifths">
+                            <span class="is-size-4 has-text-primary">
+                                สร้างแบบฟอร์มภาระงาน
+                            </span>
                             <div class="card">
-                                <section class="section is-small">
-                                    <div class="container">
+                                <div class="card-content ">
+                                    <section class="section is-small ">
+
 
                                         {/* Radio Button */}
-                                        <div class="columns is-multiline is-centered">
-                                            <div class="column is-one-quarter">
-                                                <label for="flexRadioDefault1">
-                                                    <input type="radio" value="option1" name="flexRadioDefault" id="flexRadioDefault1"
-                                                        onChange={this.handleRadiosForEveryone} />สำหรับทุกคน</label>
+                                        <div class="field is-horizontal">
+                                            <div class="field-label">
+                                                <label class="label">สร้างฟอร์ม: </label>
                                             </div>
+                                            <div class="field-body">
+                                                <div class="field ">
+                                                    <div class="control">
+                                                        <label class="radio">
+                                                            <input type="radio" name="member" onChange={this.handleRadiosForIndividual} />
+                                                                สำหรับรายบุคคล
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="field ">
+                                                    <div class="control">
+                                                        <label class="radio">
+                                                            <input type="radio" name="member" onChange={this.handleRadiosForEveryone} />
+                                                                สำหรับทุกคน
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* <div class="columns is-multiline is-centered">
 
                                             <div class="column is-one-quarter">
                                                 <label for="flexRadioDefault1">
                                                     <input type="radio" value="option2" name="flexRadioDefault" id="flexRadioDefault2"
                                                         onChange={this.handleRadiosForIndividual} />สำหรับรายบุคคล</label>
                                             </div>
-                                        </div>
-
-                                        <div class="columns is-multiline is-centered">
-
-
                                             <div class="column is-one-quarter">
-                                                <div class="field">
-                                                    <label class="label">สาขาวิชา :</label>
-                                                </div>
-
-                                                <div class="select" value={this.state.department} onChange={this.onChangeDepartment}>
-                                                    <select>
-                                                        <option>โปรดเลือก</option>
-                                                        <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
-                                                        <option>สาขาวิชาฟิสิกส์</option>
-                                                        <option>สาขาวิชาเคมี</option>
-                                                        <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
-                                                        <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
-                                                        <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
-                                                        <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
-                                                        <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
-                                                        <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
-                                                        <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
-                                                    </select>
-                                                </div>
-
+                                                <label for="flexRadioDefault1">
+                                                    <input type="radio" value="option1" name="flexRadioDefault" id="flexRadioDefault1"
+                                                        onChange={this.handleRadiosForEveryone} />สำหรับทุกคน</label>
                                             </div>
 
-                                            <div class="column is-one-quarter">
-                                                <div class="field">
-                                                    <label class="label">รอบเลื่อนเงินเดือน :</label>
-                                                </div>
+                                        </div> */}
 
-                                                <div class="select" value={this.state.salaryRound} onChange={this.onChangeSalaryRound}>
-                                                    <select>
-                                                        <option>โปรดเลือก</option>
-                                                        <option>รอบ1 เดือน เมษายน</option>
-                                                        <option>รอบ2 เดือน ตุลาคม</option>
-                                                    </select>
-                                                </div>
-
+                                        <div class="field is-horizontal">
+                                            <div class="field-label is-normal">
+                                                <label class="label">สาขาวิชา:</label>
                                             </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="container">
-                                        <div class="columns is-multiline is-centered">
-
-                                            <div class="column is-one-quarter">
+                                            <div class="field-body">
                                                 <div class="field">
-                                                    <label class="label">ปี พ.ศ. :</label>
+                                                    <div class="control">
+                                                        <div class="select is-fullwidth" value={this.state.department} onChange={this.onChangeDepartment}>
+                                                            <select>
+                                                                <option>โปรดเลือก</option>
+                                                                <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
+                                                                <option>สาขาวิชาฟิสิกส์</option>
+                                                                <option>สาขาวิชาเคมี</option>
+                                                                <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
+                                                                <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
+                                                                <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
+                                                                <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
+                                                                <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
+                                                                <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
+                                                                <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
-
-                                                <div class="select" value={this.state.year} onChange={this.onChangeYear}>
-                                                    <select>
-                                                        <option>โปรดเลือก</option>
-                                                        <option>2564</option>
-                                                        <option>2563</option>
-                                                        <option>2562</option>
-                                                        <option>2561</option>
-                                                    </select>
-                                                </div>
-
                                             </div>
-
-                                            {this.state.showSelectRadioForindividual && <div class="column is-one-quarter">
-                                                <div class="field">
-                                                    <label class="label">รายชื่อ :</label>
-                                                </div>
-
-                                                <div class="select" value={this.state.instructor} onChange={this.onChangeinstructorName}>
-                                                    <select>
-                                                        <option>โปรดเลือก</option>
-                                                        <option>ประภาพร รัตนธำรง</option>
-                                                        <option>วนิดา พฤทธิวิทยา</option>
-                                                        <option>นุชชากร งามเสาวรส</option>
-                                                        <option>เสาวลักษณ์ วรรธนาภา</option>
-                                                        <option>ธนาธร ทะนานทอง</option>
-                                                        <option>เยาวดี เต็มธนาภัทร์</option>
-                                                        <option>เด่นดวง ประดับสุวรรณ</option>
-                                                    </select>
-                                                </div>
-                                            </div>}
-
                                         </div>
-                                    </div>
+                                        <div class="field is-horizontal">
 
-                                    {/* {this.state.showSelectRadioForeveryone && <DataReportForeveryone
-                                        salaryRound={this.state.salaryRound} year={this.state.year} department={this.state.department} />} */}
-                                    {/* {this.state.showSelectRadioForindividual && <DataReportIndividual
-                                        salaryRound={this.state.salaryRound} year={this.state.year} department={this.state.department} />} */}
+                                            <div class="field-label is-normal">
+                                                <label class="label">รอบเลื่อนเงินเดือน:</label>
+                                            </div>
+                                            <div class="field-body">
+                                                <div class="field">
+                                                    <div class="control">
+                                                        <div class="select is-fullwidth" value={this.state.salaryRound} onChange={this.onChangeSalaryRound}>
+                                                            <select>
+                                                                <option>โปรดเลือก</option>
+                                                                <option>รอบ1 เดือน เมษายน</option>
+                                                                <option>รอบ2 เดือน ตุลาคม</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
+                                        <div class="field is-horizontal">
+                                            <div class="field-label is-normal">
+                                                <label class="label">ปีงบประมาณ:</label>
+                                            </div>
+                                            <div class="field-body">
+                                                <div class="field"> 
+                                                    <div class="control">
+                                                    <input class="input" type="text" placeholder="ปีงบประมาณ" value={this.state.year} onChange={this.onChangeYear}></input>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                </section>
+                                        {this.state.showSelectRadioForindividual && <div class="field is-horizontal">
+                                            <div class="field-label is-normal">
+                                                <label class="label">รายชื่อ:</label>
+                                            </div>
+                                            <div class="field-body">
+                                                <div class="field">
+                                                    <div class="control">
+                                                        <div class="select is-fullwidth" value={this.state.instructor} onChange={this.onChangeinstructorName}>
+                                                            <select>
+                                                                <option>โปรดเลือก</option>
+                                                                <option>ประภาพร รัตนธำรง</option>
+                                                                <option>วนิดา พฤทธิวิทยา</option>
+                                                                <option>นุชชากร งามเสาวรส</option>
+                                                                <option>เสาวลักษณ์ วรรธนาภา</option>
+                                                                <option>ธนาธร ทะนานทอง</option>
+                                                                <option>เยาวดี เต็มธนาภัทร์</option>
+                                                                <option>เด่นดวง ประดับสุวรรณ</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>}
 
-                                {/* -------------------------------test----------------------- */}
+                                    </section>
+                                </div>
 
                             </div>
                             {this.state.showSelectRadioForindividual &&
@@ -239,19 +257,10 @@ export default class Report extends Component {
                                     />
                                 </section>}
 
+
                         </div>
                         <div class="column"></div>
                     </div>
-
-                    {/* <div class="columns is-multiline is-centered">
-                        <div class="field">
-                            <button class="button is-primary" onClick = {this.creactReport}>สร้างแบบฟอร์ม</button>
-                        </div>
-                    </div> */}
-
-                    {/* <CreateForm /> */}
-
-
 
                 </div>
             </Fragment>

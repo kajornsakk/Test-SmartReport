@@ -6,11 +6,11 @@ export default class Navbar extends Component {
 
   render() {
     // const [loggedin, setLoggedIn] = useState(false);
-    const signOut = async ()=>{
-      try{
+    const signOut = async () => {
+      try {
         await Auth.signOut();
-      }catch (error){
-        console.log('error signing out:',error);
+      } catch (error) {
+        console.log('error signing out:', error);
       }
     }
 
@@ -18,7 +18,8 @@ export default class Navbar extends Component {
       <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
           <a className="navbar-item" href="/">
-            <img src="hexal-logo.png" width="112" height="28" alt="hexal logo" />
+            {/* <img src="hexal-logo.png" width="112" height="28" alt="hexal logo" /> */}
+            <h2>SCI-TU Workload</h2>
           </a>
         </div>
 
@@ -33,37 +34,39 @@ export default class Navbar extends Component {
             <a href="/Report" className="navbar-item">
               สร้างฟอร์มภาระงาน
             </a>
-            <a href="/TestS3" className="navbar-item">
+            {/* <a href="/TestS3" className="navbar-item">
               Test
-            </a>
+            </a> */}
           </div>
 
           <div className="navbar-end">
             <div className="navbar-item">
+
+
+              {this.props.auth.isAuthenticated && this.props.auth.user && (
+                <p>
+                  {this.props.auth.user.attributes.email}
+                </p>
+              )}
+
               <div className="buttons">
-                {/* <a href="/register" className="button is-primary">
-                  <strong>ลงทะเบียน</strong>
-                </a> */}
-                <a href="/login" className="button is-light" >
-                  ล็อกอิน
-                  {/* <AmplifySignOut /> */}
+                {!this.props.auth.isAuthenticated && (
+                  <div>
+                    <a href="/register" className="button is-primary">
+                      <strong>ลงทะเบียน</strong>
+                    </a>
+                    <a href="/login" className="button is-light" >
+                      เข้าสู่ระบบ
                 </a>
-
-
-                {/* {loggedin ? ( */}
-                  <a href="/">
+                  </div>
+                )}
+                {this.props.auth.isAuthenticated && (
+                <a href="/">
                   <button onClick={signOut} className="button is-light">
-                    log out
+                    ออกจากระบบ
                   </button>
-                  </a>
-                {/* ) : (
-                  <a href="/login">
-                    <button onClick={signOut} className="button is-light">
-                    log in
-                  </button>
-                  </a>
-                  
-                )} */}
+                </a>
+                )}
 
               </div>
             </div>

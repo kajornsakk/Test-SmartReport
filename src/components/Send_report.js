@@ -109,6 +109,7 @@ export default class Send_report extends Component {
     render() {
         return (
             <Fragment>
+
                 <div className="box cta ">
                     {/* Tabs */}
                     <div class="tabs is-centered">
@@ -136,80 +137,82 @@ export default class Send_report extends Component {
 
                     <div class="columns">
                         <div class="column"></div>
+
                         <div class="column is-four-fifths">
+                            <span class="is-size-4 has-text-primary">
+                                ส่งแบบฟอร์มภาระงาน
+                            </span>
+
                             <div class="card">
-                                <section class="section is-small">
+                                <div class="card-content ">
+                                    <section class="section is-small ">
 
-                                    <div class="columns is-multiline is-centered">
-
-                                        <div class="column is-one-quarter">
-                                            <div class="field">
-                                                <label class="label">สาขาวิชา :</label>
+                                        <div class="field is-horizontal">
+                                            <div class="field-label is-normal">
+                                                <label class="label">สาขาวิชา:</label>
                                             </div>
-
-                                            <div class="select" value={this.state.departmemtSend} onChange={this.onChangeDepartmentSend}>
-                                                <select>
-                                                    <option>โปรดเลือก</option>
-                                                    <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
-                                                    <option>สาขาวิชาฟิสิกส์</option>
-                                                    <option>สาขาวิชาเคมี</option>
-                                                    <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
-                                                    <option>สาขาวิชาคณิตศาสตร์ประกันภัย</option>
-                                                    <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
-                                                    <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
-                                                    <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
-                                                    <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
-                                                    <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
-                                                </select>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="column is-one-quarter">
-                                            {/* <div class="field">
-                                                    <label class="label">ปีงบประมาณ :</label>
+                                            <div class="field-body">
+                                                <div class="field">
+                                                    <div class="control">
+                                                        <div class="select is-fullwidth" value={this.state.departmemtSend} onChange={this.onChangeDepartmentSend}>
+                                                            <select>
+                                                                <option>โปรดเลือก</option>
+                                                                <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
+                                                                <option>สาขาวิชาฟิสิกส์</option>
+                                                                <option>สาขาวิชาเคมี</option>
+                                                                <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
+                                                                <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
+                                                                <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
+                                                                <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
+                                                                <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
+                                                                <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
+                                                                <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
-
-                                                <input class="input" type="text" placeholder="25XX" value={this.state.yearSend} onChange={this.onChangeYearSend}></input> */}
-                                            <div class="field">
-                                                <label class="label">ปีงบประมาณ :</label>
                                             </div>
+                                        </div>
+                                        <div class="field is-horizontal">
 
-                                            <div class="select" value={this.state.yearSend} onChange={this.onChangeYearSend}>
-                                                <select>
-                                                    <option>โปรดเลือก</option>
-                                                    <option>2562</option>
-                                                    <option>2563</option>
-                                                    <option>2564</option>
-                                                    <option>2565</option>
-                                                </select>
+                                            <div class="field-label is-normal">
+                                                <label class="label">รอบเลื่อนเงินเดือน:</label>
+                                            </div>
+                                            <div class="field-body">
+                                                <div class="field">
+                                                    <div class="control">
+                                                        <div class="select is-fullwidth" value={this.state.salaryRoundSend} onChange={this.onChangeSalaryRoundSend}>
+                                                            <select>
+                                                                <option>โปรดเลือก</option>
+                                                                <option>รอบ1 เดือน เมษายน</option>
+                                                                <option>รอบ2 เดือน ตุลาคม</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div class="column is-one-quarter">
-                                            <div class="field">
-                                                <label class="label">รอบเลื่อนเงินเดือน :</label>
+                                        <div class="field is-horizontal">
+                                            <div class="field-label is-normal">
+                                                <label class="label">ปีงบประมาณ:</label>
                                             </div>
-
-                                            <div class="select" value={this.state.salaryRoundSend} onChange={this.onChangeSalaryRoundSend}>
-                                                <select>
-                                                    <option>โปรดเลือก</option>
-                                                    <option>รอบ1 เดือน เมษายน</option>
-                                                    <option>รอบ2 เดือน ตุลาคม</option>
-                                                </select>
+                                            <div class="field-body">
+                                                <div class="field">
+                                                    <div class="control">
+                                                    <input class="input" type="text" placeholder="ปีงบประมาณ" value={this.state.yearSend} onChange={this.onChangeYearSend}></input>
+                                                    </div>
+                                                </div>
                                             </div>
-
                                         </div>
 
-
-
-                                    </div>
-
-
-
-                                </section>
+                                    </section>
+                                </div>
 
                             </div>
+
+                            {/*  */}
+
 
                             <section class="section is-small">
                                 <ListObjects department={this.state.departmemtSend} year={this.state.yearSend} salaryRound={this.state.salaryRoundSend} />
@@ -223,7 +226,7 @@ export default class Send_report extends Component {
 
 
                 </div>
-            </Fragment>
+            </Fragment >
         )
     }
 }

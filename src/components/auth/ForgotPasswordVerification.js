@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FormErrors from "../FormErrors";
 import Validate from "../utility/FormValidation";
+import { Auth } from "aws-amplify";
 
 class ForgotPasswordVerification extends Component {
   state = {
@@ -35,6 +36,18 @@ class ForgotPasswordVerification extends Component {
     }
 
     // AWS Cognito integration here
+
+    try{
+      await Auth.forgotPasswordSubmit(
+        this.state.email,
+        this.state.verificationcode,
+        this.state.newpassword
+      );
+      this.props.history.push("/changepasswordconfirmation");
+    }catch(error){
+      console.log(error);
+    }
+
   };
 
   onInputChange = event => {
@@ -48,10 +61,9 @@ class ForgotPasswordVerification extends Component {
     return (
       <section className="section auth">
         <div className="container">
-          <h1>Set new password</h1>
+          <h1>ตั้งค่ารหัสผ่านใหม่</h1>
           <p>
-            Please enter the verification code sent to your email address below,
-            your email address and a new password.
+          โปรดป้อนรหัสยืนยันที่ส่งไปยังที่อยู่อีเมลของคุณด้านล่าง, กรอกที่อยู่อีเมลของคุณและรหัสผ่านใหม่
           </p>
           <FormErrors formerrors={this.state.errors} />
 
@@ -63,7 +75,7 @@ class ForgotPasswordVerification extends Component {
                   className="input"
                   id="verificationcode"
                   aria-describedby="verificationCodeHelp"
-                  placeholder="Enter verification code"
+                  placeholder="กรอกรหัสยืนยัน"
                   value={this.state.verificationcode}
                   onChange={this.onInputChange}
                 />
@@ -76,7 +88,7 @@ class ForgotPasswordVerification extends Component {
                   type="email"
                   id="email"
                   aria-describedby="emailHelp"
-                  placeholder="Enter email"
+                  placeholder="กรอกอีเมล"
                   value={this.state.email}
                   onChange={this.onInputChange}
                 />
@@ -91,7 +103,7 @@ class ForgotPasswordVerification extends Component {
                   type="password"
                   className="input"
                   id="newpassword"
-                  placeholder="New password"
+                  placeholder="รหัสผ่านใหม่"
                   value={this.state.newpassword}
                   onChange={this.onInputChange}
                 />
@@ -102,8 +114,8 @@ class ForgotPasswordVerification extends Component {
             </div>
             <div className="field">
               <p className="control">
-                <button className="button is-success">
-                  Login
+                <button className="button is-primary">
+                  ยืนยัน
                 </button>
               </p>
             </div>

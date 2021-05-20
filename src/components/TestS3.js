@@ -5,6 +5,12 @@ import axios from 'axios';
 import { jsPDF } from "jspdf";
 
 
+// -----------------------------------------------------------------------------
+
+
+
+// -----------------------------------------------------------------------------
+
 export const TestS3 = props => {
 
     const [dataHistory, setdataHistory] = useState([]);
@@ -166,52 +172,306 @@ export const TestS3 = props => {
     }
 
     return (
-        <Fragment>
-            <button onClick={fecthEmailHistory}>Click Test</button>
 
+        <section className="hero">
+            <div className="hero-body">
+                <div class="columns pt-6">
+                    <div class="column mt-6">
+                        <img src="3094352.jpg" alt="conserve energy" />
+                    </div>
+                    <div class="column mt-6">
+                        <section class="section auth">
+                        <h1>เข้าสู่ระบบ</h1>
+                            <form >
+                                <div className="field">
+                                    <p className="control">
+                                        <input
+                                            className="input"
+                                            type="text"
+                                            id="username"
+                                            aria-describedby="usernameHelp"
+                                            placeholder="กรอกอีเมล"
 
+                                        />
+                                    </p>
+                                </div>
+                                <div className="field">
+                                    <p className="control has-icons-left">
+                                        <input
+                                            className="input"
+                                            type="password"
+                                            id="password"
+                                            placeholder="รหัสผ่าน"
 
-            <button onClick={generatePDF}>Generate PDF</button>
+                                        />
+                                        <span className="icon is-small is-left">
+                                            <i className="fas fa-lock"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div className="field">
+                                    <p className="control">
+                                        <a href="/register">ลงทะเบียน</a>
+                                    </p>
+                                </div>
+                                <div className="field">
+                                    <p className="control">
+                                        <a href="/forgotpassword">ลืมรหัสผ่าน?</a>
+                                    </p>
+                                </div>
+                                <div className="field">
+                                    <p className="control">
+                                        <button className="button is-primary">
+                                            เข้าสู่ระบบ
+                                        </button>
+                                    </p>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
 
-            <div class="column is-centered">
-                <table class="table is-striped is-fullwidth">
-                    <thead>
-                        <th>สาขาวิชา</th>
-                        <th>ชื่ออาจารย์</th>
-                        <th>รอบเลื่อนเงินเดือน</th>
-                        <th>สถานะ</th>
-                        <th>อีเมล</th>
-                        <th>วันเวลา</th>
-                    </thead>
-                    <tbody>
-
-                        {dataHistory.map(list => (
-                            <tr>
-                                <td>{list.department}</td>
-                                <td>{list.instructor}</td>
-                                <td>{list.salaryround}</td>
-                                <td>{list.status}</td>
-                                <td></td>
-                                <td>{list.time}</td>
-                            </tr>
-                        ))}
-
-
-                    </tbody>
-                </table>
+                </div>
             </div>
-
-            <progress class="progress is-small is-primary" max="100">15%</progress>
-
+        </section>
 
 
-        </Fragment>
+
+        // <section className="hero ">
+        //     <div className="hero-body">
+        //         <div className="container">
+
+        //             <div class="columns is-multiline">
+        //                 <div class="column is-one-quarter">
+        //                     <form >
+        //                         <div className="field">
+        //                             <p className="control">
+        //                                 <input
+        //                                     className="input"
+        //                                     type="text"
+        //                                     id="username"
+        //                                     aria-describedby="usernameHelp"
+        //                                     placeholder="กรอกอีเมล"
+
+        //                                 />
+        //                             </p>
+        //                         </div>
+        //                         <div className="field">
+        //                             <p className="control has-icons-left">
+        //                                 <input
+        //                                     className="input"
+        //                                     type="password"
+        //                                     id="password"
+        //                                     placeholder="รหัสผ่าน"
+
+        //                                 />
+        //                                 <span className="icon is-small is-left">
+        //                                     <i className="fas fa-lock"></i>
+        //                                 </span>
+        //                             </p>
+        //                         </div>
+        //                         <div className="field">
+        //                             <p className="control">
+        //                                 <a href="/register">ลงทะเบียน</a>
+        //                             </p>
+        //                         </div>
+        //                         <div className="field">
+        //                             <p className="control">
+        //                                 <a href="/forgotpassword">ลืมรหัสผ่าน?</a>
+        //                             </p>
+        //                         </div>
+        //                         <div className="field">
+        //                             <p className="control">
+        //                                 <button className="button is-primary">
+        //                                     เข้าสู่ระบบ
+        //                                 </button>
+        //                             </p>
+        //                         </div>
+        //                     </form>
+        //                 </div>
+        //                 <div class="column is-one-quarter">
+        //                 </div>
+        //                 <figure class="image is-128x128">
+        //                     <img src="3094352.jpg" alt="conserve energy" />
+        //                 </figure>
+        //             </div>
+        //         </div>
+
+
+        //     </div>
+        // </section>
 
     )
 }
 
 export default TestS3
 
+
+
+
+
+
+
+
+
+
+
+{/* <Fragment>
+
+<section className="section auth">
+    <div className="container">
+
+
+        <div class="field is-horizontal">
+            <div class="field-label">
+                <label class="label">ระดับการศึกษา: </label>
+            </div>
+            <div class="field-body">
+                <div class="field ">
+                    <div class="control">
+                        <label class="radio">
+                            <input type="radio" name="member"/>
+                                ปริญญาตรี
+                        </label>
+                    </div>
+                </div>
+                <div class="field ">
+                    <div class="control">
+                        <label class="radio">
+                            <input type="radio" name="member"/>
+                                ปริญญาโท
+                        </label>
+                    </div>
+                </div>
+                <div class="field ">
+                    <div class="control">
+                        <label class="radio">
+                            <input type="radio" name="member"/>
+                                ปริญญาเอก
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">สาขาวิชา:</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select>
+                                <option>โปรดเลือก</option>
+                                <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
+                                <option>สาขาวิชาฟิสิกส์</option>
+                                <option>สาขาวิชาเคมี</option>
+                                <option>สาขาวิชาเทคโนโลยีชีวภาพ</option>
+                                <option>สาขาวิชาคณิตศาสตร์และสถิติ</option>
+                                <option>สาขาวิชาเทคโนโลยีการเกษตร</option>
+                                <option>สาขาวิชาวิทยาศาสตร์สิ่งเเวดล้อม</option>
+                                <option>สาขาวิชาเทคโนโลยีเพื่อการพัฒนายั่งยืน</option>
+                                <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
+                                <option>สาขาวิชาเทคโนโลยีวัสดุและสิ่งทอ</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="field is-horizontal">
+
+            <div class="field-label is-normal">
+                <label class="label">หลักสูตร:</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select>
+                                <option>โปรดเลือก</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาเคมี</option>
+                                <option>วิทยาศาสตรบัณฑิต สาขาวิชาฟิสิกส์</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">ประเภท:</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select>
+                                <option>โปรดเลือก</option>
+                                <option>วิชาบรรยาย-วิชาปฏิบัติ</option>
+                                <option>ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">ปี/ภาคการศึกษา:</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="text" placeholder="ปีการศึกษา"></input>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select>
+                                <option>ภาคการศึกษา</option>
+                                <option>1</option>
+                                <option>2</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+</section>
+
+
+
+
+</Fragment> */}
+
+
+{/* <div class="field is-horizontal">
+<div class="field-label is-normal">
+    <label class="label">From</label>
+</div>
+<div class="field-body">
+    <div class="field is-narrow">
+        <div class="control">
+            <div class="select is-fullwidth">
+                <select>
+                    <option>โปรดเลือก</option>
+                    <option>วิชาบรรยาย-วิชาปฏิบัติ</option>
+                    <option>ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+</div> */}
 
 
 

@@ -14,10 +14,10 @@ export default function Hero() {
       <div class="hero-body">
         <div class="">
           <p class="title">
-            คณะวิทยาศาสตร์และเทคโนโลยี
+          SCI-TU Workload
           </p>
           <p class="subtitle">
-            มหาวิทยาลัยธรรมศาสตร์
+          ระบบจัดการข้อมูลรายงานผลการปฏิบัติงานอาจารย์
           </p>
         </div>
       </div>

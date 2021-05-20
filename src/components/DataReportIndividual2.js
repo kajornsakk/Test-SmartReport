@@ -241,11 +241,14 @@ export const DataReportIndividual2 = props => {
         console.log(arrMerge);
 
         var rangeFoMonth = '';
+        var semesterTableName='';
         if (props.salaryRound === 'รอบ1 เดือน เมษายน') {
             rangeFoMonth = 'กรกฎาคม-ธันวาคม';
+            semesterTableName = '1';
         }
         else if (props.salaryRound === 'รอบ2 เดือน ตุลาคม') {
             rangeFoMonth = 'มกราคม-มิถุนายน';
+            semesterTableName = '2';
         }
 
         // -------------
@@ -319,15 +322,26 @@ export const DataReportIndividual2 = props => {
         let fileName = 'reports/' + props.department +'/'+ props.year +'/'+ props.salaryRound +'/แบบฟอร์มรายงานผลการปฏิบัติงาน_' + props.instructor + '_' + props.department + '_' + rangeFoMonth + '_' + props.year + '.xlsx';
         obj['signedFileName'] = fileName;
 
-        //เพิ่มแบบ hardcode
+        //เพิ่มปัญหาพิเศษแบบ hardcode
         obj['tableMasterSeminar'] = 'Master_ComputerScience_ComputerScience_SpecialTopic_1-2563';
         obj['tableDoctoralSeminar'] = 'Master_ComputerScience_ComputerScience_SpecialTopic_1-2563';
         obj['tableMasterSpecialProject'] = 'Master_ComputerScience_ComputerScience_SpecialTopic_1-2563';
         obj['tableDoctoralSpecialProject'] = 'Doctor_ComputerScience_ComputerScience_SpecialTopic_1-2563';
 
-        // filePath หมวดวิชาการ
-        console.log(filePathArticleForIndividual);
-        console.log(filePathPresentationForIndividual);
+        // วิชาการ
+        // ComputerScience_Artical_2-2564
+        // ComputerScience_Conference_2-2564
+
+        var departmentTableName = compareTableName('',props.department,'','').split('_')[1]
+        obj['tableRG300'] = departmentTableName+'_'+'Artical_'+semesterTableName+'-'+props.year;
+        // ['RG300Version'] = 
+        obj['tableRG301'] = departmentTableName+'_'+'Conference_'+semesterTableName+'-'+props.year; 
+        // ['RG301Version'] = 
+
+
+        // filePath หมวดวิชาการ version
+        console.log(((filePathArticleForIndividual.split('/')[5]).split('_')[3]).split('.')[0]);
+        console.log(((filePathPresentationForIndividual.split('/')[5]).split('_')[3]).split('.')[0]);
 
         console.log(arrTosend);
         console.log(obj);
@@ -341,30 +355,30 @@ export const DataReportIndividual2 = props => {
             console.log('call API');
 
             // call API create form
-            var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/write-form-function";
-            axios.post(apiUrl, obj)
-                .then((res => {
-                    console.log(res);
-                    console.log(res.data.Response);
+            // var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/write-form-function";
+            // axios.post(apiUrl, obj)
+            //     .then((res => {
+            //         console.log(res);
+            //         console.log(res.data.Response);
 
-                    if (res.status === 200) {
-                        alert('The email has been sent')
-                    }
+            //         // if (res.status === 200) {
+            //         //     alert('The email has been sent')
+            //         // }
 
-                }))
-                .catch((error) => {
-                    if (error.response) {
-                        console.log(error.response);
-                    } else if (error.request) {
-                        console.log(error.request);
-                    }
-                })
+            //     }))
+            //     .catch((error) => {
+            //         if (error.response) {
+            //             console.log(error.response);
+            //         } else if (error.request) {
+            //             console.log(error.request);
+            //         }
+            //     })
 
             // when create succes show popup success
             setTimeout(() => {
                 setshowPopupCreateForm(false);
                 setshowPopupSuccess(true);
-            }, 35000);
+            }, 25000);
         }
 
 
