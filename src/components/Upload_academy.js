@@ -29,6 +29,7 @@ export default class Upload_academy extends Component {
         fileNameYearR1: '',
         fileNameSemesterR2: '',
         fileNameYearR2: '',
+        versionTimestamp: '',
     }
 
     onChangeProfessor = (e) => {
@@ -127,7 +128,7 @@ export default class Upload_academy extends Component {
             year = this.state.fileNameYearR2
         }
 
-        return departmentName + "_" + versionName + "_" + semester + "_" + year;
+        return departmentName + "_" + versionName + "_" + semester + "-" + year;
     }
 
     sendMessageApi = (e) => {
@@ -141,14 +142,16 @@ export default class Upload_academy extends Component {
         // console.log(filePath);
         var filePath = "public/" + this.state.filePathToSendApi;
         var tableName = this.compareTableName(this.state.department, this.state.version);
-        var arrToSend = {
-            "bucketName": "amplifys3smartreport142809-dev", // ต้อง map ค่า thai -> eng 
-            "fileName": filePath, // this.state.filePath
-            "tableName": tableName // this.state.fileName
-        }
-        console.log(arrToSend);
+
 
         if (this.state.version === 'รายงานบทความ/ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ') {
+            var arrToSend = {
+                "bucketName": "amplifys3smartreport142809-dev", // ต้อง map ค่า thai -> eng 
+                "fileName": filePath, // this.state.filePath
+                "tableName": tableName, // this.state.fileName
+                "versionRG300": this.state.versionTimestamp,
+            }
+            console.log(arrToSend);
             // call lambda lecture
             var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/rg300function";
             axios.post(apiUrl, arrToSend)
@@ -167,10 +170,16 @@ export default class Upload_academy extends Component {
                     }
                 })
             console.log("call API");
-            console.log(arrToSend);
 
         }
         if (this.state.version === 'รายงานการเสนอผลงานในที่ประชุมวิชาการ') {
+            var arrToSend = {
+                "bucketName": "amplifys3smartreport142809-dev", // ต้อง map ค่า thai -> eng 
+                "fileName": filePath, // this.state.filePath
+                "tableName": tableName, // this.state.fileName
+                "versionRG301": this.state.versionTimestamp,
+            }
+            console.log(arrToSend);
             //call lambda lecture
             var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/rg301function";
             axios.post(apiUrl, arrToSend)
@@ -189,7 +198,6 @@ export default class Upload_academy extends Component {
                     }
                 })
             console.log("call API");
-            console.log(arrToSend);
 
         }
 
@@ -244,11 +252,11 @@ export default class Upload_academy extends Component {
                     console.log(dateFile);
 
                     //รอบ 1
-                    var startdate1 = new Date((new Date().getFullYear()) - 1, '06', '01'); //  01 / 07 / 20
-                    var enddate1 = new Date((new Date().getFullYear()) - 1, '11', '31'); //   31 / 12 / 20
+                    var startdate1 = new Date((new Date().getFullYear())-1, '06', '01'); //  01 / 07 / 20
+                    var enddate1 = new Date((new Date().getFullYear())-1, '11', '31'); //   31 / 12 / 20
                     // รอบ2
-                    var startdate2 = new Date((new Date().getFullYear()) - 1, '12', '01'); //   01 / 01 /20
-                    var enddate2 = new Date(new Date().getFullYear(), '05', '30'); //   31 / 06 / 20
+                    var startdate2 = new Date(new Date().getFullYear()-1, '12', '01'); //   01 / 01 /20
+                    var enddate2 = new Date(new Date().getFullYear(), '05', '30'); //   30 / 06 / 20
 
                     console.log(startdate1);
                     console.log(enddate1);
@@ -284,8 +292,8 @@ export default class Upload_academy extends Component {
                     countRoundLoop++;
                     this.setState({ nameFloderRound2: 'รอบ2 เดือน ตุลาคม_' + yearThai });
                     this.setState({
-                        fileNameSemesterR1: "2",
-                        fileNameYearR1: yearThai
+                        fileNameSemesterR2: "2",
+                        fileNameYearR2: yearThai
                     })
                 }
 
@@ -406,6 +414,7 @@ export default class Upload_academy extends Component {
         this.setState({ isPending: true });
         const DASH_DMYHMS = 'DD-MM-YYYY HH:mm:ss';
         const timeStamp = moment().format(DASH_DMYHMS);
+        this.setState({versionTimestamp:timeStamp});
         if (this.state.version == 'รายงานบทความ/ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ') {
             var bufferVersion = 'รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ';
         }
@@ -569,20 +578,17 @@ export default class Upload_academy extends Component {
                                 </a>
                             </li>
 
-                            <li>
+                            {/* <li>
                                 <a href="/Upload_History" className="navbar-item" ><span class="icon is-small" ><i class="far fa-file-alt" aria-hidden="true"></i></span>
                                     ประวัติอัปโหลดข้อมูล
                                 </a>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
 
                     <div class="columns">
                         <div class="column"></div>
                         <div class="column is-four-fifths">
-                            <span class="is-size-4 has-text-primary">
-                                อัปโหลดข้อมูลผลงานวิชาการ
-                            </span>
                             <div class="card">
                                 <div class="card-content ">
                                     <section class="section is-small ">

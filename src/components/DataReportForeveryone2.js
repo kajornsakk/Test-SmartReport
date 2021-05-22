@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react'
 import AWS from 'aws-sdk';
+import axios from 'axios';
 import TableAcademyEveryoneReport from './TableAcademyEveryoneReport';
 import CheckBox3 from './CheckBox3';
 import PopupCreateForm from './PopupCreateForm';
@@ -144,6 +145,9 @@ export const DataReportForeveryone2 = props => {
         else if (lecture === 'วิทยานิพนธ์' || lecture === 'วิทยานิพนธ์-สารนิพนธ์') {
             lectureName = 'Thesis';
         }
+        else if (lecture === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+            lectureName = 'SpecialTopic';
+        }
 
         // level
         let levelName = '';
@@ -164,7 +168,40 @@ export const DataReportForeveryone2 = props => {
         return levelName + "_" + departmentName + "_" + courseName + "_" + lectureName + "_" + semesterYear;
     }
 
-    function CallAPI() {
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+
+    const CallLambda = (param) => {
+        console.log(param);
+
+        return new Promise((resolve, reject) => {
+            var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/write-form-function";
+            axios.post(apiUrl, param)
+                .then((res => {
+                    console.log(res);
+                    console.log(res.data.Response);
+
+                    if (res.status === 200) {
+                        alert('The email has been sent')
+                    }
+
+                }))
+                .catch((error) => {
+                    if (error.response) {
+                        console.log(error.response);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    }
+                })
+            console.log("before");
+            return setTimeout(() => resolve(param), 50000)//35000
+            console.log("after");
+        })
+    }
+
+    async function CallAPI() {
         setShowPopupLoading(true);
 
         console.log(listFiles);
@@ -177,122 +214,254 @@ export const DataReportForeveryone2 = props => {
         console.log(arrMerge);
 
         var rangeFoMonth = '';
+        var semester_year ='';
         if (props.salaryRound === 'รอบ1 เดือน เมษายน') {
             rangeFoMonth = 'กรกฎาคม-ธันวาคม';
+            semester_year = '1-'+props.year;
         }
         else if (props.salaryRound === 'รอบ2 เดือน ตุลาคม') {
             rangeFoMonth = 'มกราคม-มิถุนายน';
+            semester_year = '2-'+props.year;
         }
 
 
         var arrTosend = [];
 
-        arrMerge.forEach(list => {
-            // ปริญญาตรี
-            if (list.level === 'ปริญญาตรี') {
-                if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิชาบรรยาย-วิชาปฏิบัติ') {
-                    var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
-                    arrTosend.push({
-                        ['tableBacherlorLecture']: b1,
-                    })
-                    var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
-                    arrTosend.push({
-                        ['tableBachelorLab']: b2,
-                    })
-                }
-                if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
-                    var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
-                    arrTosend.push({
-                        ['tableBachelorSeminar']: b1,
-                    })
-                    var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
-                    arrTosend.push({
-                        ['tableBachelorSpecialProject']: b2,
-                    })
-                }
-            }
-            //ปริญญาโท
-            if (list.level === 'ปริญญาโท') {
-                if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิชาบรรยาย-วิชาปฏิบัติ') {
-                    var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
-                    arrTosend.push({
-                        ['tableMasterLecture']: b1 + props.year,
-                    })
-                    var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
-                    arrTosend.push({
-                        ['tableMasterLab']: b2,
-                    })
-                }
-                if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิทยานิพนธ์-สารนิพนธ์') {
-                    var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
-                    arrTosend.push({
-                        ['tableMasterThesis']: b1,
-                    })
-                    var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
-                    arrTosend.push({
-                        ['tableMasterIndependentStudy']: b2,
-                    })
-                }
-            }
-            //ปริญญาเอก
-            if (list.level === 'ปริญญาเอก') {
-                if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิชาบรรยาย') {
-                    var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
-                    arrTosend.push({
-                        ['tableDoctoralLecture']: b1,
-                    })
-                    var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
-                    arrTosend.push({
-                        ['tableDoctoralLab']: b2,
-                    })
-                }
-                if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิทยานิพนธ์') {
-                    var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
-                    arrTosend.push({
-                        ['tableDoctoralThesis']: b1,
-                    })
-                    var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
-                    arrTosend.push({
-                        ['tableDoctoralIndependentStudy']: b2,
-                    })
-                }
+
+        var arrName = [];
+        console.log(listShow);
+        listShow.forEach(list => {
+            if (list.isChecked && list.status === 'มีผลงาน') {
+                arrName.push({
+                    ['name']: list.name,
+                    ['department']: props.department,
+                    ['file']: list.file,
+                    ['time']: (list.time).split('.')[0],
+                })
             }
         })
-        arrTosend.push({
-            ['bucketName']: 'amplifys3smartreport142809-dev',
+        console.log(arrName);
+
+        //รวมคนที่ซ้ำเข้าด้วยกัน + RG300 ,RG301
+
+
+        const arrMergeName = [...(new Set(arrName.map(({ name }) => name)))];
+        console.log(arrMergeName);
+
+        var bufferNameMerge = [];
+        var json = '{}';
+        var obj2 = JSON.parse(json);
+        arrMergeName.forEach(list1 => {
+            var b1 = '' + list1;
+            arrName.forEach(list2 => {
+                if (list1 === list2.name) {
+                    b1 = b1 + "_" + list2.file + "_" + list2.time;
+                }
+            })
+            console.log(b1);
+            bufferNameMerge.push(b1);
         })
-        arrTosend.push({
-            ['fileName']: '',
-        })
-        arrTosend.push({
-            ['signedBucketName']: 'guy-bucket-test',
-        })
-
-        // แบบฟอร์มรายงานผลการปฏิบัติงาน_ประภาพร รัตนธำรง_สาขาวิชาวิทยาการคอมพิวเตอร์_กรกฎาคม-ธันวาคม_2561.xlsx
-        let fileName = 'แบบฟอร์มรายงานผลการปฏิบัติงาน_' + props.instructor + '_' + props.department + '_' + rangeFoMonth + '_' + props.year + '.xlsx';
-        arrTosend.push({
-            ['signedFileName']: fileName,
-        })
-
-        console.log(arrTosend);
+        console.log(bufferNameMerge);
 
 
+        // ทดสอบ for of
+        for (const list of arrName) {
 
-        // var arrTosend = [];
-        // listShow.forEach(list => {
-        //     if (list.status === "มีผลงาน") {
-        //         arrTosend.push({
-        //             ['name']: list.name,
-        //             ['department']: props.department
-        //         })
-        //     }
-        // })
-        // console.log(arrTosend);
+            var json = '{}';
+            var obj = JSON.parse(json);
+            obj['queryName'] = list.name
+            var departmentTran = compareTableName('', props.department, '', '').split('_')[1];
+            await bufferNameMerge.forEach(list2 => {
+                var name = list2.split("_")[0];
+                var fileArtical = list2.split("_")[3];
+                var timeArtical = list2.split("_")[4];
+
+                if (name === list.name && fileArtical === 'รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ') {
+                    obj['tableRG300'] = departmentTran+"_Artical_"+semester_year;
+                    obj['versionRG300'] = timeArtical;
+                }
+                var name = list2.split("_")[0];
+                var fileCon = list2.split("_")[1];
+                var timeCon = list2.split("_")[2];
+                if (name === list.name && fileCon === 'รายงานการเสนอผลงานในที่ประชุมวิชาการ') {
+                    obj['tableRG301'] = departmentTran+"_Conference_"+semester_year;
+                    obj['versionRG301'] = timeCon;
+                }
+            })
+
+
+            arrMerge.forEach(list => {
+                // ปริญญาตรี
+                if (list.level === 'ปริญญาตรี') {
+                    if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิชาบรรยาย-วิชาปฏิบัติ') {
+                        var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableBacherlorLecture'] = b1;
+                        var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableBachelorLab'] = b2;
+                    }
+                    if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
+                        var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableBachelorSeminar'] = b1;
+                        var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableBachelorSpecialProject'] = b2;
+                    }
+                }
+                //ปริญญาโท
+                if (list.level === 'ปริญญาโท') {
+                    if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิชาบรรยาย-วิชาปฏิบัติ') {
+                        var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableMasterLecture'] = b1;
+                        var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableMasterLab'] = b2;
+                    }
+                    if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิทยานิพนธ์-สารนิพนธ์') {
+                        var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableMasterThesis'] = b1;
+                        var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableMasterIndependentStudy'] = b2;
+                    }
+                    if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+                        var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableMasterSeminar'] = b1;
+                        var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableMasterSpecialProject'] = b2;
+                    }
+                }
+                //ปริญญาเอก
+                if (list.level === 'ปริญญาเอก') {
+                    if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิชาบรรยาย') {
+                        var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableDoctoralLecture'] = b1;
+                        var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableDoctoralLab'] = b2;
+                    }
+                    if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิทยานิพนธ์') {
+                        var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableDoctoralThesis'] = b1;
+                        var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableDoctoralIndependentStudy'] = b2;
+                    }
+                    if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+                        var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableDoctoralSeminar'] = b1;
+                        var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+                        obj['tableDoctoralSpecialProject'] = b2;
+                    }
+                }
+            })
+            obj['bucketName'] = 'willy-bucket';
+            obj['fileName'] = 'ฟอร์มรายงานผลการปฏิบัติงานอาจารย์.xlsx';
+            obj['signedBucketName'] = 'guy-bucket-test';
+            obj['signedFileName'] = 'reports/' + props.department + '/' + props.year + '/' + props.salaryRound + '/แบบฟอร์มรายงานผลการปฏิบัติงาน_' + list.name + '_' + props.department + '_' + rangeFoMonth + '_' + props.year + '.xlsx';
+
+            // console.log(obj);
+
+
+            var va = await CallLambda(obj);
+            console.log(va);
+        }
+        console.log('Done');
 
         setTimeout(() => {
             setShowPopupLoading(false);
             setshowPopupSucces(true);
-        }, 35000);
+        }, 3000);
+        // 
+
+
+        // await arrName.forEach(list => {
+        //     // setTimeout(() => {
+        //     // sleep(20000);
+        //     var json = '{}';
+        //     var obj = JSON.parse(json);
+        //     obj['name'] = list.name
+        //     if (list.file === 'รายงานการเสนอผลงานในที่ประชุมวิชาการ') {
+        //         obj['tableRG300'] = 'Artical';
+        //         obj['versionRG300'] = list.time;
+        //     }
+        //     if (list.file === 'รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ') {
+        //         obj['tableRG301'] = 'Con';
+        //         obj['versionRG301'] = list.time;
+        //     }
+
+        //     arrMerge.forEach(list => {
+        //         // ปริญญาตรี
+        //         if (list.level === 'ปริญญาตรี') {
+        //             if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิชาบรรยาย-วิชาปฏิบัติ') {
+        //                 var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableBacherlorLecture'] = b1;
+        //                 var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableBachelorLab'] = b2;
+        //             }
+        //             if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
+        //                 var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableBachelorSeminar'] = b1;
+        //                 var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableBachelorSpecialProject'] = b2;
+        //             }
+        //         }
+        //         //ปริญญาโท
+        //         if (list.level === 'ปริญญาโท') {
+        //             if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิชาบรรยาย-วิชาปฏิบัติ') {
+        //                 var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableMasterLecture'] = b1;
+        //                 var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableMasterLab'] = b2;
+        //             }
+        //             if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิทยานิพนธ์-สารนิพนธ์') {
+        //                 var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableMasterThesis'] = b1;
+        //                 var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableMasterIndependentStudy'] = b2;
+        //             }
+        //             if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+        //                 var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableMasterSeminar'] = b1;
+        //                 var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableMasterSpecialProject'] = b2;
+        //             }
+        //         }
+        //         //ปริญญาเอก
+        //         if (list.level === 'ปริญญาเอก') {
+        //             if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิชาบรรยาย') {
+        //                 var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableDoctoralLecture'] = b1;
+        //                 var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableDoctoralLab'] = b2;
+        //             }
+        //             if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิทยานิพนธ์') {
+        //                 var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableDoctoralThesis'] = b1;
+        //                 var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableDoctoralIndependentStudy'] = b2;
+        //             }
+        //             if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+        //                 var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableDoctoralSeminar'] = b1;
+        //                 var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+        //                 obj['tableDoctoralSpecialProject'] = b2;
+        //             }
+        //         }
+        //     })
+        //     obj['bucketName'] = 'willy-bucket';
+        //     obj['fileName'] = 'ฟอร์มรายงานผลการปฏิบัติงานอาจารย์.xlsx';
+        //     obj['signedBucketName'] = 'guy-bucket-test';
+        //     obj['signedFileName'] = 'แบบฟอร์มรายงานผลการปฏิบัติงาน_' + list.name + '_' + props.department + '_' + rangeFoMonth + '_' + props.year + '.xlsx';
+
+        //     console.log(obj);
+
+
+        // })
+
+
+
+        // console.log(arrTosend);
+        // console.log(obj);
+
+
+
+
+
 
         // window.location.reload(false);
 
@@ -447,6 +616,7 @@ export const DataReportForeveryone2 = props => {
                 arrCourse.forEach(course => {
                     var arrBufferLecture = [];
                     var arrBufferAcademy = [];
+                    var arrBufferSpecialProblem = [];
                     contents.forEach(content => {
                         // console.log(content);
                         // console.log(((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาตรี/')[1]).split('/')[0]);
@@ -460,6 +630,13 @@ export const DataReportForeveryone2 = props => {
                         if (course == checkCourse && checkLecture == 'วิทยานิพนธ์-สารนิพนธ์' && checkYearSemester == numyear_semeter) {
                             arrBufferAcademy.push(content.Key);
                         }
+                        // 
+                        var chackSpecail = ((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาโท/')[1]).split('/')[2];
+
+                        if (course == checkCourse && chackSpecail == 'ปัญหาพิเศษ-วิชาสัมมนา' && checkYearSemester == numyear_semeter) {
+                            arrBufferSpecialProblem.push(content.Key);
+                        }
+                        // 
 
                     })
                     var lengthh = arrBufferLecture.length;
@@ -467,6 +644,11 @@ export const DataReportForeveryone2 = props => {
 
                     var lengthhh = arrBufferAcademy.length;
                     test.push(arrBufferAcademy[lengthhh - 1])
+
+                    if (arrBufferSpecialProblem.length >= 1) {
+                        var lengthhhh = arrBufferSpecialProblem.length;
+                        test.push(arrBufferSpecialProblem[lengthhhh - 1])
+                    }
                 })
                 // console.log(arrBufferLecture);
                 console.log(test);
@@ -550,6 +732,7 @@ export const DataReportForeveryone2 = props => {
                 arrCourse.forEach(course => {
                     var arrBufferLecture = [];
                     var arrBufferAcademy = [];
+                    var arrBufferSpecialProblem = [];
                     contents.forEach(content => {
                         // console.log(content);
                         // console.log(((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาตรี/')[1]).split('/')[0]);
@@ -563,6 +746,13 @@ export const DataReportForeveryone2 = props => {
                         if (course == checkCourse && checkLecture == 'วิทยานิพนธ์' && checkYearSemester == numyear_semeter) {
                             arrBufferAcademy.push(content.Key);
                         }
+                        // 
+                        var chackSpecail = ((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาเอก/')[1]).split('/')[2];
+
+                        if (course == checkCourse && chackSpecail == 'ปัญหาพิเศษ-วิชาสัมมนา' && checkYearSemester == numyear_semeter) {
+                            arrBufferSpecialProblem.push(content.Key);
+                        }
+                        // 
 
                     })
                     var lengthh = arrBufferLecture.length;
@@ -570,6 +760,11 @@ export const DataReportForeveryone2 = props => {
 
                     var lengthhh = arrBufferAcademy.length;
                     test.push(arrBufferAcademy[lengthhh - 1])
+
+                    if (arrBufferSpecialProblem.length >= 1) {
+                        var lengthhhh = arrBufferSpecialProblem.length;
+                        test.push(arrBufferSpecialProblem[lengthhhh - 1])
+                    }
                 })
                 // console.log(arrBufferLecture);
                 console.log(test);

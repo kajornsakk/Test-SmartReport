@@ -67,99 +67,107 @@ class Register extends Component {
 
   render() {
     return (
-      <section className="section auth">
-        <div className="container">
-          <h1>ลงทะเบียน</h1>
-          <FormErrors formerrors={this.state.errors} />
 
-          <form onSubmit={this.handleSubmit}>
-            <div className="field">
-              <p className="control">
-                <input
-                  className="input"
-                  type="text"
-                  id="username"
-                  aria-describedby="userNameHelp"
-                  placeholder="อีเมล"
-                  value={this.state.username}
-                  onChange={this.onInputChange}
-                />
-              </p>
+      <section className="hero">
+        <div className="hero-body">
+          <div class="columns pt-6">
+            <div class="column mt-6">
+              <img src="2853458.jpg" alt="conserve energy" />
             </div>
-            <div className="field">
-              <p className="control has-icons-left has-icons-right">
-                <input
-                  className="input"
-                  type="email"
-                  id="email"
-                  aria-describedby="emailHelp"
-                  placeholder="ยืนยันอีเมล"
-                  value={this.state.email}
-                  onChange={this.onInputChange}
-                />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-envelope"></i>
-                </span>
-              </p>
-            </div>
-            <div className="field">
-              <p className="control has-icons-left">
-                <input
-                  className="input"
-                  type="password"
-                  id="password"
-                  placeholder="รหัสผ่าน"
-                  value={this.state.password}
-                  onChange={this.onInputChange}
-                />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-lock"></i>
-                </span>
-              </p>
-            </div>
-            <div className="field">
-              <p className="control has-icons-left">
-                <input
-                  className="input"
-                  type="password"
-                  id="confirmpassword"
-                  placeholder="ยืนยันรหัสผ่าน"
-                  value={this.state.confirmpassword}
-                  onChange={this.onInputChange}
-                />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-lock"></i>
-                </span>
-              </p>
-            </div>
+            <div class="column mt-6">
+              <section className="section auth">
+                {/* <div className="container"> */}
+                  <h1>ลงทะเบียน</h1>
+                  <FormErrors formerrors={this.state.errors} />
 
-            <div className="field">
-              <p className="control">
-                <a href="/ConfirmSingUp">Confirm Code</a>
-              </p>
-            </div>
+                  <form onSubmit={this.handleSubmit}>
+                    <div className="field">
+                      <p className="control">
+                        <input
+                          className="input"
+                          type="text"
+                          id="username"
+                          aria-describedby="userNameHelp"
+                          placeholder="อีเมล"
+                          value={this.state.username}
+                          onChange={this.onInputChange}
+                        />
+                      </p>
+                    </div>
+                    <div className="field">
+                      <p className="control has-icons-left has-icons-right">
+                        <input
+                          className="input"
+                          type="email"
+                          id="email"
+                          aria-describedby="emailHelp"
+                          placeholder="ยืนยันอีเมล"
+                          value={this.state.email}
+                          onChange={this.onInputChange}
+                        />
+                        <span className="icon is-small is-left">
+                          <i className="fas fa-envelope"></i>
+                        </span>
+                      </p>
+                    </div>
+                    <div className="field">
+                      <p className="control has-icons-left">
+                        <input
+                          className="input"
+                          type="password"
+                          id="password"
+                          placeholder="รหัสผ่าน"
+                          value={this.state.password}
+                          onChange={this.onInputChange}
+                        />
+                        <span className="icon is-small is-left">
+                          <i className="fas fa-lock"></i>
+                        </span>
+                      </p>
+                    </div>
+                    <div className="field">
+                      <p className="control has-icons-left">
+                        <input
+                          className="input"
+                          type="password"
+                          id="confirmpassword"
+                          placeholder="ยืนยันรหัสผ่าน"
+                          value={this.state.confirmpassword}
+                          onChange={this.onInputChange}
+                        />
+                        <span className="icon is-small is-left">
+                          <i className="fas fa-lock"></i>
+                        </span>
+                      </p>
+                    </div>
 
-            <div className="field">
-              <p className="control">
-                <a href="/forgotpassword">ลืมรหัสผ่าน?</a>
-              </p>
+                    <div className="field">
+                      <p className="control">
+                        <a href="/ConfirmSingUp">Confirm Code</a>
+                      </p>
+                    </div>
+
+                    <div className="field">
+                      <p className="control">
+                        <a href="/forgotpassword">ลืมรหัสผ่าน?</a>
+                      </p>
+                    </div>
+                    <div className="field">
+                      <p className="control">
+                        <button className="button is-primary">
+                          ลงทะเบียน
+                        </button>
+                      </p>
+                    </div>
+                  </form>
+                {/* </div> */}
+              </section >
             </div>
-            <div className="field">
-              <p className="control">
-                <button className="button is-primary">
-                  ลงทะเบียน
-                </button>
-              </p>
-            </div>
-          </form>
+          </div>
         </div>
-
-
-
-
-
-
       </section>
+
+
 
 
     );

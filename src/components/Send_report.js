@@ -139,9 +139,6 @@ export default class Send_report extends Component {
                         <div class="column"></div>
 
                         <div class="column is-four-fifths">
-                            <span class="is-size-4 has-text-primary">
-                                ส่งแบบฟอร์มภาระงาน
-                            </span>
 
                             <div class="card">
                                 <div class="card-content ">

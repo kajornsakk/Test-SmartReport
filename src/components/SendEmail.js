@@ -103,7 +103,8 @@ export const SendEmail = props => {
                             if (listTosend[j] === arrInstructorsListExcel[i]) {
                                 const s3 = new AWS.S3();
                                 var keyName = `reports/${props.department}/${props.year}/${props.salaryRound}/แบบฟอร์มรายงานผลการปฏิบัติงาน_${arrInstructorsListExcel[i]}_${props.department}_${monthSearchFile}_${yearSearchFile}.xlsx`;
-                                var params = { Bucket: "guy-bucket-test", Key: keyName };
+                                const signedUrlExpireSeconds = 600480
+                                var params = { Bucket: "guy-bucket-test", Key: keyName, Expires: signedUrlExpireSeconds };
 
                                 console.log(listTosend[j]);
                                 var url = s3.getSignedUrl('getObject', params);

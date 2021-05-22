@@ -207,6 +207,9 @@ export const DataReportIndividual2 = props => {
         else if (lecture === 'วิทยานิพนธ์' || lecture === 'วิทยานิพนธ์-สารนิพนธ์') {
             lectureName = 'Thesis';
         }
+        else if (lecture === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+            lectureName = 'SpecialTopic';
+        }
 
         // level
         let levelName = '';
@@ -234,14 +237,14 @@ export const DataReportIndividual2 = props => {
         // console.log(namePresentationForIndividual);
         console.log(statusPresentationForIndividual);
 
-        setshowPopupCreateForm(true);
+
 
         var bufferArr1 = listFiles.concat(listFilesMaster);
         var arrMerge = bufferArr1.concat(listFilesDoctor);
         console.log(arrMerge);
 
         var rangeFoMonth = '';
-        var semesterTableName='';
+        var semesterTableName = '';
         if (props.salaryRound === 'รอบ1 เดือน เมษายน') {
             rangeFoMonth = 'กรกฎาคม-ธันวาคม';
             semesterTableName = '1';
@@ -294,6 +297,12 @@ export const DataReportIndividual2 = props => {
                     var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
                     obj['tableMasterIndependentStudy'] = b2;
                 }
+                if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+                    var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+                    obj['tableMasterSeminar'] = b1;
+                    var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+                    obj['tableMasterSpecialProject'] = b2;
+                }
             }
 
             //ปริญญาเอก
@@ -310,6 +319,12 @@ export const DataReportIndividual2 = props => {
                     var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
                     obj['tableDoctoralIndependentStudy'] = b2;
                 }
+                if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'ปัญหาพิเศษ-วิชาสัมมนา') {
+                    var b1 = compareTableName(list.level, list.department, list.course, list.lecture);
+                    obj['tableDoctoralSeminar'] = b1;
+                    var b2 = compareTableName(list.level, list.department, list.course, list.lecture);
+                    obj['tableDoctoralSpecialProject'] = b2;
+                }
             }
 
 
@@ -318,30 +333,26 @@ export const DataReportIndividual2 = props => {
         obj['bucketName'] = 'willy-bucket';
         obj['fileName'] = 'ฟอร์มรายงานผลการปฏิบัติงานอาจารย์.xlsx';
         obj['signedBucketName'] = 'guy-bucket-test';
-        
-        let fileName = 'reports/' + props.department +'/'+ props.year +'/'+ props.salaryRound +'/แบบฟอร์มรายงานผลการปฏิบัติงาน_' + props.instructor + '_' + props.department + '_' + rangeFoMonth + '_' + props.year + '.xlsx';
+
+        let fileName = 'reports/' + props.department + '/' + props.year + '/' + props.salaryRound + '/แบบฟอร์มรายงานผลการปฏิบัติงาน_' + props.instructor + '_' + props.department + '_' + rangeFoMonth + '_' + props.year + '.xlsx';
         obj['signedFileName'] = fileName;
 
-        //เพิ่มปัญหาพิเศษแบบ hardcode
-        obj['tableMasterSeminar'] = 'Master_ComputerScience_ComputerScience_SpecialTopic_1-2563';
-        obj['tableDoctoralSeminar'] = 'Master_ComputerScience_ComputerScience_SpecialTopic_1-2563';
-        obj['tableMasterSpecialProject'] = 'Master_ComputerScience_ComputerScience_SpecialTopic_1-2563';
-        obj['tableDoctoralSpecialProject'] = 'Doctor_ComputerScience_ComputerScience_SpecialTopic_1-2563';
 
         // วิชาการ
         // ComputerScience_Artical_2-2564
         // ComputerScience_Conference_2-2564
 
-        var departmentTableName = compareTableName('',props.department,'','').split('_')[1]
-        obj['tableRG300'] = departmentTableName+'_'+'Artical_'+semesterTableName+'-'+props.year;
-        // ['RG300Version'] = 
-        obj['tableRG301'] = departmentTableName+'_'+'Conference_'+semesterTableName+'-'+props.year; 
-        // ['RG301Version'] = 
+        var departmentTableName = compareTableName('', props.department, '', '').split('_')[1];
+        // var timeRG300 = ((filePathArticleForIndividual.split('/')[5]).split('_')[3]).split('.')[0];
+        // var timeRG301 = ((filePathPresentationForIndividual.split('/')[5]).split('_')[3]).split('.')[0];
+        var timeRG300 = timeUploadArtical.split('.')[0];
+        var timeRG301 = timeUploadCon.split('.')[0];
 
+        obj['tableRG300'] = departmentTableName + '_' + 'Artical_' + semesterTableName + '-' + props.year;
+        obj['versionRG300'] = timeRG300;
+        obj['tableRG301'] = departmentTableName + '_' + 'Conference_' + semesterTableName + '-' + props.year;
+        obj['versionRG301'] = timeRG301;
 
-        // filePath หมวดวิชาการ version
-        console.log(((filePathArticleForIndividual.split('/')[5]).split('_')[3]).split('.')[0]);
-        console.log(((filePathPresentationForIndividual.split('/')[5]).split('_')[3]).split('.')[0]);
 
         console.log(arrTosend);
         console.log(obj);
@@ -352,27 +363,28 @@ export const DataReportIndividual2 = props => {
 
         var checkToSend = CheckBeforeSend();
         if (checkToSend) {
+            setshowPopupCreateForm(true);
             console.log('call API');
 
             // call API create form
-            // var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/write-form-function";
-            // axios.post(apiUrl, obj)
-            //     .then((res => {
-            //         console.log(res);
-            //         console.log(res.data.Response);
+            var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/write-form-function";
+            axios.post(apiUrl, obj)
+                .then((res => {
+                    console.log(res);
+                    console.log(res.data.Response);
 
-            //         // if (res.status === 200) {
-            //         //     alert('The email has been sent')
-            //         // }
+                    // if (res.status === 200) {
+                    //     alert('The email has been sent')
+                    // }
 
-            //     }))
-            //     .catch((error) => {
-            //         if (error.response) {
-            //             console.log(error.response);
-            //         } else if (error.request) {
-            //             console.log(error.request);
-            //         }
-            //     })
+                }))
+                .catch((error) => {
+                    if (error.response) {
+                        console.log(error.response);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    }
+                })
 
             // when create succes show popup success
             setTimeout(() => {
@@ -412,6 +424,14 @@ export const DataReportIndividual2 = props => {
         var count = 1;
         // await 
         await s3.listObjectsV2(paramsLecture, (err, data) => {
+
+            // 
+            // data.Contents.forEach(list =>{
+            //     var content = list.Key;
+            //     content.split(prefixLectrue);
+            //     console.log();
+            // })
+            // 
 
             var contents = data.Contents;
             console.log(contents);
@@ -520,7 +540,7 @@ export const DataReportIndividual2 = props => {
                 setnoInformationMaster(true);
             }
             else {
-                // console.log(data.Contents);
+                console.log(data.Contents);
                 contents.forEach(content => {
                     arrBufferCourse2.push({
                         ['course']: (content.Key).split('/')[4]
@@ -533,8 +553,9 @@ export const DataReportIndividual2 = props => {
                 arrCourse.forEach(course => {
                     var arrBufferLecture = [];
                     var arrBufferAcademy = [];
+                    var arrBufferSpecialProblem = [];
                     contents.forEach(content => {
-                        // console.log(content);
+                        console.log(content);
                         // console.log(((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาตรี/')[1]).split('/')[0]);
                         var checkYearSemester = ((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาโท/')[1]).split('/')[1];
                         var checkCourse = ((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาโท/')[1]).split('/')[0];
@@ -547,12 +568,25 @@ export const DataReportIndividual2 = props => {
                             arrBufferAcademy.push(content.Key);
                         }
 
+                        // 
+                        var chackSpecail = ((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาโท/')[1]).split('/')[2];
+
+                        if (course == checkCourse && chackSpecail == 'ปัญหาพิเศษ-วิชาสัมมนา' && checkYearSemester == numyear_semeter) {
+                            arrBufferSpecialProblem.push(content.Key);
+                        }
+                        // 
+
                     })
                     var lengthh = arrBufferLecture.length;
                     test.push(arrBufferLecture[lengthh - 1])
 
                     var lengthhh = arrBufferAcademy.length;
                     test.push(arrBufferAcademy[lengthhh - 1])
+
+                    if (arrBufferSpecialProblem.length >= 1) {
+                        var lengthhhh = arrBufferSpecialProblem.length;
+                        test.push(arrBufferSpecialProblem[lengthhhh - 1])
+                    }
                 })
                 // console.log(arrBufferLecture);
                 console.log(test);
@@ -636,6 +670,7 @@ export const DataReportIndividual2 = props => {
                 arrCourse.forEach(course => {
                     var arrBufferLecture = [];
                     var arrBufferAcademy = [];
+                    var arrBufferSpecialProblem = [];
                     contents.forEach(content => {
                         // console.log(content);
                         // console.log(((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาตรี/')[1]).split('/')[0]);
@@ -649,6 +684,13 @@ export const DataReportIndividual2 = props => {
                         if (course == checkCourse && checkLecture == 'วิทยานิพนธ์' && checkYearSemester == numyear_semeter) {
                             arrBufferAcademy.push(content.Key);
                         }
+                        // 
+                        var chackSpecail = ((content.Key).split('public/' + props.department + '/ภาระงานสอน/ปริญญาเอก/')[1]).split('/')[2];
+
+                        if (course == checkCourse && chackSpecail == 'ปัญหาพิเศษ-วิชาสัมมนา' && checkYearSemester == numyear_semeter) {
+                            arrBufferSpecialProblem.push(content.Key);
+                        }
+                        // 
 
                     })
                     var lengthh = arrBufferLecture.length;
@@ -656,6 +698,11 @@ export const DataReportIndividual2 = props => {
 
                     var lengthhh = arrBufferAcademy.length;
                     test.push(arrBufferAcademy[lengthhh - 1])
+
+                    if (arrBufferSpecialProblem.length >= 1) {
+                        var lengthhhh = arrBufferSpecialProblem.length;
+                        test.push(arrBufferSpecialProblem[lengthhhh - 1])
+                    }
                 })
                 // console.log(arrBufferLecture);
                 console.log(test);

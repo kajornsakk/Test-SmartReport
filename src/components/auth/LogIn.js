@@ -112,14 +112,14 @@ class LogIn extends Component {
                       รหัสผ่านหรืออีเมลไม่ถูกต้อง
                     </p>
                   </div>}
-                  {/* <div className="field">
+                  <div className="field">
                     <p className="control">
                       <a href="/register">ลงทะเบียน</a>
                     </p>
-                  </div> */}
+                  </div>
                   <div className="field">
                     <p className="control">
-                      <a href="/forgotpassword">ลืมรหัสผ่าน?</a>
+                      <a href="/forgotpassword">ลืมรหัสผ่าน?</a> 
                     </p>
                   </div>
                   <div className="field">

@@ -18,7 +18,8 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import Upload_academy from './components/Upload_academy';
 import Report from './components/Report';
 import TestS3 from './components/TestS3';
-import ConfirmSingUp from './components/auth/ConfirmSingUp'
+import ConfirmSingUp from './components/auth/ConfirmSingUp';
+import DownloadTemplate from './components/DownloadTemplate';
 
 import Amplify from 'aws-amplify';
 import aws_exports from './aws-exports';
@@ -106,6 +107,7 @@ class App extends Component {
               <Route exact path="/SendEmailHistory" render={(props) => <SendEmailHistory {...props} auth={authProps} />} />
               <Route exact path="/admin" render={(props) => <ProductAdmin {...props} auth={authProps} />} />
               <Route exact path="/login" render={(props) => <LogIn {...props} auth={authProps} />} />
+              <Route exact path="/DownloadTemplate" render={(props) => <DownloadTemplate {...props} auth={authProps} />} />
               {/* <Route exact path="/register" render={(props) => <Register {...props} auth={authProps} />} /> */}
               {/* <Route exact path="/forgotpassword" render={(props) => <ForgotPassword {...props} auth={authProps} />} /> */}
               {/* <Route exact path="/forgotpasswordverification" render={(props) => <ForgotPasswordVerification {...props} auth={authProps} />} /> */}

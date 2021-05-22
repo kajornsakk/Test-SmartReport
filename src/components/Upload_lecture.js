@@ -63,20 +63,17 @@ export default class Upload_lecture extends Component {
                 </a>
               </li>
 
-              <li>
+              {/* <li>
                 <a href="/Upload_History" className="navbar-item" ><span class="icon is-small" ><i class="far fa-file-alt" aria-hidden="true"></i></span>
                     ประวัติอัปโหลดข้อมูล
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
 
           <div class="columns">
             <div class="column"></div>
             <div class="column is-four-fifths">
-              <span class="is-size-4 has-text-primary">
-                อัปโหลดข้อมูลภาระงานสอน
-              </span>
               <div class="card ">
                 <div class="card-content ">
                   <section class="section is-small ">

@@ -5,11 +5,6 @@ export default function HomeContent() {
 
     return (
         <section className="container">
-
-
-
-
-
             <span class="is-size-4 has-text-primary">
                 ระดับปริญญาตรี
             </span>
@@ -170,22 +165,6 @@ export default function HomeContent() {
                 </div>
 
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         </section>
     )

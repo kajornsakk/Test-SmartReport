@@ -106,9 +106,6 @@ export const SendEmailHistory = props => {
                     <div class="column"></div>
                     <div class="column is-four-fifths">
 
-                        <span class="is-size-4 has-text-primary">
-                            ค้นหาประวัติส่งแบบฟอร์มภาระงาน
-                        </span>
                         {/*  */}
 
                         <div class="card">

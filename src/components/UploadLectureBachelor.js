@@ -214,54 +214,54 @@ export default class UploadLectureBachelor extends Component {
         }
         console.log(arrToSend);
 
-        // if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
-        //     //call lambda lecture
-        //     var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/bachelor-class-function";
-        //     axios.post(apiUrl, arrToSend)
-        //         .then((res => {
-        //             console.log(res);
-        //             console.log(res.data.Response);
-        //             if (res.status === '200') {
-        //                 alert('The email has been sent')
-        //             }
-        //         }))
-        //         .catch((error) => {
-        //             if (error.response) {
-        //                 console.log(error.response);
-        //             } else if (error.request) {
-        //                 console.log(error.request);
-        //             }
-        //         })
+        if (this.state.version === 'วิชาบรรยาย-วิชาปฏิบัติ') {
+            //call lambda lecture
+            var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/bachelor-class-function";
+            axios.post(apiUrl, arrToSend)
+                .then((res => {
+                    console.log(res);
+                    console.log(res.data.Response);
+                    if (res.status === '200') {
+                        alert('The email has been sent')
+                    }
+                }))
+                .catch((error) => {
+                    if (error.response) {
+                        console.log(error.response);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    }
+                })
 
-        // }
-        // if (this.state.version === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
-        //     //call lambda specail Project
-        //     var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/bachelor-specialproject-function";
-        //     let axiosConfig = {
-        //         headers: {
-        //             'Content-Type': 'application/json;charset=UTF-8',
-        //             'Access-Control-Allow-Origin': "*",
-        //             'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-        //         }
-        //     };
-        //     axios.post(apiUrl, arrToSend)
-        //         .then((res => {
-        //             console.log(res);
-        //             console.log(res.data.Response);
+        }
+        if (this.state.version === 'ซีเนียร์โปรเจค-ปัญหาพิเศษ-สัมมนา') {
+            //call lambda specail Project
+            var apiUrl = "https://h5r2je6zp5.execute-api.us-east-1.amazonaws.com/Prod/bachelor-specialproject-function";
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Access-Control-Allow-Origin': "*",
+                    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+                }
+            };
+            axios.post(apiUrl, arrToSend)
+                .then((res => {
+                    console.log(res);
+                    console.log(res.data.Response);
 
-        //             if (res.status === '200') {
-        //                 alert('The email has been sent')
-        //             }
+                    if (res.status === '200') {
+                        alert('The email has been sent')
+                    }
 
-        //         }))
-        //         .catch((error) => {
-        //             if (error.response) {
-        //                 console.log(error.response);
-        //             } else if (error.request) {
-        //                 console.log(error.request);
-        //             }
-        //         })
-        // }
+                }))
+                .catch((error) => {
+                    if (error.response) {
+                        console.log(error.response);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    }
+                })
+        }
 
     }
 

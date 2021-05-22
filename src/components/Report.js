@@ -104,9 +104,6 @@ export default class Report extends Component {
                     <div class="columns">
                         <div class="column"></div>
                         <div class="column is-four-fifths">
-                            <span class="is-size-4 has-text-primary">
-                                สร้างแบบฟอร์มภาระงาน
-                            </span>
                             <div class="card">
                                 <div class="card-content ">
                                     <section class="section is-small ">
