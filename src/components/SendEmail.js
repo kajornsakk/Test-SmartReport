@@ -3,6 +3,7 @@ import * as XLSX from 'xlsx';
 import axios from 'axios';
 import moment from 'moment';
 import PopupSendSuccess from './PopupSendSuccess';
+import PopupLoading from './PopupLoading';
 
 import React, { Component, Fragment, useState } from 'react'
 
@@ -14,6 +15,7 @@ export const SendEmail = props => {
     // }
     const [showPopupSendSuccess, setshowPopupSendSuccess] = useState(false);
     const [showMessageSendSuccess, setshowMessageSendSuccess] = useState([]);
+    const [isPending, setisPending] = useState(false);
 
     function clickPopupClose() {
         setshowPopupSendSuccess(!showPopupSendSuccess);
@@ -21,7 +23,7 @@ export const SendEmail = props => {
     }
 
     async function onClickSend() {
-
+        
         let dataFromProps = props.data;
         const listTosend = [];
         console.log(dataFromProps);
@@ -145,16 +147,11 @@ export const SendEmail = props => {
                     console.log(arrToSend);
 
                     if (arrToSend.length >= 1) {
+
+                        setisPending(true);
                         // Send Email
                         // https://amy1ptw2q6.execute-api.us-east-1.amazonaws.com/dev/lecture
                         var apiUrl = "https://haw3rvgwd2.execute-api.us-east-1.amazonaws.com/dev/sendEmail";
-                        let axiosConfig = {
-                            headers: {
-                                'Content-Type': 'application/json;charset=UTF-8',
-                                "Access-Control-Allow-Origin": "*",
-                                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-                            }
-                        };
                         axios.post(apiUrl, arrToSend)
                             .then((res => {
 
@@ -164,6 +161,7 @@ export const SendEmail = props => {
 
                                 console.log(res.status);
                                 if (res.status === 200) {
+                                    setisPending(false);
                                     setshowPopupSendSuccess(true);
                                 }
 
@@ -178,7 +176,9 @@ export const SendEmail = props => {
                         // this.setState({ showPopupSendSuccess: true })
                     }
                     else {
+                        setisPending(false);
                         alert('โปรดเลือกรายการส่งอีเมล')
+                        
                     }
 
                 }
@@ -201,6 +201,8 @@ export const SendEmail = props => {
                     </div>
                 </div>
             </section>
+
+            {isPending && <PopupLoading />}
 
             {showPopupSendSuccess && <PopupSendSuccess
                 clickPopup={clickPopupClose}

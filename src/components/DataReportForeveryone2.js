@@ -31,6 +31,8 @@ export const DataReportForeveryone2 = props => {
     const [noInformationAcademy, setnoInformationAcademy] = useState(false);
     const [semesterYear, setsemesterYear] = useState();
 
+    const [nameFormSuccess, setnameFormSuccess] = useState([]);
+
     function clickPopupClose() {
         setshowPopupSucces(!showPopupSucces);
         // window.location.reload(false);
@@ -172,6 +174,7 @@ export const DataReportForeveryone2 = props => {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    const arrNameSuccess = [];
 
     const CallLambda = (param) => {
         console.log(param);
@@ -184,7 +187,9 @@ export const DataReportForeveryone2 = props => {
                     console.log(res.data.Response);
 
                     if (res.status === 200) {
-                        alert('The email has been sent')
+                        arrNameSuccess.push(param.queryName);
+                        // setShowPopupLoading(false);
+                        // setshowPopupSucces(true);
                     }
 
                 }))
@@ -196,7 +201,7 @@ export const DataReportForeveryone2 = props => {
                     }
                 })
             console.log("before");
-            return setTimeout(() => resolve(param), 50000)//35000
+            return setTimeout(() => resolve(param), 15000)//35000
             console.log("after");
         })
     }
@@ -214,14 +219,14 @@ export const DataReportForeveryone2 = props => {
         console.log(arrMerge);
 
         var rangeFoMonth = '';
-        var semester_year ='';
+        var semester_year = '';
         if (props.salaryRound === 'รอบ1 เดือน เมษายน') {
             rangeFoMonth = 'กรกฎาคม-ธันวาคม';
-            semester_year = '1-'+props.year;
+            semester_year = '1-' + props.year;
         }
         else if (props.salaryRound === 'รอบ2 เดือน ตุลาคม') {
             rangeFoMonth = 'มกราคม-มิถุนายน';
-            semester_year = '2-'+props.year;
+            semester_year = '2-' + props.year;
         }
 
 
@@ -251,7 +256,7 @@ export const DataReportForeveryone2 = props => {
         var bufferNameMerge = [];
         var json = '{}';
         var obj2 = JSON.parse(json);
-        arrMergeName.forEach(list1 => {
+        await arrMergeName.forEach(list1 => {
             var b1 = '' + list1;
             arrName.forEach(list2 => {
                 if (list1 === list2.name) {
@@ -264,7 +269,7 @@ export const DataReportForeveryone2 = props => {
         console.log(bufferNameMerge);
 
 
-        // ทดสอบ for of
+
         for (const list of arrName) {
 
             var json = '{}';
@@ -277,20 +282,20 @@ export const DataReportForeveryone2 = props => {
                 var timeArtical = list2.split("_")[4];
 
                 if (name === list.name && fileArtical === 'รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ') {
-                    obj['tableRG300'] = departmentTran+"_Artical_"+semester_year;
+                    obj['tableRG300'] = departmentTran + "_Artical_" + semester_year;
                     obj['versionRG300'] = timeArtical;
                 }
                 var name = list2.split("_")[0];
                 var fileCon = list2.split("_")[1];
                 var timeCon = list2.split("_")[2];
                 if (name === list.name && fileCon === 'รายงานการเสนอผลงานในที่ประชุมวิชาการ') {
-                    obj['tableRG301'] = departmentTran+"_Conference_"+semester_year;
+                    obj['tableRG301'] = departmentTran + "_Conference_" + semester_year;
                     obj['versionRG301'] = timeCon;
                 }
             })
 
 
-            arrMerge.forEach(list => {
+            await arrMerge.forEach(list => {
                 // ปริญญาตรี
                 if (list.level === 'ปริญญาตรี') {
                     if (list.status === 'อัปโหลดเเล้ว' && list.lecture === 'วิชาบรรยาย-วิชาปฏิบัติ') {
@@ -362,11 +367,29 @@ export const DataReportForeveryone2 = props => {
         }
         console.log('Done');
 
-        setTimeout(() => {
-            setShowPopupLoading(false);
-            setshowPopupSucces(true);
-        }, 3000);
-        // 
+        // console.log(arrNameSuccess);
+        // const NameCreateFormSucces = Array.from(new Set(arrNameSuccess));
+        // // NameSuccesShow.push(NameCreateFormSucces);
+        // // console.log(NameSuccesShow);
+
+        // const NameSuccesShow = [];
+        // NameSuccesShow.forEach(list => {
+        //     NameSuccesShow.push({
+        //         ['name']: list,
+        //     })
+        // })
+        // setnameFormSuccess(NameSuccesShow);
+        // console.log(nameFormSuccess);
+
+
+
+
+
+        // setTimeout(() => {
+        setShowPopupLoading(false);
+        setshowPopupSucces(true);
+        // }, 3000);
+
 
 
         // await arrName.forEach(list => {
@@ -1323,7 +1346,7 @@ export const DataReportForeveryone2 = props => {
             {/* --------------------------------------------------------------------- */}
 
             {showPopupLoading && <PopupCreateForm />}
-            {showPopupSucces && <PopupCreateSuccess clickPopupClose={clickPopupClose} />}
+            {showPopupSucces && <PopupCreateSuccess clickPopupClose={clickPopupClose}  NameSuccesShow={nameFormSuccess}/>}
 
             {showTableForEveryone &&
                 <section class="section is-small">

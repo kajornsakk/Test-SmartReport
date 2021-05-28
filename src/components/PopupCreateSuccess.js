@@ -21,6 +21,9 @@ export default class PopupCreateSuccess extends Component {
                                         <i class="fas fa-check-square"></i>
                                     </span>
                                     <span>สร้างฟอร์มสำเร็จ</span>
+                                    {/* {this.props.NameSuccesShow.map(list =>(
+                                        <li>{list}</li>
+                                    ))} */}
                                 </div>
                             </p>
                             <button class="delete" aria-label="close" onClick={this.handleClick} ></button>

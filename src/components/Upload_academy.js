@@ -30,6 +30,8 @@ export default class Upload_academy extends Component {
         fileNameSemesterR2: '',
         fileNameYearR2: '',
         versionTimestamp: '',
+        checkRoundToSave: '',
+        checkRound: '',
     }
 
     onChangeProfessor = (e) => {
@@ -226,6 +228,25 @@ export default class Upload_academy extends Component {
                 //---------------------------------------------
                 rage = XLSX.utils.decode_range(ws['!ref']);
 
+                // --------- ทดสอบ -----------------------------------------------------------------------------------------------------
+                //รอบ 1
+                var startdate1 = new Date((new Date().getFullYear()) - 1, '06', '01'); //  01 / 07 / 20
+                var enddate1 = new Date((new Date().getFullYear()) - 1, '11', '31'); //   31 / 12 / 20
+                // รอบ2
+                var startdate2 = new Date(new Date().getFullYear() - 1, '12', '01'); //   01 / 01 /20
+                var enddate2 = new Date(new Date().getFullYear(), '05', '30'); //   30 / 06 / 20
+                var datePresent = new Date();
+                var CheckRound = '';
+                if (datePresent >= startdate1 && datePresent <= enddate1) {
+                    CheckRound = 'รอบ1';
+                }
+                else if (datePresent >= startdate2 && datePresent <= enddate2) {
+                    CheckRound = 'รอบ2';
+                }
+                console.log(CheckRound);
+                this.setState({ checkRound: CheckRound });
+                // ------------------------------------------------------------------------------------------------------
+
                 // loop ในไฟล์ว่าข้อมูลอยู่ไหนช่วงไหน
                 var CheckRound1 = 0;
                 var CheckRound2 = 0;
@@ -252,10 +273,10 @@ export default class Upload_academy extends Component {
                     console.log(dateFile);
 
                     //รอบ 1
-                    var startdate1 = new Date((new Date().getFullYear())-1, '06', '01'); //  01 / 07 / 20
-                    var enddate1 = new Date((new Date().getFullYear())-1, '11', '31'); //   31 / 12 / 20
+                    var startdate1 = new Date((new Date().getFullYear()) - 1, '06', '01'); //  01 / 07 / 20
+                    var enddate1 = new Date((new Date().getFullYear()) - 1, '11', '31'); //   31 / 12 / 20
                     // รอบ2
-                    var startdate2 = new Date(new Date().getFullYear()-1, '12', '01'); //   01 / 01 /20
+                    var startdate2 = new Date(new Date().getFullYear() - 1, '12', '01'); //   01 / 01 /20
                     var enddate2 = new Date(new Date().getFullYear(), '05', '30'); //   30 / 06 / 20
 
                     console.log(startdate1);
@@ -277,6 +298,35 @@ export default class Upload_academy extends Component {
                 console.log(CheckRound1);
                 console.log(CheckRound2);
 
+                // --------- ทดสอบ -----------------------------------------
+                var CheckRoundToSave = 'false';
+                if (CheckRound === 'รอบ1') {
+                    if (CheckRound1 >= 1 && CheckRound2 >= 1) {
+                        CheckRoundToSave = 'true';
+                    }
+                    else if (CheckRound1 >= 1) {
+                        CheckRoundToSave = 'true';
+                    }
+                    else if (CheckRound2 >= 1) {
+                        CheckRoundToSave = 'false';
+                    }
+                }
+                if (CheckRound === 'รอบ2') {
+                    if (CheckRound1 >= 1 && CheckRound2 >= 1) {
+                        CheckRoundToSave = 'true';
+                    }
+                    else if (CheckRound1 >= 1) {
+                        CheckRoundToSave = 'false';
+                    }
+                    else if (CheckRound2 >= 1) {
+                        CheckRoundToSave = 'true';
+                    }
+                }
+                console.log(CheckRoundToSave);
+                this.setState({ checkRound: CheckRound });
+                this.setState({ checkRoundToSave: CheckRoundToSave });
+                // ---------------------------------------------------------
+
                 //checkRoundLoop
                 var countRoundLoop = 0;
                 if (CheckRound1 >= 1) {
@@ -296,11 +346,6 @@ export default class Upload_academy extends Component {
                         fileNameYearR2: yearThai
                     })
                 }
-
-                // if(CheckRound1 >=1 && CheckRound2 >=1){
-
-                // }
-
 
                 this.setState({
                     checkRound1: CheckRound1,
@@ -332,7 +377,7 @@ export default class Upload_academy extends Component {
 
 
                 if (DepartmentFromFile == this.state.department && VersionFromFile == this.state.version && ProfessorFromFile == this.state.professor
-                    && this.state.checkRound1 >= 1 || this.state.checkRound2 >= 1) {
+                    && this.state.checkRoundToSave === 'true' && this.state.checkRound1 >= 1 || this.state.checkRound2 >= 1) {
                     this.setState({
                         showNotification: true
                     })
@@ -352,6 +397,9 @@ export default class Upload_academy extends Component {
                     if (this.state.checkRound1 < 1 && this.state.checkRound2 < 1) {
                         arrTextAleart.push('"ข้อมูลไม่อัพเดท" ผลงานไม่อยู่ในช่วงที่กำหนด');
                     }
+                    if (this.state.checkRoundToSave === 'false') {
+                        arrTextAleart.push('"ข้อมูลไม่อัพเดท" ผลงานไม่อยู่ในช่วงที่กำหนด');
+                    }
                     this.setState({
                         textAleart: arrTextAleart,
                         showPopup: true
@@ -364,8 +412,9 @@ export default class Upload_academy extends Component {
                 var VersionFromFile = d.AH2.v;
                 var ProfessorFromFile = d.N2.v;
 
+
                 if (DepartmentFromFile == this.state.department && VersionFromFile == this.state.version && ProfessorFromFile == this.state.professor
-                    && this.state.checkRound1 >= 1 || this.state.checkRound2 >= 1) {
+                    && this.state.checkRoundToSave === 'true' && this.state.checkRound1 >= 1 || this.state.checkRound2 >= 1) {
                     this.setState({
                         showNotification: true
                     })
@@ -383,6 +432,9 @@ export default class Upload_academy extends Component {
                         arrTextAleart.push('"ชื่อเจ้าของผลงาน" ไม่ตรงกับข้อมูลนำเข้า');
                     }
                     if (this.state.checkRound1 < 1 && this.state.checkRound2 < 1) {
+                        arrTextAleart.push('"ข้อมูลไม่อัพเดท" ผลงานไม่อยู่ในช่วงที่กำหนด');
+                    }
+                    if (this.state.checkRoundToSave === 'false') {
                         arrTextAleart.push('"ข้อมูลไม่อัพเดท" ผลงานไม่อยู่ในช่วงที่กำหนด');
                     }
                     this.setState({
@@ -414,7 +466,7 @@ export default class Upload_academy extends Component {
         this.setState({ isPending: true });
         const DASH_DMYHMS = 'DD-MM-YYYY HH:mm:ss';
         const timeStamp = moment().format(DASH_DMYHMS);
-        this.setState({versionTimestamp:timeStamp});
+        this.setState({ versionTimestamp: timeStamp });
         if (this.state.version == 'รายงานบทความ/ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ') {
             var bufferVersion = 'รายงานบทความ-ผลงานตีพิมพ์ในวารสารวิชาการต่างๆ';
         }
@@ -424,23 +476,24 @@ export default class Upload_academy extends Component {
 
         //---------------------------------------------
 
-        if (this.state.checkRoundLoop === 1) {
-            console.log("checkRoundLoop");
-            if (this.state.checkRound1 >= 1) { //รอบ1
-                var fileName = this.state.department + "/" + "ผลงานทางวิชาการ" + "/" + bufferVersion + "/" + this.state.nameFloderRound1 + "/" +
-                    this.state.professor + "_" + this.state.department + "_" + bufferVersion + "_" + timeStamp + ".xlsx";
-            }
-            if (this.state.checkRound2 >= 1) { //รอบ2
-                var fileName = this.state.department + "/" + "ผลงานทางวิชาการ" + "/" + bufferVersion + "/" + this.state.nameFloderRound2 + "/" +
-                    this.state.professor + "_" + this.state.department + "_" + bufferVersion + "_" + timeStamp + ".xlsx";
-            }
-            Storage.put(fileName, this.state.file)
-                .then(() => {
-                    this.setState({
-                        filePathToSendApi: fileName,
-                        typeToSendApi: bufferVersion
-                    });
-                    this.sendMessageApi();
+        // if (this.state.checkRoundLoop === 1) {
+        console.log("checkRoundLoop");
+        if (this.state.checkRound === 'รอบ1') { //รอบ1
+            var fileName = this.state.department + "/" + "ผลงานทางวิชาการ" + "/" + bufferVersion + "/" + this.state.nameFloderRound1 + "/" +
+                this.state.professor + "_" + this.state.department + "_" + bufferVersion + "_" + timeStamp + ".xlsx";
+        }
+        if (this.state.checkRound === 'รอบ2') { //รอบ2
+            var fileName = this.state.department + "/" + "ผลงานทางวิชาการ" + "/" + bufferVersion + "/" + this.state.nameFloderRound2 + "/" +
+                this.state.professor + "_" + this.state.department + "_" + bufferVersion + "_" + timeStamp + ".xlsx";
+        }
+        Storage.put(fileName, this.state.file)
+            .then(() => {
+                this.setState({
+                    filePathToSendApi: fileName,
+                    typeToSendApi: bufferVersion
+                });
+                this.sendMessageApi();
+                setTimeout(() => {
                     e.preventDefault();
                     this.setState({
                         isPending: false,
@@ -451,100 +504,98 @@ export default class Upload_academy extends Component {
                         textAleartSave: 'Successfully save file!',
                         showPopupSave: true
                     })
+                }, 20000);
 
-                    this.setState({ fileUrl: '', file: '', filename: '' })
-                    //this.state.filename;
-                    e.preventDefault();
+                this.setState({ fileUrl: '', file: '', filename: '' })
+                //this.state.filename;
+                e.preventDefault();
+            })
+            .catch(err => {
+                console.log('error upload file!', err)
+                this.setState({
+                    textAleartDanger: 'ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง',
+                    showPopupDanger: true
                 })
-                .catch(err => {
-                    console.log('error upload file!', err)
-                    this.setState({
-                        textAleartDanger: 'ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง',
-                        showPopupDanger: true
-                    })
-                })
-        }
+            })
+        // }
 
 
 
-        if (this.state.checkRoundLoop === 2) {
-            for (let i = 0; i < 2; i++) {
-                if (i === 0) {// รอบ1
-                    var fileName = this.state.department + "/" + "ผลงานทางวิชาการ" + "/" + bufferVersion + "/" + this.state.nameFloderRound1 + "/" +
-                        this.state.professor + "_" + this.state.department + "_" + bufferVersion + "_" + timeStamp + ".xlsx";
+        // if (this.state.checkRoundLoop === 2) {
+        //     for (let i = 0; i < 2; i++) {
+        //         if (i === 0) {// รอบ1
+        //             var fileName = this.state.department + "/" + "ผลงานทางวิชาการ" + "/" + bufferVersion + "/" + this.state.nameFloderRound1 + "/" +
+        //                 this.state.professor + "_" + this.state.department + "_" + bufferVersion + "_" + timeStamp + ".xlsx";
 
-                    Storage.put(fileName, this.state.file)
-                        .then(() => {
-                            this.setState({
-                                filePathToSendApi: fileName,
-                                typeToSendApi: bufferVersion
-                            });
-                            this.sendMessageApi();
-                            // e.preventDefault();
-                            this.setState({
-                                isPending: false,
-                                showNotification: false
-                            })
-                            console.log('Successfully save file!')
-                            this.setState({
-                                textAleartSave: 'Successfully save file!',
-                                showPopupSave: true
-                            })
+        //             Storage.put(fileName, this.state.file)
+        //                 .then(() => {
+        //                     this.setState({
+        //                         filePathToSendApi: fileName,
+        //                         typeToSendApi: bufferVersion
+        //                     });
+        //                     this.sendMessageApi();
+        //                     // e.preventDefault();
+        //                     this.setState({
+        //                         isPending: false,
+        //                         showNotification: false
+        //                     })
+        //                     console.log('Successfully save file!')
+        //                     this.setState({
+        //                         textAleartSave: 'Successfully save file!',
+        //                         showPopupSave: true
+        //                     })
 
-                            this.setState({ fileUrl: '', file: '', filename: '' })
-                            //this.state.filename;
-                            // e.preventDefault();
-                        })
-                        .catch(err => {
-                            console.log('error upload file!', err)
-                            this.setState({
-                                textAleartDanger: 'ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง',
-                                showPopupDanger: true
-                            })
-                        })
-                }
-                if (i === 1) {// รอบ2
-                    var fileName = this.state.department + "/" + "ผลงานทางวิชาการ" + "/" + bufferVersion + "/" + this.state.nameFloderRound2 + "/" +
-                        this.state.professor + "_" + this.state.department + "_" + bufferVersion + "_" + timeStamp + ".xlsx";
+        //                     this.setState({ fileUrl: '', file: '', filename: '' })
+        //                     //this.state.filename;
+        //                     // e.preventDefault();
+        //                 })
+        //                 .catch(err => {
+        //                     console.log('error upload file!', err)
+        //                     this.setState({
+        //                         textAleartDanger: 'ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง',
+        //                         showPopupDanger: true
+        //                     })
+        //                 })
+        //         }
+        //         if (i === 1) {// รอบ2
+        //             var fileName = this.state.department + "/" + "ผลงานทางวิชาการ" + "/" + bufferVersion + "/" + this.state.nameFloderRound2 + "/" +
+        //                 this.state.professor + "_" + this.state.department + "_" + bufferVersion + "_" + timeStamp + ".xlsx";
 
-                    Storage.put(fileName, this.state.file)
-                        .then(() => {
-                            this.setState({
-                                filePathToSendApi: fileName,
-                                typeToSendApi: bufferVersion
-                            });
-                            this.sendMessageApi();
-                            // e.preventDefault();
-                            this.setState({
-                                isPending: false,
-                                showNotification: false
-                            })
-                            console.log('Successfully save file!')
-                            this.setState({
-                                textAleartSave: 'Successfully save file!',
-                                showPopupSave: true
-                            })
+        //             Storage.put(fileName, this.state.file)
+        //                 .then(() => {
+        //                     this.setState({
+        //                         filePathToSendApi: fileName,
+        //                         typeToSendApi: bufferVersion
+        //                     });
+        //                     this.sendMessageApi();
+        //                     // e.preventDefault();
+        //                     this.setState({
+        //                         isPending: false,
+        //                         showNotification: false
+        //                     })
+        //                     console.log('Successfully save file!')
+        //                     this.setState({
+        //                         textAleartSave: 'Successfully save file!',
+        //                         showPopupSave: true
+        //                     })
 
-                            this.setState({ fileUrl: '', file: '', filename: '' })
-                            //this.state.filename;
-                            // e.preventDefault();
-                        })
-                        .catch(err => {
-                            console.log('error upload file!', err)
-                            this.setState({
-                                textAleartDanger: 'ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง',
-                                showPopupDanger: true
-                            })
-                        })
-                }
-            }
-            this.setState({ fileUrl: '', file: '', filename: '' })
-            e.preventDefault();
-        }
+        //                     this.setState({ fileUrl: '', file: '', filename: '' })
+        //                     //this.state.filename;
+        //                     // e.preventDefault();
+        //                 })
+        //                 .catch(err => {
+        //                     console.log('error upload file!', err)
+        //                     this.setState({
+        //                         textAleartDanger: 'ข้อมูลไม่ถูกต้องโปรดตรวจสอบอีกครั้ง',
+        //                         showPopupDanger: true
+        //                     })
+        //                 })
+        //         }
+        //     }
+        //     this.setState({ fileUrl: '', file: '', filename: '' })
+        //     e.preventDefault();
+        // }
 
-        //---------------------------------------------
-        // var fileName = this.state.department + "/" + "ผลงานทางวิชาการ" + "/" + bufferVersion + "/" +
-        //     this.state.professor + "_" + this.state.department + "_" + bufferVersion + "_" + timeStamp + ".xlsx";
 
 
 
@@ -685,8 +736,8 @@ export default class Upload_academy extends Component {
                                             <article class="message is-primary">
                                                 <div class="message-body ">
                                                     Format ไฟล์ข้อมูลถูกต้องสามารถอัปโหลดไฟล์ข้อมูลได้<br />
-                                                    {this.state.nameFloderRound1}<br />
-                                                    {this.state.nameFloderRound2}
+                                                    {/* {this.state.nameFloderRound1}<br />
+                                                    {this.state.nameFloderRound2} */}
                                                 </div>
                                             </article>}
 

@@ -373,9 +373,13 @@ export const DataReportIndividual2 = props => {
                     console.log(res);
                     console.log(res.data.Response);
 
-                    // if (res.status === 200) {
-                    //     alert('The email has been sent')
-                    // }
+                    if (res.status === 200) {
+                        setshowPopupCreateForm(false);
+                        setshowPopupSuccess(true);
+                    }
+                    else{
+                        alert("สร้างฟอร์มไม่สำเร็จ โปรดลองใหม่อีกครั้ง")
+                    }
 
                 }))
                 .catch((error) => {
@@ -387,10 +391,10 @@ export const DataReportIndividual2 = props => {
                 })
 
             // when create succes show popup success
-            setTimeout(() => {
-                setshowPopupCreateForm(false);
-                setshowPopupSuccess(true);
-            }, 25000);
+            // setTimeout(() => {
+            //     setshowPopupCreateForm(false);
+            //     setshowPopupSuccess(true);
+            // }, 25000);
         }
 
 
